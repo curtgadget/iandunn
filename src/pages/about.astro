@@ -1,0 +1,245 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SiteNav from '../components/SiteNav.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import PageHeader from '../components/PageHeader.astro';
+
+// The 3gforfree screenshot is a vendored artifact from the 3G repo
+// (sites/all/themes/3gforfree/screenshot.png) — the real site, ~150px,
+// shown small and on purpose.
+
+const takeaways = [
+  ['Customer instinct', 'I found the product by standing next to the people who wanted it.'],
+  ['Product instinct', 'An off-hand favor turned into a self-serve product.'],
+  ['Technical grit', 'I learned by building, debugging, scaling, and operating under real load.'],
+  ['Scrappiness', 'No playbook and no modern tooling — you solve the problem or it breaks.'],
+  ['Resilience', 'When the market shifted under me, I shifted with it.'],
+];
+---
+
+<BaseLayout
+  title="About — Ian Dunn"
+  description="How a ringtone business Ian Dunn ran through his twenties shaped the engineering leader he became."
+>
+  <SiteNav active="About" />
+
+  <main id="main">
+    <PageHeader
+      eyebrow="About"
+      title="The long way in"
+      intro="I lead engineering teams at Pinterest now, but I didn't take the standard route here. I came into tech sideways, by building something of my own first — and the years before the formal titles taught me as much about product, systems, and ownership as anything since."
+    />
+
+    <section class="section origin">
+      <p class="eyebrow">Origin story</p>
+      <h2 class="origin-head">Building before I had the title</h2>
+
+      <div class="origin-grid">
+        <div class="origin-prose">
+          <p>
+            Before I became an engineering leader, I built and ran
+            3gforfree.com: a mobile ringtone and customization business that
+            started as a page for coworkers and grew into my full-time work
+            for most of my twenties.
+          </p>
+          <p>
+            I was working at Sprint in the early mobile-web era. Coworkers
+            wanted ringtones and screensavers for their phones, so I worked
+            out how to deliver content to a flip phone and stood up a site on
+            a computer at my parents' house. They passed the link to
+            customers, traffic grew, and a favor turned into a business.
+          </p>
+          <p>
+            I built both halves of it: the web experience and a separate
+            mobile site, with device detection that fingerprinted each phone
+            so it only got content it could actually play. This was before
+            cloud infrastructure made scaling a button you press, so growth
+            meant solving performance and operational problems the hard way.
+            It was also a crash course in business — customer demand, product
+            iteration, music and content rights, and what it means to own a
+            whole system when that system is just you.
+          </p>
+          <p>
+            Eventually the carriers and platforms absorbed ringtone
+            distribution, the market moved, and I moved with it, into formal
+            engineering roles. The path in was winding. But 3gforfree is where
+            most of my instincts were formed.
+          </p>
+        </div>
+
+        <aside class="origin-aside">
+          <figure class="origin-shot">
+            <img
+              src="/3gforfree-site.png"
+              alt="The 3gforfree.com homepage as it ran"
+              width="150"
+              height="139"
+              loading="lazy"
+              decoding="async"
+            />
+            <figcaption>3gforfree.com, the site as it ran</figcaption>
+          </figure>
+          <dl class="origin-facts">
+            <div><dt>Role</dt><dd>Founder and operator</dd></div>
+            <div><dt>Span</dt><dd>About eight years, through my twenties</dd></div>
+            <div><dt>Built with</dt><dd>Drupal, CodeIgniter, WURFL device detection</dd></div>
+          </dl>
+        </aside>
+      </div>
+
+      <div class="origin-takeaways">
+        <p class="eyebrow">What it taught me</p>
+        <ul>
+          {
+            takeaways.map(([term, gloss]) => (
+              <li>
+                <strong>{term}.</strong> {gloss}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </section>
+
+    <section class="section career">
+      <p class="eyebrow">Since then</p>
+      <h2 class="career-head">The formal years</h2>
+      <p class="career-body">
+        Everything after 3gforfree has been more conventional: engineering
+        roles, then management, at Disney, NBC, Netflix, Spotify, and now
+        Pinterest. The titles changed; the foundation held. I still lead by
+        staying close to the people we build for, favoring practical systems
+        over clever ones, working through ambiguity, and owning the outcome.
+      </p>
+      <a
+        class="career-link"
+        href="https://www.linkedin.com/in/iancdunn"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        The full record, roles and dates, lives on LinkedIn →
+      </a>
+    </section>
+  </main>
+
+  <SiteFooter />
+</BaseLayout>
+
+<style>
+  /* ── Origin story — the centerpiece, set on a tonal band ──── */
+  .origin {
+    background: var(--paper-sand);
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    padding-block: clamp(3rem, 7vw, 5rem);
+  }
+  .origin-head {
+    margin-top: 8px;
+    font: 400 clamp(1.9rem, 4vw, 2.9rem) / 1.08 var(--font-head);
+  }
+
+  .origin-grid {
+    margin-top: clamp(1.75rem, 4vw, 2.75rem);
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: clamp(1.75rem, 5vw, 3.5rem);
+    align-items: start;
+  }
+  .origin-prose p {
+    font: 400 17px/1.65 var(--font-body);
+    color: var(--ink-body);
+  }
+  .origin-prose p + p {
+    margin-top: 1.1em;
+  }
+
+  /* ── The artifact: the real screenshot, shown small ───────── */
+  .origin-shot {
+    max-width: 220px;
+  }
+  .origin-shot img {
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--line);
+    background: var(--paper);
+  }
+  .origin-shot figcaption {
+    margin-top: 8px;
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .origin-facts {
+    margin-top: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .origin-facts dt {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .origin-facts dd {
+    margin: 3px 0 0;
+    font: 400 16px/1.4 var(--font-head);
+    color: var(--ink);
+  }
+
+  /* ── What it taught me ────────────────────────────────────── */
+  .origin-takeaways {
+    margin-top: clamp(2rem, 5vw, 3rem);
+    padding-top: clamp(1.75rem, 4vw, 2.5rem);
+    border-top: 1px solid var(--line);
+  }
+  .origin-takeaways ul {
+    margin-top: 16px;
+    display: grid;
+    gap: 12px;
+    max-width: 70ch;
+  }
+  .origin-takeaways li {
+    font: 400 15px/1.6 var(--font-body);
+    color: var(--ink-body);
+  }
+  .origin-takeaways strong {
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  /* ── Since then ───────────────────────────────────────────── */
+  .career {
+    padding-block: clamp(3rem, 7vw, 5rem);
+  }
+  .career-head {
+    margin-top: 8px;
+    font: 400 clamp(1.9rem, 4vw, 2.9rem) / 1.08 var(--font-head);
+  }
+  .career-body {
+    margin-top: 18px;
+    max-width: 64ch;
+    font: 400 17px/1.65 var(--font-body);
+    color: var(--ink-body);
+  }
+  .career-link {
+    display: inline-block;
+    margin-top: 22px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--accent-strong);
+    text-decoration: none;
+    border-bottom: 1px solid var(--accent);
+    padding-bottom: 2px;
+  }
+  .career-link:hover {
+    color: var(--ink);
+    border-bottom-color: var(--ink);
+  }
+
+  @media (max-width: 760px) {
+    .origin-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
