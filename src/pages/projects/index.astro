@@ -1,0 +1,194 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SiteNav from '../../components/SiteNav.astro';
+import SiteFooter from '../../components/SiteFooter.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import ProjectVisual from '../../components/ProjectVisual.astro';
+// Screenshot vendored from the centerref-site repo (src/assets/screens/).
+import crWatch from '../../assets/screens/watch-active-1h.png';
+
+const LIVE = '#3f6f49';
+const FLIGHT = '#a9762f';
+const CONCEPT = '#8a7d66';
+
+const projects = [
+  {
+    name: 'FutAve',
+    status: 'Live',
+    statusColor: LIVE,
+    tagline: 'A taste engine for soccer.',
+    body: 'Not another live-scores app. FutAve is a curation layer: its Wave Detector scores how exciting a match will be before kickoff, weighing form, rivalry, and what is at stake, and an AI layer writes the context for why it matters. Live scores, lineups, and event timelines follow, for the matches actually worth your time.',
+    meta: 'iOS and web, Android soon · React Native, Next.js, Payload CMS',
+    url: 'https://futave.com',
+    cta: 'Visit futave.com',
+    external: true,
+    visual: { kind: 'logo', src: '/logos/futave-mark.svg', alt: 'FutAve logo' },
+  },
+  {
+    name: 'TheraBasics',
+    status: 'TestFlight',
+    statusColor: FLIGHT,
+    tagline: 'The work between sessions.',
+    body: 'Built with Raven, my wife and a psychologist. A mobile app gives clients the exercises and reflection that happen between appointments; a dashboard gives the therapist a place to review them. HIPAA-compliant, built on Supabase.',
+    meta: 'iOS, Android & web · React Native, Next.js',
+    url: 'https://therabasics.com',
+    cta: 'Visit therabasics.com',
+    external: true,
+    visual: { kind: 'logo', src: '/logos/therabasics-icon.png', alt: 'TheraBasics app icon' },
+  },
+  {
+    name: 'Center Ref',
+    status: 'Public beta',
+    statusColor: FLIGHT,
+    tagline: 'Ref the match. Not the screen.',
+    body: 'A watch-first match clock for youth-soccer referees. The clock, score, and event log live on the Apple Watch, designed to be read in a two-second glance under bright sun. AYSO and Club Soccer division presets, haptic period signals you learn by feel, and stoppage time that arms its own countdown.',
+    meta: 'Apple Watch + iPhone · Swift',
+    url: 'https://centerref.com',
+    cta: 'Visit centerref.com',
+    external: true,
+    visual: { kind: 'screenshot', src: crWatch, alt: 'Center Ref running a match on Apple Watch' },
+  },
+  {
+    name: 'Numbrix',
+    status: 'Concept',
+    statusColor: CONCEPT,
+    tagline: 'Multiplication by strategy, not drill.',
+    body: 'A math game for kids built on derived facts: working out new answers from the ones you already know, instead of drilling flashcards. Still a concept, sketched for my own kids.',
+    meta: 'Concept and research',
+    url: 'https://numbrix.app',
+    cta: 'numbrix.app',
+    external: true,
+    visual: { kind: 'placeholder' },
+  },
+];
+---
+
+<BaseLayout
+  title="Projects — Ian Dunn"
+  description="Side projects from Ian Dunn — FutAve, TheraBasics, Center Ref, and Numbrix."
+>
+  <SiteNav active="Projects" />
+
+  <main id="main">
+    <PageHeader
+      eyebrow="Projects"
+      title="Side projects"
+      intro="Four things I'm building outside of work, in different states of done. I ship slowly, on nights and weekends, around a day job and three kids."
+    />
+
+    <section class="section project-list">
+      {
+        projects.map((p) => (
+          <article class="project">
+            <div class="project-id">
+              <h2 class="project-name">{p.name}</h2>
+              <span class="project-status">
+                <span class="dot" style={`background:${p.statusColor}`} />
+                {p.status}
+              </span>
+              <p class="project-tagline">{p.tagline}</p>
+            </div>
+            <div class="project-visual">
+              <ProjectVisual
+                kind={p.visual.kind}
+                src={p.visual.src}
+                alt={p.visual.alt}
+                name={p.name}
+              />
+            </div>
+            <div class="project-detail">
+              <p class="project-body">{p.body}</p>
+              <p class="project-meta">{p.meta}</p>
+              <a
+                class="project-link"
+                href={p.url}
+                target={p.external ? '_blank' : undefined}
+                rel={p.external ? 'noopener noreferrer' : undefined}
+              >
+                {p.cta} →
+              </a>
+            </div>
+          </article>
+        ))
+      }
+    </section>
+  </main>
+
+  <SiteFooter />
+</BaseLayout>
+
+<style>
+  .project-list {
+    padding-bottom: clamp(3.5rem, 8vw, 6rem);
+  }
+  .project {
+    display: grid;
+    grid-template-columns: 0.8fr 1fr 1.4fr;
+    gap: clamp(1.25rem, 3.5vw, 2.5rem);
+    align-items: start;
+    padding-block: clamp(2.25rem, 5vw, 3.25rem);
+    border-top: 1px solid var(--line);
+  }
+  .project:last-child {
+    border-bottom: 1px solid var(--line);
+  }
+
+  .project-name {
+    font: 400 clamp(2rem, 4vw, 3rem) / 1 var(--font-head);
+  }
+  .project-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    margin-top: 12px;
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+  }
+  .project-tagline {
+    margin-top: 14px;
+    font: 400 1.2rem/1.35 var(--font-head);
+    font-style: italic;
+    color: var(--ink-soft);
+  }
+
+  .project-visual {
+    width: 100%;
+    max-width: 360px;
+  }
+
+  .project-body {
+    font: 400 16px/1.65 var(--font-body);
+    color: var(--ink-body);
+  }
+  .project-meta {
+    margin-top: 16px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .project-link {
+    display: inline-block;
+    margin-top: 16px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--accent-strong);
+    text-decoration: none;
+    border-bottom: 1px solid var(--accent);
+    padding-bottom: 2px;
+  }
+  .project-link:hover {
+    color: var(--ink);
+    border-bottom-color: var(--ink);
+  }
+
+  @media (max-width: 760px) {
+    .project {
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+    }
+  }
+</style>

@@ -1,0 +1,82 @@
+---
+// ProjectVisual — one framed tile for every project visual, so mixed-shape
+// art (a landscape web shot, a portrait phone shot, a square logo, a
+// monogram) all read consistently. Consistency comes from the fixed frame
+// and the sand mat, not from cropping. Used by the Projects rows and the
+// Center Ref detail page.
+import { Image } from 'astro:assets';
+
+interface Props {
+  kind: 'screenshot' | 'logo' | 'placeholder';
+  src?: ImageMetadata | string;
+  alt?: string;
+  name?: string;
+  aspect?: string;
+  loading?: 'lazy' | 'eager';
+}
+const {
+  kind,
+  src,
+  alt = '',
+  name = '',
+  aspect = '1 / 1',
+  loading = 'lazy',
+} = Astro.props;
+
+const monogram = name.trim().charAt(0).toUpperCase();
+---
+
+<div class:list={['pv', `pv-${kind}`]} style={`aspect-ratio:${aspect}`}>
+  {
+    kind === 'screenshot' && src && (
+      <Image
+        src={src as ImageMetadata}
+        alt={alt}
+        width={760}
+        format="webp"
+        loading={loading}
+      />
+    )
+  }
+  {
+    kind === 'logo' && src && (
+      <img src={src as string} alt={alt} loading={loading} decoding="async" />
+    )
+  }
+  {kind === 'placeholder' && <span class="pv-mono" aria-hidden="true">{monogram}</span>}
+</div>
+
+<style>
+  .pv {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: var(--paper-sand);
+    border: 1px solid var(--line);
+  }
+
+  /* Screenshots fill the tile, contained, with the warm grade (same
+     treatment Plate.astro applies to photos). */
+  .pv-screenshot :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding: clamp(8px, 4%, 22px);
+    filter: var(--photo-filter);
+  }
+
+  /* A logo is a mark, not a photo — centered, capped, never edge-to-edge. */
+  .pv-logo img {
+    max-width: 46%;
+    max-height: 46%;
+    object-fit: contain;
+  }
+
+  /* Concept-stage projects with no art get a typeset monogram. */
+  .pv-mono {
+    font: 400 clamp(2.5rem, 9vw, 4.5rem) / 1 var(--font-head);
+    color: var(--muted);
+  }
+</style>

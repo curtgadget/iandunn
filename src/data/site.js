@@ -37,7 +37,7 @@ export const FOOTER_COLUMNS = [
     items: [
       { label: 'FutAve', url: '/projects' },
       { label: 'TheraBasics', url: 'https://therabasics.com' },
-      { label: 'Center Ref', url: '/projects/center-ref' },
+      { label: 'Center Ref', url: 'https://centerref.com' },
     ],
   },
   {

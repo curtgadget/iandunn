@@ -1,8 +1,7 @@
 ---
-// ProjectCard — a quiet, text-forward project tile. No cover art: the
-// projects have no screenshots yet, and an honest text card beats a
-// gradient placeholder. The `featured` variant is a wider, horizontal
-// card that breaks the equal-column grid and gives one project weight.
+// ProjectCard — a quiet project tile led by the product's logo mark.
+// The `featured` variant is a wider, horizontal card that breaks the
+// equal-column grid and gives one project weight.
 interface Props {
   name: string;
   tagline: string;
@@ -11,14 +10,25 @@ interface Props {
   status: string;
   statusColor: string;
   href: string;
+  logo?: string;
+  logoAlt?: string;
   featured?: boolean;
 }
-const { name, tagline, body, meta, status, statusColor, href, featured = false } =
-  Astro.props;
+const {
+  name, tagline, body, meta, status, statusColor, href,
+  logo, logoAlt, featured = false,
+} = Astro.props;
 ---
 
 <a class:list={['card', { featured }]} href={href}>
   <div class="card-main">
+    {
+      logo && (
+        <span class="card-logo">
+          <img src={logo} alt={logoAlt ?? `${name} logo`} loading="lazy" decoding="async" />
+        </span>
+      )
+    }
     <div class="card-head">
       <h3 class="card-name">{name}</h3>
       <span class="card-status">
@@ -63,6 +73,22 @@ const { name, tagline, body, meta, status, statusColor, href, featured = false }
     display: flex;
     flex-direction: column;
     flex: 1;
+  }
+
+  .card-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    margin-bottom: 14px;
+    background: var(--paper-sand);
+    border: 1px solid var(--line);
+  }
+  .card-logo img {
+    max-width: 58%;
+    max-height: 58%;
+    object-fit: contain;
   }
 
   .card-head {
@@ -135,6 +161,11 @@ const { name, tagline, body, meta, status, statusColor, href, featured = false }
   .card.featured .card-rest {
     padding: 34px 32px;
     justify-content: center;
+  }
+  .card.featured .card-logo {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 18px;
   }
   .card.featured .card-name {
     font-size: clamp(2.4rem, 4vw, 3.25rem);
