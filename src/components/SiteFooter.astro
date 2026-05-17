@@ -1,0 +1,190 @@
+---
+// SiteFooter — a calm dark footer: a "Say hi." mark, the social list,
+// three link columns, and a quiet copyright line.
+import SocialIcon from './SocialIcon.astro';
+import { SOCIALS, FOOTER_COLUMNS } from '../data/site.js';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer section">
+  <div class="footer-grid">
+    <div class="footer-lead">
+      <p class="say-hi">Say hi<span class="dot">.</span></p>
+      <p class="footnote">
+        For collaborations, advice, or a chat about a side project.
+        My inbox is open.
+      </p>
+
+      <ul class="social-list">
+        {
+          SOCIALS.map((s) => (
+            <li>
+              <a
+                href={s.url}
+                target={s.url.startsWith('http') ? '_blank' : undefined}
+                rel={s.url.startsWith('http') ? 'noopener noreferrer' : undefined}
+              >
+                <span class="social-icon">
+                  <SocialIcon id={s.id} size={16} />
+                </span>
+                <span class="social-name">{s.label}</span>
+                <span class="social-handle">{s.handle}</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    {
+      FOOTER_COLUMNS.map((col) => (
+        <div class="footer-col">
+          <p class="col-title">{col.title}</p>
+          <ul>
+            {col.items.map((item) => (
+              <li>
+                {item.url ? (
+                  <a
+                    href={item.url}
+                    target={item.url.startsWith('http') ? '_blank' : undefined}
+                    rel={item.url.startsWith('http') ? 'noopener noreferrer' : undefined}
+                  >
+                    {item.label}
+                  </a>
+                ) : (
+                  <span>{item.label}</span>
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))
+    }
+  </div>
+
+  <div class="footer-meta">
+    <span>© {year} Ian Dunn</span>
+    <span>Los Angeles, California</span>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background: var(--dark);
+    color: var(--dark-fg);
+    padding-top: clamp(3rem, 7vw, 5rem);
+    padding-bottom: 32px;
+  }
+
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 1.7fr 1fr 1fr 1fr;
+    gap: 48px 40px;
+  }
+
+  /* ── Lead column ────────────────────────────────────────── */
+  .say-hi {
+    font: 400 clamp(2.5rem, 5vw, 3.5rem) / 1 var(--font-head);
+  }
+  .dot {
+    color: var(--accent-on-dark);
+  }
+  .footnote {
+    margin-top: 16px;
+    max-width: 320px;
+    font: 400 15px/1.6 var(--font-body);
+    color: var(--dark-muted);
+  }
+
+  .social-list {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    max-width: 340px;
+  }
+  .social-list a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 0;
+    color: var(--dark-fg);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(148, 139, 120, 0.18);
+    transition: color 0.18s ease;
+  }
+  .social-list li:first-child a {
+    border-top: 1px solid rgba(148, 139, 120, 0.18);
+  }
+  .social-list a:hover {
+    color: var(--accent-on-dark);
+  }
+  .social-icon {
+    width: 20px;
+    display: inline-flex;
+    justify-content: center;
+    color: var(--dark-muted);
+  }
+  .social-name {
+    flex: 1;
+    font-size: 15px;
+  }
+  .social-handle {
+    font-size: 12px;
+    color: var(--dark-muted);
+  }
+
+  /* ── Link columns ───────────────────────────────────────── */
+  .col-title {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--dark-muted);
+    margin-bottom: 16px;
+  }
+  .footer-col ul {
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+  }
+  .footer-col li {
+    font-size: 14px;
+  }
+  .footer-col a {
+    text-decoration: none;
+    transition: color 0.18s ease;
+  }
+  .footer-col a:hover {
+    color: var(--accent-on-dark);
+  }
+
+  /* ── Meta ───────────────────────────────────────────────── */
+  .footer-meta {
+    margin-top: clamp(2.5rem, 6vw, 4rem);
+    padding-top: 22px;
+    border-top: 1px solid rgba(148, 139, 120, 0.18);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px 24px;
+    font-size: 12px;
+    color: var(--dark-muted);
+  }
+
+  /* ── Responsive ─────────────────────────────────────────── */
+  @media (max-width: 860px) {
+    .footer-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+    .footer-lead {
+      grid-column: 1 / -1;
+    }
+  }
+  @media (max-width: 520px) {
+    .footer-grid {
+      grid-template-columns: 1fr;
+      gap: 36px;
+    }
+  }
+</style>

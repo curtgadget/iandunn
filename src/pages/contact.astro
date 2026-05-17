@@ -1,0 +1,147 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SiteNav from '../components/SiteNav.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import PageHeader from '../components/PageHeader.astro';
+import SocialIcon from '../components/SocialIcon.astro';
+
+// Every channel here is real and current.
+const channels = [
+  {
+    id: 'email',
+    name: 'Email',
+    handle: 'iandunn@iandunn.net',
+    url: 'mailto:iandunn@iandunn.net',
+    note: 'Best for intros, collaborations, and anything that deserves more than a quick reply.',
+  },
+  {
+    id: 'calendar',
+    name: 'Book a call',
+    handle: 'Google Calendar',
+    url: 'https://calendar.app.google/aEmvi9bEvT1sPwnS8',
+    note: 'Thirty minutes on the calendar. Good for advice calls or talking through a side project.',
+  },
+  {
+    id: 'linkedin',
+    name: 'LinkedIn',
+    handle: 'in/iancdunn',
+    url: 'https://www.linkedin.com/in/iancdunn',
+    note: 'Where the work history lives. Best for hiring conversations and reconnecting.',
+  },
+  {
+    id: 'threads',
+    name: 'Threads',
+    handle: '@curtgadget',
+    url: 'https://www.threads.com/@curtgadget',
+    note: 'Short, semi-public, and usually the quickest way to get a reply.',
+  },
+  {
+    id: 'instagram',
+    name: 'Instagram',
+    handle: '@curtgadget',
+    url: 'https://www.instagram.com/curtgadget',
+    note: 'Photos, mostly. Family, the dog, the occasional U-12 sideline.',
+  },
+  {
+    id: 'github',
+    name: 'GitHub',
+    handle: '@curtgadget',
+    url: 'https://github.com/curtgadget',
+    note: 'Public code is tools and dotfiles; the real work lives in private repos.',
+  },
+];
+---
+
+<BaseLayout
+  title="Contact — Ian Dunn"
+  description="Get in touch with Ian Dunn: email, a booking link, LinkedIn, Threads, Instagram, and GitHub."
+>
+  <SiteNav active="Contact" />
+
+  <main id="main">
+    <PageHeader
+      eyebrow="Contact"
+      title="Let’s talk"
+      intro="For collaborations, advice, side-project chatter, or just to say hello. Pick whichever channel suits; they all reach me."
+    />
+
+    <section class="section channels">
+      <div class="channel-grid">
+        {
+          channels.map((c) => (
+            <a
+              class="channel"
+              href={c.url}
+              target={c.url.startsWith('http') ? '_blank' : undefined}
+              rel={c.url.startsWith('http') ? 'noopener noreferrer' : undefined}
+            >
+              <span class="channel-icon">
+                <SocialIcon id={c.id} size={20} />
+              </span>
+              <h2 class="channel-name">{c.name}</h2>
+              <p class="channel-handle">{c.handle}</p>
+              <p class="channel-note">{c.note}</p>
+              <span class="channel-go">Open →</span>
+            </a>
+          ))
+        }
+      </div>
+    </section>
+  </main>
+
+  <SiteFooter />
+</BaseLayout>
+
+<style>
+  .channels {
+    padding-bottom: clamp(3.5rem, 8vw, 6rem);
+  }
+  .channel-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(248px, 1fr));
+    gap: 16px;
+  }
+
+  .channel {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    padding: 26px 24px 22px;
+    background: var(--paper-card);
+    border: 1px solid var(--line);
+    text-decoration: none;
+    color: var(--ink);
+    transition: border-color 0.18s ease;
+  }
+  .channel:hover {
+    border-color: var(--ink);
+  }
+  .channel:hover .channel-go {
+    color: var(--accent-strong);
+  }
+
+  .channel-icon {
+    display: inline-flex;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .channel-name {
+    font: 400 26px/1 var(--font-head);
+  }
+  .channel-handle {
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .channel-note {
+    margin-top: 4px;
+    font: 400 14px/1.55 var(--font-body);
+    color: var(--ink-body);
+    flex: 1;
+  }
+  .channel-go {
+    margin-top: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    transition: color 0.18s ease;
+  }
+</style>

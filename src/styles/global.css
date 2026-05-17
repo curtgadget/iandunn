@@ -1,0 +1,152 @@
+/* global.css — design tokens + base styles for iandunn.net
+   ──────────────────────────────────────────────────────────────
+   A warm editorial system: cream paper, ink text, Sorts Mill Goudy (a
+   warm old-style serif) for display, Helvetica for body, and terracotta
+   held in reserve for emphasis and interaction.
+
+   Monospace is deliberately NOT a global display token — it is
+   scoped to the contribution graph, where it reads as data. */
+
+:root {
+  /* ── Palette ──────────────────────────────────────────────── */
+  --paper:      #f5f1ea; /* primary cream background          */
+  --paper-sand: #ece5d6; /* one tonal band (the service block)*/
+  --paper-card: #fbf8f1; /* raised card background            */
+  --ink:        #1f1d1a; /* primary text                      */
+  --ink-soft:   #34302a; /* lead / hero body copy             */
+  --ink-body:   #4a443b; /* standard body copy                */
+  --muted:      #675d4b; /* labels, captions — clears WCAG AA */
+  --line:       #ddd5c3; /* hairline borders — the only rule  */
+
+  /* Terracotta, split by contrast context so the brand hue never
+     ships as a contrast failure:
+       --accent         decoration only (rules, dots, focus ring)
+       --accent-strong  accent-COLORED TEXT on light (~5.6:1, AA)
+       --accent-on-dark accent text on the dark footer (~5:1)    */
+  --accent:         #c4622d;
+  --accent-strong:  #9c4a1e;
+  --accent-on-dark: #db8a4f;
+
+  /* the contribution graph — its own muted green */
+  --green:         #436b46;
+  --contrib-empty: #e7e0cf;
+
+  /* dark footer */
+  --dark:       #1c1a17;
+  --dark-fg:    #f0ece1;
+  --dark-muted: #948b78;
+
+  /* ── Type ─────────────────────────────────────────────────── */
+  --font-head: "Sorts Mill Goudy", Georgia, "Times New Roman", serif;
+  --font-body: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+  /* ── Photo treatment — a gentle warm grade ────────────────── */
+  --photo-filter: saturate(0.96) contrast(1.02) brightness(0.99);
+
+  /* ── Layout ───────────────────────────────────────────────── */
+  --max-width: 1180px;
+  --gutter: clamp(1.25rem, 5vw, 3.5rem);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4, p, blockquote, figure, ul {
+  margin: 0;
+}
+
+ul {
+  padding: 0;
+  list-style: none;
+}
+
+a {
+  color: inherit;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+button {
+  font-family: inherit;
+}
+
+/* Visible focus ring for keyboard users — the cream palette erases
+   the browser default, so this is a real accessibility requirement. */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 1px;
+}
+
+/* Skip link — offscreen until focused, then drops into view. */
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -120px;
+  z-index: 100;
+  background: var(--ink);
+  color: var(--paper);
+  padding: 10px 16px;
+  font-size: 14px;
+  text-decoration: none;
+  transition: top 0.16s ease;
+}
+.skip-link:focus {
+  top: 1rem;
+}
+
+/* Full-bleed section whose content is centred and capped at --max-width. */
+.section {
+  padding-inline: max(var(--gutter), calc((100% - var(--max-width)) / 2));
+}
+
+/* Eyebrow — the one quiet label style. */
+.eyebrow {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

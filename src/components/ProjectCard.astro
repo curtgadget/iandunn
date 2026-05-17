@@ -1,0 +1,164 @@
+---
+// ProjectCard — a quiet, text-forward project tile. No cover art: the
+// projects have no screenshots yet, and an honest text card beats a
+// gradient placeholder. The `featured` variant is a wider, horizontal
+// card that breaks the equal-column grid and gives one project weight.
+interface Props {
+  name: string;
+  tagline: string;
+  body: string;
+  meta: string;
+  status: string;
+  statusColor: string;
+  href: string;
+  featured?: boolean;
+}
+const { name, tagline, body, meta, status, statusColor, href, featured = false } =
+  Astro.props;
+---
+
+<a class:list={['card', { featured }]} href={href}>
+  <div class="card-main">
+    <div class="card-head">
+      <h3 class="card-name">{name}</h3>
+      <span class="card-status">
+        <span class="dot" style={`background:${statusColor}`}></span>
+        {status}
+      </span>
+    </div>
+    <p class="card-tagline">{tagline}</p>
+  </div>
+
+  <div class="card-rest">
+    <p class="card-body">{body}</p>
+    <div class="card-foot">
+      <span class="card-meta">{meta}</span>
+      <span class="card-view">View →</span>
+    </div>
+  </div>
+</a>
+
+<style>
+  .card {
+    display: flex;
+    flex-direction: column;
+    background: var(--paper-card);
+    border: 1px solid var(--line);
+    text-decoration: none;
+    color: var(--ink);
+    transition: border-color 0.18s ease;
+  }
+  .card:hover {
+    border-color: var(--ink);
+  }
+  .card:hover .card-view {
+    color: var(--accent-strong);
+  }
+
+  .card-main {
+    padding: 26px 24px 0;
+  }
+  .card-rest {
+    padding: 0 24px 22px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+
+  .card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 14px;
+  }
+  .card-name {
+    font: 400 32px/1 var(--font-head);
+  }
+  .card-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+  }
+
+  .card-tagline {
+    margin-top: 8px;
+    font: 400 17px/1.35 var(--font-head);
+    font-style: italic;
+    color: var(--ink-soft);
+  }
+  .card-body {
+    margin-top: 16px;
+    font: 400 14px/1.6 var(--font-body);
+    color: var(--ink-body);
+    flex: 1;
+  }
+
+  .card-foot {
+    margin-top: 22px;
+    padding-top: 14px;
+    border-top: 1px solid var(--line);
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+  }
+  .card-meta {
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .card-view {
+    font-size: 13px;
+    font-weight: 500;
+    transition: color 0.18s ease;
+  }
+
+  /* ── Featured variant — wide, horizontal, larger name ───────── */
+  .card.featured {
+    display: grid;
+    grid-template-columns: 1fr 1.15fr;
+  }
+  .card.featured .card-main {
+    padding: 34px 32px;
+    border-right: 1px solid var(--line);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .card.featured .card-rest {
+    padding: 34px 32px;
+    justify-content: center;
+  }
+  .card.featured .card-name {
+    font-size: clamp(2.4rem, 4vw, 3.25rem);
+  }
+  .card.featured .card-tagline {
+    margin-top: 12px;
+    font-size: 19px;
+  }
+  .card.featured .card-body {
+    margin-top: 0;
+    flex: 0;
+  }
+
+  @media (max-width: 860px) {
+    .card.featured {
+      grid-template-columns: 1fr;
+    }
+    .card.featured .card-main {
+      border-right: none;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 22px;
+    }
+    .card.featured .card-body {
+      margin-top: 16px;
+    }
+  }
+</style>

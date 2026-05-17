@@ -1,0 +1,48 @@
+---
+// SocialRow — a quiet inline row of social links (icon + name).
+import SocialIcon from './SocialIcon.astro';
+import { SOCIALS } from '../data/site.js';
+
+interface Props {
+  items?: typeof SOCIALS;
+  class?: string;
+}
+const { items = SOCIALS, class: className } = Astro.props;
+---
+
+<ul class:list={['social-row', className]}>
+  {
+    items.map((s) => (
+      <li>
+        <a
+          href={s.url}
+          target={s.url.startsWith('http') ? '_blank' : undefined}
+          rel={s.url.startsWith('http') ? 'noopener noreferrer' : undefined}
+        >
+          <SocialIcon id={s.id} size={15} />
+          <span>{s.label}</span>
+        </a>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .social-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 22px;
+  }
+  .social-row a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--muted);
+    text-decoration: none;
+    font: 500 13px/1 var(--font-body);
+    transition: color 0.18s ease;
+  }
+  .social-row a:hover {
+    color: var(--accent-strong);
+  }
+</style>

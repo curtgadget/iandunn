@@ -1,0 +1,140 @@
+---
+// SiteNav — quiet masthead navigation: serif wordmark + five links.
+// Below 760px the links collapse behind a "Menu / Close" text toggle.
+import { NAV_ITEMS } from '../data/site.js';
+
+interface Props {
+  active?: string;
+}
+const { active } = Astro.props;
+---
+
+<header class="site-nav section">
+  <a class="brand" href="/">Ian Dunn</a>
+
+  <button
+    class="menu-toggle"
+    type="button"
+    aria-expanded="false"
+    aria-controls="site-menu"
+  >
+    <span class="label-closed">Menu</span>
+    <span class="label-open">Close</span>
+  </button>
+
+  <nav class="nav-links" id="site-menu" aria-label="Primary">
+    <ul>
+      {
+        NAV_ITEMS.map((item) => (
+          <li>
+            <a
+              href={item.href}
+              class:list={['nav-link', { active: item.label === active }]}
+              aria-current={item.label === active ? 'page' : undefined}
+            >
+              {item.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+</header>
+
+<style>
+  .site-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 14px 32px;
+    padding-block: 22px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .brand {
+    font: 400 24px/1 var(--font-head);
+    text-decoration: none;
+    color: var(--ink);
+  }
+
+  /* ── Menu toggle (mobile only) ──────────────────────────── */
+  .menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    padding: 4px 0;
+    cursor: pointer;
+    font: 500 13px/1 var(--font-body);
+    letter-spacing: 0.04em;
+    color: var(--ink);
+  }
+  .label-open {
+    display: none;
+  }
+  .site-nav[data-open] .label-closed {
+    display: none;
+  }
+  .site-nav[data-open] .label-open {
+    display: inline;
+  }
+
+  /* ── Links ──────────────────────────────────────────────── */
+  .nav-links ul {
+    display: flex;
+    gap: 30px;
+  }
+  .nav-link {
+    font: 500 14px/1 var(--font-body);
+    text-decoration: none;
+    color: var(--ink);
+    padding-bottom: 3px;
+    border-bottom: 1px solid transparent;
+    transition: color 0.18s ease, border-color 0.18s ease;
+  }
+  .nav-link:hover {
+    color: var(--accent-strong);
+  }
+  .nav-link.active {
+    color: var(--accent-strong);
+    border-bottom-color: var(--accent);
+  }
+
+  /* ── Responsive ─────────────────────────────────────────── */
+  @media (max-width: 760px) {
+    .menu-toggle {
+      display: inline-block;
+    }
+    .nav-links {
+      width: 100%;
+      display: none;
+    }
+    .site-nav[data-open] .nav-links {
+      display: block;
+      padding-top: 4px;
+    }
+    .nav-links ul {
+      flex-direction: column;
+      gap: 16px;
+    }
+    .nav-link {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+    /* a filled accent-text label, not a side-stripe, marks the
+       active item in the stacked menu */
+    .nav-link.active {
+      color: var(--accent-strong);
+    }
+  }
+</style>
+
+<script>
+  const nav = document.querySelector<HTMLElement>('.site-nav');
+  const toggle = nav?.querySelector<HTMLButtonElement>('.menu-toggle');
+
+  toggle?.addEventListener('click', () => {
+    const open = nav!.toggleAttribute('data-open');
+    toggle.setAttribute('aria-expanded', String(open));
+  });
+</script>

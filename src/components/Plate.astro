@@ -1,0 +1,70 @@
+---
+// Plate — a tagged photo block: image with an optional corner "mark"
+// overlay and an optional mono caption beneath. The image filter is the
+// design's "warm" photo treatment, set globally via --photo-filter.
+interface Props {
+  src: string;
+  alt: string;
+  mark?: string;
+  caption?: string;
+  aspect?: string;
+  loading?: 'lazy' | 'eager';
+}
+const {
+  src,
+  alt,
+  mark,
+  caption,
+  aspect = '3 / 4',
+  loading = 'lazy',
+} = Astro.props;
+---
+
+<figure class="plate">
+  <div class="frame" style={`aspect-ratio:${aspect}`}>
+    <img src={src} alt={alt} loading={loading} decoding="async" />
+    {mark && <span class="mark">{mark}</span>}
+  </div>
+  {caption && <figcaption>{caption}</figcaption>}
+</figure>
+
+<style>
+  .plate {
+    position: relative;
+    width: 100%;
+  }
+
+  .frame {
+    position: relative;
+    width: 100%;
+    background: #e5dfd2;
+    overflow: hidden;
+  }
+
+  .frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: var(--photo-filter);
+  }
+
+  .mark {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    font: 600 9px/1 var(--font-mono);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--paper);
+    background: rgba(0, 0, 0, 0.55);
+    padding: 5px 7px;
+  }
+
+  figcaption {
+    margin-top: 6px;
+    font: 500 9px/1.4 var(--font-mono);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+</style>
