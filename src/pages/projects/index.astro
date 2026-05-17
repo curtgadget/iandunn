@@ -11,9 +11,20 @@ const LIVE = '#3f6f49';
 const FLIGHT = '#a9762f';
 const CONCEPT = '#8a7d66';
 
+// Every project is one row with the same skeleton: a left rail (mark,
+// name, status) and a content column that leads with the tagline set
+// large. A `screenshot` row also carries a real device shot; a `text`
+// row leans on the tagline as its visual anchor — no hollow image box.
+// A text row graduates to a screenshot row by adding `shot` + `shotAlt`
+// and switching `layout`.
+//
+// mark.fit: 'contain' = a logo on the sand mat · 'cover' = an app icon
+// shown full-bleed · 'mono' = a typeset initial, for projects with no art.
 const projects = [
   {
     name: 'FutAve',
+    layout: 'text',
+    mark: { fit: 'contain', src: '/logos/futave-mark.svg', alt: 'FutAve logo' },
     status: 'Live',
     statusColor: LIVE,
     tagline: 'A taste engine for soccer.',
@@ -22,10 +33,11 @@ const projects = [
     url: 'https://futave.com',
     cta: 'Visit futave.com',
     external: true,
-    visual: { kind: 'logo', src: '/logos/futave-mark.svg', alt: 'FutAve logo' },
   },
   {
     name: 'TheraBasics',
+    layout: 'text',
+    mark: { fit: 'cover', src: '/logos/therabasics-icon.png', alt: 'TheraBasics app icon' },
     status: 'TestFlight',
     statusColor: FLIGHT,
     tagline: 'The work between sessions.',
@@ -34,10 +46,13 @@ const projects = [
     url: 'https://therabasics.com',
     cta: 'Visit therabasics.com',
     external: true,
-    visual: { kind: 'logo', src: '/logos/therabasics-icon.png', alt: 'TheraBasics app icon' },
   },
   {
     name: 'Center Ref',
+    layout: 'screenshot',
+    mark: { fit: 'contain', src: '/logos/centerref-icon.svg', alt: 'Center Ref logo' },
+    shot: crWatch,
+    shotAlt: 'Center Ref running a match on Apple Watch',
     status: 'Public beta',
     statusColor: FLIGHT,
     tagline: 'Ref the match. Not the screen.',
@@ -46,10 +61,11 @@ const projects = [
     url: 'https://centerref.com',
     cta: 'Visit centerref.com',
     external: true,
-    visual: { kind: 'screenshot', src: crWatch, alt: 'Center Ref running a match on Apple Watch' },
   },
   {
     name: 'Numbrix',
+    layout: 'text',
+    mark: { fit: 'mono' },
     status: 'Concept',
     statusColor: CONCEPT,
     tagline: 'Multiplication by strategy, not drill.',
@@ -58,7 +74,6 @@ const projects = [
     url: 'https://numbrix.app',
     cta: 'numbrix.app',
     external: true,
-    visual: { kind: 'placeholder' },
   },
 ];
 ---
@@ -79,34 +94,46 @@ const projects = [
     <section class="section project-list">
       {
         projects.map((p) => (
-          <article class="project">
+          <article class:list={['project', p.layout === 'screenshot' ? 'has-shot' : 'text-only']}>
             <div class="project-id">
+              <span class:list={['project-mark', `is-${p.mark.fit}`]}>
+                {p.mark.fit === 'mono' ? (
+                  <span class="mark-mono" aria-hidden="true">
+                    {p.name.charAt(0)}
+                  </span>
+                ) : (
+                  <img src={p.mark.src} alt={p.mark.alt} loading="lazy" decoding="async" />
+                )}
+              </span>
               <h2 class="project-name">{p.name}</h2>
               <span class="project-status">
                 <span class="dot" style={`background:${p.statusColor}`} />
                 {p.status}
               </span>
+            </div>
+
+            <div class="project-content">
               <p class="project-tagline">{p.tagline}</p>
-            </div>
-            <div class="project-visual">
-              <ProjectVisual
-                kind={p.visual.kind}
-                src={p.visual.src}
-                alt={p.visual.alt}
-                name={p.name}
-              />
-            </div>
-            <div class="project-detail">
-              <p class="project-body">{p.body}</p>
-              <p class="project-meta">{p.meta}</p>
-              <a
-                class="project-link"
-                href={p.url}
-                target={p.external ? '_blank' : undefined}
-                rel={p.external ? 'noopener noreferrer' : undefined}
-              >
-                {p.cta} →
-              </a>
+
+              <div class="project-lower">
+                {p.layout === 'screenshot' && (
+                  <div class="project-visual">
+                    <ProjectVisual kind="screenshot" src={p.shot} alt={p.shotAlt} />
+                  </div>
+                )}
+                <div class="project-detail">
+                  <p class="project-body">{p.body}</p>
+                  <p class="project-meta">{p.meta}</p>
+                  <a
+                    class="project-link"
+                    href={p.url}
+                    target={p.external ? '_blank' : undefined}
+                    rel={p.external ? 'noopener noreferrer' : undefined}
+                  >
+                    {p.cta} →
+                  </a>
+                </div>
+              </div>
             </div>
           </article>
         ))
@@ -121,26 +148,58 @@ const projects = [
   .project-list {
     padding-bottom: clamp(3.5rem, 8vw, 6rem);
   }
+
+  /* Every row shares one skeleton: a left rail and a content column.
+     The rail width is fixed so project names align down the page. */
   .project {
     display: grid;
-    grid-template-columns: 0.8fr 1fr 1.4fr;
-    gap: clamp(1.25rem, 3.5vw, 2.5rem);
+    grid-template-columns: 0.9fr 2.6fr;
+    gap: clamp(1.5rem, 4vw, 3rem);
     align-items: start;
-    padding-block: clamp(2.25rem, 5vw, 3.25rem);
+    padding-block: clamp(2.5rem, 5vw, 3.5rem);
     border-top: 1px solid var(--line);
   }
   .project:last-child {
     border-bottom: 1px solid var(--line);
   }
 
+  /* ── Left rail: mark, name, status ──────────────────────────── */
+  .project-mark {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    height: 46px;
+    background: var(--paper-sand);
+    border: 1px solid var(--line);
+    overflow: hidden;
+  }
+  /* A logo is a mark — centered, capped, room around it. */
+  .project-mark.is-contain img {
+    max-width: 56%;
+    max-height: 56%;
+    object-fit: contain;
+  }
+  /* An app icon owns its own background — show it full-bleed. */
+  .project-mark.is-cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .mark-mono {
+    font: 400 1.6rem/1 var(--font-head);
+    color: var(--muted);
+  }
+
   .project-name {
-    font: 400 clamp(2rem, 4vw, 3rem) / 1 var(--font-head);
+    margin-top: 16px;
+    font: 400 clamp(1.9rem, 3.4vw, 2.6rem) / 1.05 var(--font-head);
   }
   .project-status {
     display: inline-flex;
     align-items: center;
     gap: 7px;
-    margin-top: 12px;
+    margin-top: 10px;
     font-size: 12px;
     color: var(--muted);
   }
@@ -149,19 +208,37 @@ const projects = [
     height: 6px;
     border-radius: 50%;
   }
+
+  /* ── Content column: the tagline leads, then the lower band ─── */
+  .project-content {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(1.1rem, 2.6vw, 1.7rem);
+  }
+  /* Set large, the tagline is the row's visual anchor — it carries
+     a text row on its own and decks a screenshot row. */
   .project-tagline {
-    margin-top: 14px;
-    font: 400 1.2rem/1.35 var(--font-head);
-    font-style: italic;
+    max-width: 30ch;
+    font: italic 400 clamp(1.45rem, 2.6vw, 2.15rem) / 1.25 var(--font-head);
     color: var(--ink-soft);
   }
 
+  .project-lower {
+    display: grid;
+    gap: clamp(1.25rem, 3vw, 2.25rem);
+    align-items: start;
+  }
+  /* A screenshot row splits the lower band: device shot, then detail. */
+  .has-shot .project-lower {
+    grid-template-columns: 1fr 1.25fr;
+  }
   .project-visual {
     width: 100%;
-    max-width: 360px;
+    max-width: 320px;
   }
 
   .project-body {
+    max-width: 62ch;
     font: 400 16px/1.65 var(--font-body);
     color: var(--ink-body);
   }
@@ -185,10 +262,16 @@ const projects = [
     border-bottom-color: var(--ink);
   }
 
+  /* The device shot stacks above its detail before the tile gets cramped. */
+  @media (max-width: 880px) {
+    .has-shot .project-lower {
+      grid-template-columns: 1fr;
+    }
+  }
   @media (max-width: 760px) {
     .project {
       grid-template-columns: 1fr;
-      gap: 1.25rem;
+      gap: 1.5rem;
     }
   }
 </style>
