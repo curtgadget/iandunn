@@ -1,0 +1,43 @@
+# Keeps the home-page contribution graph current.
+#
+# The graph is baked into the static build at deploy time (see src/lib/contrib.js),
+# so it only refreshes when Cloudflare Pages rebuilds — which normally happens
+# only on a git push. This workflow pings a Cloudflare Pages Deploy Hook on a
+# schedule, triggering a rebuild that re-fetches the live GitHub numbers.
+#
+# Setup (one time):
+#   1. Cloudflare dashboard → Pages → your project → Settings → Builds & deployments
+#      → Deploy hooks → "Add deploy hook" (name it e.g. "scheduled-refresh",
+#      branch: the one Cloudflare deploys, e.g. main). Copy the generated URL.
+#   2. GitHub → this repo → Settings → Secrets and variables → Actions →
+#      "New repository secret" → name CLOUDFLARE_DEPLOY_HOOK, value = that URL.
+#
+# Trigger it by hand anytime from the Actions tab ("Run workflow").
+
+name: Refresh contribution graph
+
+on:
+  schedule:
+    # 12:00 UTC every Monday. Cron has no timezone — adjust if you prefer.
+    - cron: '0 12 * * 1'
+  workflow_dispatch: {}
+
+jobs:
+  trigger-rebuild:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Cloudflare Pages deploy hook
+        env:
+          DEPLOY_HOOK: ${{ secrets.CLOUDFLARE_DEPLOY_HOOK }}
+        run: |
+          if [ -z "$DEPLOY_HOOK" ]; then
+            echo "::error::CLOUDFLARE_DEPLOY_HOOK secret is not set. See the setup notes in this workflow file."
+            exit 1
+          fi
+          echo "Triggering Cloudflare Pages rebuild…"
+          status=$(curl -sS -o /dev/null -w '%{http_code}' -X POST "$DEPLOY_HOOK")
+          echo "Deploy hook responded with HTTP $status"
+          case "$status" in
+            2*) echo "Rebuild queued. The contribution graph will refresh once the build finishes." ;;
+            *)  echo "::error::Deploy hook returned HTTP $status"; exit 1 ;;
+          esac
