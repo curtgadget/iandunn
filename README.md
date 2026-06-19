@@ -5,13 +5,15 @@ and deployed as a static site to Cloudflare Pages.
 
 ## Status
 
-Three of the planned six pages are built:
+Five of the planned six pages are built:
 
 - Home (`/`)
-- Contact (`/contact`)
+- About (`/about`)
+- Projects (`/projects`)
 - Writing (`/writing`)
+- Contact (`/contact`)
 
-Still to come: About, Projects, and a Center Ref project page.
+Still to come: a dedicated Center Ref project page.
 
 ## Local development
 
@@ -54,7 +56,7 @@ src/
   layouts/     BaseLayout: document shell, fonts, meta tags
   components/  SiteNav, SiteFooter, PageHeader, Plate, ProjectCard,
                SocialIcon, SocialRow, ContribGrid
-  pages/       index, contact, writing
+  pages/       index, about, projects/, writing, contact
   lib/         contrib.js: the build-time GitHub fetch
   data/        site.js: nav, social, and footer links
   styles/      global.css: design tokens

@@ -6,6 +6,8 @@
 // it above the stretched layer.
 // The `featured` variant is a wider, horizontal card that breaks the
 // equal-column grid and gives one project weight.
+import StoreBadges from './StoreBadges.astro';
+
 interface Props {
   name: string;
   tagline: string;
@@ -19,10 +21,12 @@ interface Props {
   featured?: boolean;
   // When set, the meta line reads `{meta} {label}` with the label linked.
   metaLink?: { label: string; href: string };
+  // Shipped mobile apps get official store badges below the body.
+  stores?: { ios?: string; android?: string };
 }
 const {
   name, tagline, body, meta, status, statusColor, href,
-  logo, logoAlt, featured = false, metaLink,
+  logo, logoAlt, featured = false, metaLink, stores,
 } = Astro.props;
 ---
 
@@ -49,6 +53,13 @@ const {
 
   <div class="card-rest">
     <p class="card-body">{body}</p>
+    {
+      stores && (
+        <div class="card-stores">
+          <StoreBadges ios={stores.ios} android={stores.android} label={name} height={34} />
+        </div>
+      )
+    }
     <div class="card-foot">
       <span class="card-meta">
         {
@@ -165,6 +176,10 @@ const {
     font: 400 14px/1.6 var(--font-body);
     color: var(--ink-body);
     flex: 1;
+  }
+  /* Store badges sit between the body and the foot rule. */
+  .card-stores {
+    margin-top: 18px;
   }
 
   .card-foot {

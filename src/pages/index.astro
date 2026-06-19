@@ -6,15 +6,12 @@ import Plate from '../components/Plate.astro';
 import SocialRow from '../components/SocialRow.astro';
 import ContribGrid from '../components/ContribGrid.astro';
 import ProjectCard from '../components/ProjectCard.astro';
-import { SOCIALS } from '../data/site.js';
+import { SOCIALS, APP_LINKS } from '../data/site.js';
 import { getContributions } from '../lib/contrib.js';
 
 // Real GitHub contribution data, fetched at build time. Null when
 // GITHUB_TOKEN is unset or the fetch fails — the section is then omitted.
 const contributions = await getContributions();
-
-// Hero links — every channel except App Store.
-const heroSocials = SOCIALS.filter((s) => s.id !== 'appstore');
 
 // Status colors: green for shipping, a muted amber for in-flight work.
 const LIVE = '#3f6f49';
@@ -26,12 +23,13 @@ const projects = [
     name: 'FutAve',
     tagline: 'A taste engine for soccer.',
     body: 'Not a scores app. A curation layer: the Wave Detector flags which matches are worth watching before kickoff, and an AI layer explains why.',
-    meta: 'iOS & web',
+    meta: 'iOS, Android & web',
     status: 'Live',
     statusColor: LIVE,
     logo: '/logos/futave-mark.svg',
     logoAlt: 'FutAve logo',
     href: '/projects',
+    stores: APP_LINKS.futave,
   },
   {
     name: 'TheraBasics',
@@ -42,11 +40,12 @@ const projects = [
       label: 'Dr. Raven Barrow',
       href: 'https://www.linkedin.com/in/raven-barrow-psyd-ma-mft-she-her-84628820/',
     },
-    status: 'TestFlight',
-    statusColor: FLIGHT,
+    status: 'Live',
+    statusColor: LIVE,
     logo: '/logos/therabasics-icon.png',
     logoAlt: 'TheraBasics app icon',
     href: '/projects',
+    stores: APP_LINKS.therabasics,
   },
   {
     name: 'Center Ref',
@@ -104,7 +103,7 @@ const service = [
           <a class="cta" href="/projects">See the projects →</a>
         </div>
         <div class="hero-social">
-          <SocialRow items={heroSocials} />
+          <SocialRow items={SOCIALS} />
         </div>
       </div>
 
