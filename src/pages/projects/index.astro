@@ -4,6 +4,8 @@ import SiteNav from '../../components/SiteNav.astro';
 import SiteFooter from '../../components/SiteFooter.astro';
 import PageHeader from '../../components/PageHeader.astro';
 import ProjectVisual from '../../components/ProjectVisual.astro';
+import StoreBadges from '../../components/StoreBadges.astro';
+import { APP_LINKS } from '../../data/site.js';
 // Screenshot vendored from the centerref-site repo (src/assets/screens/).
 import crWatch from '../../assets/screens/watch-active-1h.png';
 
@@ -29,23 +31,25 @@ const projects = [
     statusColor: LIVE,
     tagline: 'A taste engine for soccer.',
     body: 'Not another live-scores app. FutAve is a curation layer: its Wave Detector scores how exciting a match will be before kickoff, weighing form, rivalry, and what is at stake, and an AI layer writes the context for why it matters. Live scores, lineups, and event timelines follow, for the matches actually worth your time.',
-    meta: 'iOS and web, Android soon · React Native, Next.js, Payload CMS',
+    meta: 'iOS, Android & web · React Native, Next.js, Payload CMS',
     url: 'https://futave.com',
     cta: 'Visit futave.com',
     external: true,
+    stores: APP_LINKS.futave,
   },
   {
     name: 'TheraBasics',
     layout: 'text',
     mark: { fit: 'cover', src: '/logos/therabasics-icon.png', alt: 'TheraBasics app icon' },
-    status: 'TestFlight',
-    statusColor: FLIGHT,
+    status: 'Live',
+    statusColor: LIVE,
     tagline: 'The work between sessions.',
-    body: 'Built with Raven, my wife and a psychologist. A mobile app gives clients the exercises and reflection that happen between appointments; a dashboard gives the therapist a place to review them. HIPAA-compliant, built on Supabase.',
+    body: 'Built with Raven, my wife and a psychologist. A mobile app gives clients the exercises and reflection that happen between appointments; a dashboard gives the therapist a place to review them. HIPAA-compliant.',
     meta: 'iOS, Android & web · React Native, Next.js',
     url: 'https://therabasics.com',
     cta: 'Visit therabasics.com',
     external: true,
+    stores: APP_LINKS.therabasics,
   },
   {
     name: 'Center Ref',
@@ -63,24 +67,21 @@ const projects = [
     external: true,
   },
   {
-    name: 'Numbrix',
+    name: 'Stonefold',
     layout: 'text',
     mark: { fit: 'mono' },
-    status: 'Concept',
+    status: 'Prototype',
     statusColor: CONCEPT,
     tagline: 'Multiplication by strategy, not drill.',
-    body: 'A math game for kids built on derived facts: working out new answers from the ones you already know, instead of drilling flashcards. Still a concept, sketched for my own kids.',
-    meta: 'Concept and research',
-    url: 'https://numbrix.app',
-    cta: 'numbrix.app',
-    external: true,
+    body: 'A math toy for kids, built on derived facts instead of flashcard drill. You drag, slice, and fuse number-slabs on an iPad until they make the target, so multiplication becomes something you reason out with your hands. Early days, sketched for my own kids — no site to show yet.',
+    meta: 'iPad · SwiftUI',
   },
 ];
 ---
 
 <BaseLayout
   title="Projects — Ian Dunn"
-  description="Side projects from Ian Dunn — FutAve, TheraBasics, Center Ref, and Numbrix."
+  description="Side projects from Ian Dunn — FutAve, TheraBasics, Center Ref, and Stonefold."
 >
   <SiteNav active="Projects" />
 
@@ -124,14 +125,26 @@ const projects = [
                 <div class="project-detail">
                   <p class="project-body">{p.body}</p>
                   <p class="project-meta">{p.meta}</p>
-                  <a
-                    class="project-link"
-                    href={p.url}
-                    target={p.external ? '_blank' : undefined}
-                    rel={p.external ? 'noopener noreferrer' : undefined}
-                  >
-                    {p.cta} →
-                  </a>
+                  {p.url && (
+                    <a
+                      class="project-link"
+                      href={p.url}
+                      target={p.external ? '_blank' : undefined}
+                      rel={p.external ? 'noopener noreferrer' : undefined}
+                    >
+                      {p.cta} →
+                    </a>
+                  )}
+                  {p.stores && (
+                    <div class="project-stores">
+                      <StoreBadges
+                        ios={p.stores.ios}
+                        android={p.stores.android}
+                        label={p.name}
+                        height={44}
+                      />
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -260,6 +273,10 @@ const projects = [
   .project-link:hover {
     color: var(--ink);
     border-bottom-color: var(--ink);
+  }
+  /* Download badges sit a step below the website link, as the download CTA. */
+  .project-stores {
+    margin-top: 22px;
   }
 
   /* The device shot stacks above its detail before the tile gets cramped. */
