@@ -21,31 +21,20 @@ Requires Node 18.20+, 20.3+, or 22+. There is **no test or lint tooling** — th
 only quality gate is `astro build` succeeding under TypeScript strict mode
 (`tsconfig.json` extends `astro/tsconfigs/strict`).
 
-## Build-time GitHub contribution graph
-
-The single non-obvious data flow in the codebase. The home page's contribution
-heatmap is **fetched at build time, not in the browser**:
-
-- `src/lib/contrib.js` (`getContributions`) POSTs to the GitHub GraphQL API and
-  reshapes the result into a 7×N grid. It runs during `astro build` and bakes the
-  data into static HTML.
-- It needs `GITHUB_TOKEN` — a classic PAT with `read:user` scope. Copy
-  `.env.example` → `.env` for local builds (git-ignored); set it as a build env
-  var in Cloudflare Pages for production.
-- **Null-safe by design**: if the token is missing or the fetch fails, it returns
-  `null` and `src/pages/index.astro` omits the entire section. It never renders
-  placeholder/invented data — this is a stated design principle, so preserve it.
-- Because the graph is frozen at build time, `.github/workflows/refresh-contrib.yml`
-  pings a Cloudflare Pages deploy hook (secret `CLOUDFLARE_DEPLOY_HOOK`) on a
-  weekly cron to trigger a rebuild that re-fetches live numbers.
+The build needs no environment variables; every page renders from data in the
+repo.
 
 ## Architecture & conventions
 
 **Single sources of truth — edit these, don't hardcode:**
 
-- `src/data/site.js` — nav items, socials, and footer columns. Shared so the nav,
-  footer, and social rows never drift. (The hero filters `SOCIALS` to a subset; the
-  footer renders all of them.)
+- `src/data/site.js` — nav items, store links (`APP_LINKS`), socials, and footer
+  columns. Shared so the nav, footer, and social rows never drift.
+- `src/data/caseStudies.js` — the shared case-study model: one entry per product
+  (opinion + problem/tradeoff/different fields, status, shot, store links). The
+  Home rows render the first three entries (teasing one field, picked by the
+  optional `tease` key); `/projects` renders all four in full. Copy edits happen
+  here, once.
 - `src/styles/global.css` — all design tokens as CSS custom properties (palette,
   fonts, layout widths, photo grade). Change a token here and it updates sitewide.
 
@@ -75,7 +64,10 @@ explicit decisions, not defaults:
 - **No olive/sage tones** — those belong to Ian's TheraBasics product and are kept
   off this site for visual separation.
 - **Fonts**: Sorts Mill Goudy (display serif) + Helvetica Neue (body, a system font,
-  not loaded). JetBrains Mono is **scoped to the contribution graph only** — don't
-  use mono as a general display voice.
+  not loaded). JetBrains Mono is the **label voice** — eyebrows, captions, and
+  case-study numbers, small and letterspaced — never body or display text.
+- The dark panel (`--dark`) appears **only in the footer**; pages are cream paper.
+- **Plain speech over cleverness**: section titles and copy are direct ("Things I'm
+  building", not wordplay). The one deliberate flourish is the terracotta period.
 - Italic serif is for genuine quotes/taglines only; placeholders stay honest (no fake
   screenshots or invented data).

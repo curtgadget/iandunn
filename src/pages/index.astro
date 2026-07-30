@@ -2,84 +2,35 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SiteNav from '../components/SiteNav.astro';
 import SiteFooter from '../components/SiteFooter.astro';
+import CaseStudyRow from '../components/CaseStudyRow.astro';
 import Plate from '../components/Plate.astro';
-import SocialRow from '../components/SocialRow.astro';
-import ContribGrid from '../components/ContribGrid.astro';
-import ProjectCard from '../components/ProjectCard.astro';
-import { SOCIALS, APP_LINKS } from '../data/site.js';
-import { getContributions } from '../lib/contrib.js';
+import { CASE_STUDIES } from '../data/caseStudies.js';
 
-// Real GitHub contribution data, fetched at build time. Null when
-// GITHUB_TOKEN is unset or the fetch fails — the section is then omitted.
-const contributions = await getContributions();
+// Home leads with the three shipped-or-shipping case studies;
+// Stonefold lives on the Case Studies page only.
+const featured = CASE_STUDIES.slice(0, 3);
 
-// Status colors: green for shipping, a muted amber for in-flight work.
-const LIVE = '#3f6f49';
-const FLIGHT = '#a9762f';
-
-// FutAve is featured (first, wide card) — it's the only shipped one.
-const projects = [
-  {
-    name: 'FutAve',
-    tagline: 'A taste engine for soccer.',
-    body: 'Not a scores app. A curation layer: the Wave Detector flags which matches are worth watching before kickoff, and an AI layer explains why.',
-    meta: 'iOS, Android & web',
-    status: 'Live',
-    statusColor: LIVE,
-    logo: '/logos/futave-mark.svg',
-    logoAlt: 'FutAve logo',
-    href: '/projects',
-    stores: APP_LINKS.futave,
-  },
-  {
-    name: 'TheraBasics',
-    tagline: 'A therapy companion.',
-    body: 'Built with Raven, my wife and a psychologist. Practical between-session tools, without the “app-y” feel.',
-    meta: 'With',
-    metaLink: {
-      label: 'Dr. Raven Barrow',
-      href: 'https://www.linkedin.com/in/raven-barrow-psyd-ma-mft-she-her-84628820/',
-    },
-    status: 'Live',
-    statusColor: LIVE,
-    logo: '/logos/therabasics-icon.png',
-    logoAlt: 'TheraBasics app icon',
-    href: '/projects',
-    stores: APP_LINKS.therabasics,
-  },
-  {
-    name: 'Center Ref',
-    tagline: 'Ref the match. Not the screen.',
-    body: 'A watch-first match clock for soccer referees: AYSO presets U6–U19, haptic period transitions, auto-armed stoppage.',
-    meta: 'Apple Watch + iPhone',
-    status: 'Public beta',
-    statusColor: FLIGHT,
-    logo: '/logos/centerref-icon.svg',
-    logoAlt: 'Center Ref logo',
-    href: '/projects',
-  },
-];
-
-const service = [
+// Off the clock — each role's copy ties back to the thesis.
+const weekend = [
   {
     role: 'People’s Warden',
     org: 'Christ the Good Shepherd · Episcopal',
-    copy: 'Elected by the congregation to represent the laity on the vestry, the parish’s governing board. Less authority than the title suggests and more showing up — which is the part that counts.',
+    tie: 'Elected to represent the laity on the vestry. Less authority than the title suggests, more showing up — which is most of what leadership is.',
   },
   {
     role: 'Board Member',
     org: 'Good Shepherd Manor · Leimert Park',
-    copy: 'Good Shepherd Manor is affordable senior housing with long roots in Leimert Park — affiliated with the parish, but its own community under its own roof. I serve on the board: governance, stewardship, and keeping a place that has housed neighbors for decades steady for the ones living there now.',
+    tie: 'Affordable senior housing with long roots. Governance and stewardship: keeping a system steady for the people living inside it.',
   },
   {
     role: 'Livestream Producer',
-    org: 'Christ the Good Shepherd · Sundays, 10 a.m.',
-    copy: 'Built the parish’s broadcast stack from scratch — automated thumbnails, bulletin integration, sermon clipping, channel management. It runs every week, mostly hands-free.',
+    org: 'Sundays, 10 a.m.',
+    tie: 'Built the parish’s broadcast stack from scratch — thumbnails, bulletins, clipping, all automated. It goes live every Sunday, and it runs without me.',
   },
   {
     role: 'AYSO Regional Referee',
-    org: 'American Youth Soccer Organization',
-    copy: 'Most Saturdays I’m on a U-12 pitch in my kids’ league, whistle in hand. The job that quietly turned into Center Ref.',
+    org: 'U-12, most Saturdays',
+    tie: 'Whistle in hand in my kids’ league. The weekend job that quietly turned into Center Ref.',
   },
 ];
 ---
@@ -88,86 +39,84 @@ const service = [
   <SiteNav active="Home" />
 
   <main id="main">
-    <!-- HERO ───────────────────────────────────────────────── -->
+    <!-- HERO — quiet paper, one declarative thesis ───────────── -->
     <section class="section hero">
-      <div class="hero-text">
-        <h1 class="hero-name">Ian Dunn</h1>
-        <p class="hero-role">Engineering manager · builder · Los Angeles</p>
-        <p class="hero-lede">
-          Senior Engineering Manager at Pinterest. Father of three, husband
-          to one, LA native with Belizean roots. Eight years as a founder
-          before eight more inside Disney, NBC, Netflix, and Spotify. I
-          build small things on the side.
-        </p>
-        <div class="hero-actions">
-          <a class="cta" href="/projects">See the projects →</a>
-        </div>
-        <div class="hero-social">
-          <SocialRow items={SOCIALS} />
-        </div>
-      </div>
+        <div class="hero-text">
+          <h1 class="hero-thesis">
+            The best systems run without you<span class="period">.</span>
+          </h1>
+          <p class="hero-lede">
+            I run my team at Pinterest by the same rule I ship side projects
+            by: know exactly who it’s for, cut what doesn’t serve them, and
+            then get out of the way. Eight years a founder before a
+            decade-plus building for Disney, NBC, Netflix, and Spotify.
+          </p>
 
-      <div class="hero-photo">
-        <Plate
-          src="/photos/chin-portrait.jpg"
-          alt="Portrait of Ian Dunn"
-          aspect="4 / 5"
-          loading="eager"
-        />
-      </div>
-    </section>
-
-    <!-- FEATURED PROJECTS ──────────────────────────────────── -->
-    <section class="section featured">
-      <div class="block-head">
-        <div class="block-title-group">
-          <p class="eyebrow">Featured work</p>
-          <h2 class="block-title">Things I’m building</h2>
-        </div>
-        <a class="block-link" href="/projects">All projects →</a>
-      </div>
-
-      <div class="project-grid">
-        {projects.map((p, i) => <ProjectCard {...p} featured={i === 0} />)}
-      </div>
-
-      {
-        contributions && (
-          <div class="activity">
-            <div class="activity-head">
-              <p class="eyebrow">Activity</p>
-              <h3 class="activity-title">The night shift</h3>
+          <!-- Mobile-only identity strip — the statement lands first,
+               the face follows small. -->
+          <div class="hero-strip">
+            <div class="strip-photo">
+              <img src="/photos/chin-portrait.jpg" alt="Ian Dunn" loading="eager" />
             </div>
-            <ContribGrid data={contributions} />
+            <p>Los Angeles · Belizean roots · whistle on Saturdays</p>
           </div>
-        )
-      }
+
+          <div class="hero-actions">
+            <a class="cta" href="/projects">Read the case studies →</a>
+            <a class="cta-ghost" href="/about">The long way in →</a>
+          </div>
+        </div>
+
+        <figure class="hero-photo">
+          <div class="hero-frame">
+            <img src="/photos/chin-portrait.jpg" alt="Ian Dunn" loading="eager" />
+          </div>
+          <figcaption>Los Angeles · Belizean roots · whistle on Saturdays</figcaption>
+        </figure>
+      </section>
+
+    <!-- CASE STUDIES ─────────────────────────────────────────── -->
+    <section class="section case-studies">
+    <div class="block-head">
+      <div>
+        <p class="eyebrow">Case studies</p>
+        <h2 class="block-title">Things I’m building</h2>
+      </div>
+      <a class="block-link" href="/projects">All case studies →</a>
+    </div>
+
+      {featured.map((c) => <CaseStudyRow study={c} />)}
     </section>
 
-    <!-- SERVICE — community & church ───────────────────────── -->
+    <!-- OFF THE CLOCK ────────────────────────────────────────── -->
     <section class="section service">
-      <div class="service-intro">
-        <p class="eyebrow">Off the clock</p>
-        <h2 class="block-title">The weekend</h2>
-        <p class="service-blurb">
-          The other half of the week — a small Episcopal parish in L.A., a
-          board seat, and a livestream rig that goes live at 10 a.m. sharp.
-        </p>
-        <div class="service-photo">
-          <Plate src="/photos/stool-seated.jpg" alt="Ian Dunn" aspect="4 / 5" />
-        </div>
-      </div>
+    <div class="service-intro">
+      <p class="eyebrow">Off the clock</p>
+      <h2 class="block-title">The weekend</h2>
+      <p class="service-blurb">
+        The other half of the week — a small Episcopal parish in L.A., a
+        board seat, and a livestream rig that goes live at 10 a.m. sharp.
+      </p>
 
-      <div class="service-list">
-        {
-          service.map((row) => (
-            <article class="service-row">
+      <!-- The artifact slot. The handoff wants a photo of the livestream
+           rig here; the portrait stands in until that shot exists. -->
+      <div class="rig">
+        <Plate src="/photos/stool-seated.jpg" alt="Ian Dunn, seated" aspect="4 / 5" />
+      </div>
+    </div>
+
+    <div class="service-list">
+      {
+        weekend.map((row) => (
+          <article class="service-row">
+            <div class="service-line">
               <h3 class="service-role">{row.role}</h3>
-              <p class="service-org">{row.org}</p>
-              <p class="service-copy">{row.copy}</p>
-            </article>
-          ))
-        }
+              <span class="service-org">{row.org}</span>
+            </div>
+            <p class="service-copy">{row.tie}</p>
+          </article>
+        ))
+      }
       </div>
     </section>
   </main>
@@ -176,18 +125,125 @@ const service = [
 </BaseLayout>
 
 <style>
-  /* ── Shared section header ──────────────────────────────── */
+  /* ── Hero — quiet paper, the thesis in ink ──────────────── */
+  .hero {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 64px;
+    align-items: center;
+    padding-block: clamp(3.5rem, 8vw, 5.5rem) clamp(3rem, 7vw, 5rem);
+  }
+  .hero-thesis {
+    font: 400 clamp(2.625rem, 6.5vw, 4.5rem) / 1.06 var(--font-head);
+    text-wrap: pretty;
+  }
+  .period {
+    color: var(--accent);
+  }
+  .hero-lede {
+    margin-top: 26px;
+    max-width: 540px;
+    font: 400 17px/1.65 var(--font-body);
+    color: var(--ink-soft);
+  }
+
+  .hero-actions {
+    margin-top: 34px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+  /* An outlined button holds the eye without shouting — the terracotta
+     stays in reserve for the period and interactions. */
+  .cta {
+    display: inline-block;
+    border: 1px solid var(--ink);
+    color: var(--ink);
+    padding: 14px 25px;
+    font: 500 14px/1 var(--font-body);
+    text-decoration: none;
+    transition: background 0.18s ease, color 0.18s ease;
+  }
+  .cta:hover {
+    background: var(--ink);
+    color: var(--paper);
+  }
+  .cta-ghost {
+    font: 500 14px/1 var(--font-body);
+    color: var(--muted);
+    text-decoration: none;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 3px;
+    transition: color 0.18s ease;
+  }
+  .cta-ghost:hover {
+    color: var(--accent-strong);
+  }
+
+  /* The portrait: desktop only, hairline frame, the site's warm grade. */
+  .hero-photo {
+    max-width: 300px;
+    width: 100%;
+    justify-self: end;
+  }
+  .hero-frame {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    border: 1px solid var(--line);
+  }
+  .hero-frame img,
+  .strip-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: var(--photo-filter);
+  }
+  .hero-photo figcaption {
+    margin-top: 8px;
+    font: 500 10px/1.4 var(--font-mono);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .hero-strip {
+    display: none;
+    gap: 14px;
+    align-items: center;
+    padding: 14px 0;
+    margin-top: 24px;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+  .strip-photo {
+    width: 56px;
+    height: 56px;
+    flex: none;
+    overflow: hidden;
+    border: 1px solid var(--line);
+  }
+  .hero-strip p {
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--muted);
+  }
+
+  /* ── Case studies ───────────────────────────────────────── */
+  .case-studies {
+    padding-block: 72px;
+  }
   .block-head {
     display: flex;
     justify-content: space-between;
     align-items: baseline;
-    gap: 16px 32px;
+    gap: 16px;
     flex-wrap: wrap;
-    margin-bottom: 36px;
+    margin-bottom: 8px;
   }
   .block-title {
     margin-top: 10px;
-    font: 400 clamp(1.9rem, 4vw, 2.9rem) / 1.08 var(--font-head);
+    font: 400 clamp(2rem, 4vw, 2.625rem) / 1.08 var(--font-head);
   }
   .block-link {
     font-size: 13px;
@@ -200,77 +256,16 @@ const service = [
     color: var(--accent-strong);
   }
 
-  /* ── Hero ───────────────────────────────────────────────── */
-  .hero {
-    display: grid;
-    grid-template-columns: 1.05fr 1fr;
-    gap: clamp(2rem, 5vw, 4rem);
-    align-items: start;
-    padding-block: clamp(2.5rem, 6vw, 4.5rem);
-  }
-  .hero-name {
-    font: 400 clamp(3rem, 8vw, 5rem) / 1 var(--font-head);
-    letter-spacing: normal;
-  }
-  .hero-role {
-    margin-top: 14px;
-    font-size: 14px;
-    color: var(--muted);
-  }
-  .hero-lede {
-    margin-top: 22px;
-    max-width: 480px;
-    font: 400 18px/1.6 var(--font-body);
-    color: var(--ink-soft);
-  }
-  .hero-actions {
-    margin-top: 30px;
-  }
-  .cta {
-    display: inline-block;
-    background: var(--ink);
-    color: var(--paper);
-    padding: 15px 26px;
-    font: 500 14px/1 var(--font-body);
-    text-decoration: none;
-    transition: background 0.18s ease;
-  }
-  .cta:hover {
-    background: var(--accent-strong);
-  }
-  .hero-social {
-    margin-top: 30px;
-    padding-top: 24px;
-    border-top: 1px solid var(--line);
-  }
-  /* .hero-photo fills its grid column by default — the mobile query
-     below caps it so the portrait isn't full-bleed on phones */
-
-  /* ── Featured projects ──────────────────────────────────── */
-  .featured {
-    padding-block: clamp(3.5rem, 8vw, 6rem);
-  }
-  /* Asymmetric: the featured card spans full width, the other two
-     sit beneath it — breaks the monotony of an equal 3-column grid. */
-  .project-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-  }
-  .project-grid > :global(.card.featured) {
-    grid-column: 1 / -1;
-  }
-
-  /* ── Service ────────────────────────────────────────────── */
+  /* ── Off the clock ──────────────────────────────────────── */
   .service {
     display: grid;
     grid-template-columns: 1fr 1.5fr;
-    gap: clamp(2rem, 5vw, 4rem);
+    gap: 64px;
     align-items: start;
     background: var(--paper-sand);
     border-top: 1px solid var(--line);
     border-bottom: 1px solid var(--line);
-    padding-block: clamp(3.5rem, 8vw, 6rem);
+    padding-block: 72px;
   }
   .service-blurb {
     margin-top: 18px;
@@ -278,10 +273,12 @@ const service = [
     font: 400 16px/1.6 var(--font-body);
     color: var(--ink-body);
   }
-  .service-photo {
-    margin-top: clamp(1.5rem, 3vw, 2.25rem);
+
+  .rig {
+    margin-top: 2.25rem;
     max-width: 360px;
   }
+
   .service-row {
     padding: 24px 0;
     border-top: 1px solid var(--line);
@@ -289,50 +286,48 @@ const service = [
   .service-row:last-child {
     border-bottom: 1px solid var(--line);
   }
+  .service-line {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    justify-content: space-between;
+  }
   .service-role {
-    font: 400 clamp(1.35rem, 2.5vw, 1.7rem) / 1.15 var(--font-head);
+    font: 400 clamp(1.35rem, 2.5vw, 1.625rem) / 1.15 var(--font-head);
   }
   .service-org {
-    margin-top: 6px;
-    font-size: 13px;
+    font-size: 12px;
     color: var(--muted);
+    flex: none;
   }
   .service-copy {
-    margin-top: 12px;
+    margin-top: 10px;
     max-width: 560px;
     font: 400 15px/1.65 var(--font-body);
     color: var(--ink-body);
   }
 
-  /* ── Activity — the contribution graph, within Featured work ─ */
-  .activity {
-    margin-top: clamp(3rem, 6vw, 4.5rem);
-    padding-top: clamp(2.5rem, 5vw, 3.5rem);
-    border-top: 1px solid var(--line);
-  }
-  .activity-head {
-    margin-bottom: 28px;
-  }
-  .activity-title {
-    margin-top: 8px;
-    font: 400 clamp(1.4rem, 2.6vw, 1.9rem) / 1.1 var(--font-head);
-  }
-
   /* ── Responsive ─────────────────────────────────────────── */
-  @media (max-width: 860px) {
+  @media (max-width: 760px) {
     .hero {
       grid-template-columns: 1fr;
+      gap: 36px;
+      padding-block: 48px;
     }
     .hero-photo {
-      order: -1;
-      max-width: 380px;
-      margin-inline: auto;
+      display: none;
     }
-    .project-grid {
-      grid-template-columns: 1fr;
+    .hero-strip {
+      display: flex;
+    }
+    .hero-actions {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 18px;
     }
     .service {
       grid-template-columns: 1fr;
+      gap: 36px;
     }
   }
 </style>

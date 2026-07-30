@@ -4,8 +4,8 @@
    warm old-style serif) for display, Helvetica for body, and terracotta
    held in reserve for emphasis and interaction.
 
-   Monospace is deliberately NOT a global display token — it is
-   scoped to the contribution graph, where it reads as data. */
+   Monospace (JetBrains Mono) is the label voice: eyebrows, captions,
+   and case-study numbers all set in it, small and letterspaced. */
 
 :root {
   /* ── Palette ──────────────────────────────────────────────── */
@@ -27,14 +27,12 @@
   --accent-strong:  #9c4a1e;
   --accent-on-dark: #db8a4f;
 
-  /* the contribution graph — its own muted green */
-  --green:         #436b46;
-  --contrib-empty: #e7e0cf;
-
-  /* dark footer */
+  /* dark panel — the footer */
   --dark:       #1c1a17;
   --dark-fg:    #f0ece1;
   --dark-muted: #948b78;
+  --dark-body:  #b5ac99; /* body copy on dark */
+  --dark-line:  rgba(148, 139, 120, 0.25); /* hairline on dark */
 
   /* ── Type ─────────────────────────────────────────────────── */
   --font-head: "Sorts Mill Goudy", Georgia, "Times New Roman", serif;
@@ -120,10 +118,9 @@ button {
   padding-inline: max(var(--gutter), calc((100% - var(--max-width)) / 2));
 }
 
-/* Eyebrow — the one quiet label style. */
+/* Eyebrow — the one quiet label style, set in the mono label voice. */
 .eyebrow {
-  font-size: 11px;
-  font-weight: 500;
+  font: 500 11px/1 var(--font-mono);
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--muted);

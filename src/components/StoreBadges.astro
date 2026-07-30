@@ -3,24 +3,21 @@
 // Play" badges, rendered only for the platforms a project actually ships on.
 // The official artwork lives in public/badges/; both badges share the same
 // 3.375:1 aspect ratio, so a single `height` keeps the pair balanced.
-//
-// position:relative + z-index lift the badges above a stretched card link
-// (see ProjectCard.astro) so they stay independently clickable inside a
-// card that is itself one big link.
 interface Props {
   ios?: string;
   android?: string;
   height?: number; // badge height in px; widths scale to match
   label?: string; // app name, woven into the accessible labels
+  direction?: 'row' | 'column'; // column = stacked, e.g. in a case-study rail
 }
-const { ios, android, height = 40, label } = Astro.props;
+const { ios, android, height = 40, label, direction = 'row' } = Astro.props;
 const name = label ?? 'the app';
 ---
 
 {
   (ios || android) && (
     <ul
-      class="store-badges"
+      class:list={['store-badges', { stacked: direction === 'column' }]}
       style={`--badge-h:${height}px`}
       aria-label={label ? `Download ${label}` : 'Download'}
     >
@@ -63,6 +60,11 @@ const name = label ?? 'the app';
     margin: 0;
     padding: 0;
     list-style: none;
+  }
+  .store-badges.stacked {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
   }
   .store-badges a {
     display: inline-flex;

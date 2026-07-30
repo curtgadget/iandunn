@@ -1,9 +1,9 @@
 // site.js — shared site data.
 // Centralized so the nav, footer, and social rows stay in sync.
 
-// App store links for the shipped mobile apps. Centralized so the home
-// cards and the Projects page point at the same listings. Render them with
-// the official badges via <StoreBadges> — see src/components/StoreBadges.astro.
+// App store links for the shipped mobile apps. Centralized so every page
+// points at the same listings. Render them with the official badges via
+// <StoreBadges> — see src/components/StoreBadges.astro.
 export const APP_LINKS = {
   futave: {
     ios: 'https://apps.apple.com/us/app/futave-what-to-watch/id6758036629',
@@ -18,13 +18,13 @@ export const APP_LINKS = {
 export const NAV_ITEMS = [
   { label: 'Home', href: '/' },
   { label: 'About', href: '/about' },
-  { label: 'Projects', href: '/projects' },
+  { label: 'Case studies', href: '/projects' },
   { label: 'Writing', href: '/writing' },
   { label: 'Contact', href: '/contact' },
 ];
 
-// Rendered as a list in the footer and the home hero. Per-app store links
-// live on the project cards via APP_LINKS, not here.
+// Rendered as a list in the footer. Per-app store links live on the case
+// studies via APP_LINKS, not here.
 export const SOCIALS = [
   { id: 'linkedin', label: 'LinkedIn', handle: 'in/iancdunn', url: 'https://www.linkedin.com/in/iancdunn' },
   { id: 'threads', label: 'Threads', handle: '@curtgadget', url: 'https://www.threads.com/@curtgadget' },
@@ -40,17 +40,18 @@ export const FOOTER_COLUMNS = [
     items: [
       { label: 'Home', url: '/' },
       { label: 'About', url: '/about' },
-      { label: 'Projects', url: '/projects' },
+      { label: 'Case studies', url: '/projects' },
       { label: 'Writing', url: '/writing' },
       { label: 'Contact', url: '/contact' },
     ],
   },
   {
-    title: 'Projects',
+    title: 'Case studies',
     items: [
-      { label: 'FutAve', url: '/projects' },
-      { label: 'TheraBasics', url: 'https://therabasics.com' },
-      { label: 'Center Ref', url: 'https://centerref.com' },
+      { label: 'FutAve', url: '/projects#futave' },
+      { label: 'TheraBasics', url: '/projects#therabasics' },
+      { label: 'Center Ref', url: '/projects#center-ref' },
+      { label: 'Stonefold', url: '/projects#stonefold' },
     ],
   },
   {
