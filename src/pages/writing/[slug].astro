@@ -1,0 +1,149 @@
+---
+// One post from the Writing collection, set in the site's editorial
+// voice: mono byline, Goudy display, a readable measure, hairline rules.
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SiteNav from '../../components/SiteNav.astro';
+import SiteFooter from '../../components/SiteFooter.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('writing');
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+// timeZone UTC — frontmatter dates parse as UTC midnight, and local
+// formatting would shift them back a day.
+const dateLabel = post.data.date.toLocaleDateString('en-US', {
+  month: 'long',
+  day: 'numeric',
+  year: 'numeric',
+  timeZone: 'UTC',
+});
+// ~200 wpm, rounded — a courtesy, not a promise.
+const minutes = Math.max(1, Math.round(post.body.split(/\s+/).length / 200));
+---
+
+<BaseLayout title={`${post.data.title} — Ian Dunn`} description={post.data.description}>
+  <SiteNav active="Writing" />
+
+  <main id="main">
+    <article class="section post">
+      <header class="post-head">
+        <p class="post-byline">
+          {post.data.category} · {dateLabel} · {minutes} min read
+        </p>
+        <h1 class="post-title">{post.data.title}<span class="period">.</span></h1>
+      </header>
+
+      <div class="prose">
+        <Content />
+      </div>
+
+      <footer class="post-foot">
+        <a class="back-link" href="/writing">← All writing</a>
+      </footer>
+    </article>
+  </main>
+
+  <SiteFooter />
+</BaseLayout>
+
+<style>
+  .post {
+    padding-block: clamp(2.5rem, 6vw, 4.5rem) clamp(3.5rem, 8vw, 6rem);
+  }
+  .post-head {
+    max-width: 720px;
+  }
+  .post-byline {
+    font: 500 11px/1.5 var(--font-mono);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .post-title {
+    margin-top: 14px;
+    font: 400 clamp(2.2rem, 5.5vw, 3.5rem) / 1.08 var(--font-head);
+    text-wrap: pretty;
+  }
+  .period {
+    color: var(--accent);
+  }
+
+  /* ── Prose — markdown output, styled via :global ────────── */
+  .prose {
+    margin-top: clamp(1.75rem, 4vw, 2.5rem);
+    max-width: 68ch;
+  }
+  .prose :global(p) {
+    margin-top: 1.3em;
+    font: 400 17px/1.7 var(--font-body);
+    color: var(--ink-body);
+  }
+  .prose :global(h2) {
+    margin-top: 2.2em;
+    font: 400 clamp(1.5rem, 3vw, 1.9rem) / 1.2 var(--font-head);
+    color: var(--ink);
+    text-wrap: pretty;
+  }
+  .prose :global(h2 + p) {
+    margin-top: 1em;
+  }
+  .prose :global(hr) {
+    margin: 3rem 0 0;
+    border: 0;
+    border-top: 1px solid var(--line);
+  }
+  .prose :global(a) {
+    color: var(--accent-strong);
+    text-decoration: none;
+    border-bottom: 1px solid var(--accent);
+    transition: color 0.18s ease, border-color 0.18s ease;
+  }
+  .prose :global(a:hover) {
+    color: var(--ink);
+    border-bottom-color: var(--ink);
+  }
+  .prose :global(strong) {
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .prose :global(ul),
+  .prose :global(ol) {
+    margin-top: 1.3em;
+    padding-left: 1.2em;
+    list-style: disc;
+  }
+  .prose :global(li) {
+    margin-top: 0.5em;
+    font: 400 17px/1.7 var(--font-body);
+    color: var(--ink-body);
+  }
+  .prose :global(blockquote) {
+    margin-top: 1.5em;
+    padding: 0.25em 0 0.25em 1.4em;
+    border-left: 1px solid var(--line);
+    font: italic 400 1.2rem/1.5 var(--font-head);
+    color: var(--ink-soft);
+  }
+
+  .post-foot {
+    margin-top: clamp(2.5rem, 6vw, 3.5rem);
+    padding-top: 22px;
+    border-top: 1px solid var(--line);
+    max-width: 68ch;
+  }
+  .back-link {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.18s ease;
+  }
+  .back-link:hover {
+    color: var(--accent-strong);
+  }
+</style>
