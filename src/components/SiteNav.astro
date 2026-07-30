@@ -1,16 +1,21 @@
 ---
-// SiteNav — quiet masthead navigation: serif wordmark + five links.
+// SiteNav — quiet masthead navigation: serif wordmark, a plain identifier
+// subtitle, and five links.
 // Below 760px the links collapse behind a "Menu / Close" text toggle.
 import { NAV_ITEMS } from '../data/site.js';
 
 interface Props {
   active?: string;
+  subtitle?: string;
 }
-const { active } = Astro.props;
+const { active, subtitle = 'Sr. Engineering Manager, Pinterest' } = Astro.props;
 ---
 
 <header class="site-nav section">
-  <a class="brand" href="/">Ian Dunn</a>
+  <div class="brand-group">
+    <a class="brand" href="/">Ian Dunn</a>
+    <span class="brand-sub">{subtitle}</span>
+  </div>
 
   <button
     class="menu-toggle"
@@ -52,10 +57,19 @@ const { active } = Astro.props;
     border-bottom: 1px solid var(--line);
   }
 
+  .brand-group {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+  }
   .brand {
     font: 400 24px/1 var(--font-head);
     text-decoration: none;
     color: var(--ink);
+  }
+  .brand-sub {
+    font-size: 12px;
+    color: var(--muted);
   }
 
   /* ── Menu toggle (mobile only) ──────────────────────────── */
@@ -102,6 +116,9 @@ const { active } = Astro.props;
 
   /* ── Responsive ─────────────────────────────────────────── */
   @media (max-width: 760px) {
+    .brand-sub {
+      display: none;
+    }
     .menu-toggle {
       display: inline-block;
     }

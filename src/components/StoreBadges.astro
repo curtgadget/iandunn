@@ -1,0 +1,82 @@
+---
+// StoreBadges — official "Download on the App Store" / "Get it on Google
+// Play" badges, rendered only for the platforms a project actually ships on.
+// The official artwork lives in public/badges/; both badges share the same
+// 3.375:1 aspect ratio, so a single `height` keeps the pair balanced.
+interface Props {
+  ios?: string;
+  android?: string;
+  height?: number; // badge height in px; widths scale to match
+  label?: string; // app name, woven into the accessible labels
+  direction?: 'row' | 'column'; // column = stacked, e.g. in a case-study rail
+}
+const { ios, android, height = 40, label, direction = 'row' } = Astro.props;
+const name = label ?? 'the app';
+---
+
+{
+  (ios || android) && (
+    <ul
+      class:list={['store-badges', { stacked: direction === 'column' }]}
+      style={`--badge-h:${height}px`}
+      aria-label={label ? `Download ${label}` : 'Download'}
+    >
+      {ios && (
+        <li>
+          <a href={ios} target="_blank" rel="noopener noreferrer">
+            <img
+              src="/badges/app-store.svg"
+              alt={`Download ${name} on the App Store`}
+              loading="lazy"
+              decoding="async"
+            />
+          </a>
+        </li>
+      )}
+      {android && (
+        <li>
+          <a href={android} target="_blank" rel="noopener noreferrer">
+            <img
+              src="/badges/google-play.svg"
+              alt={`Get ${name} on Google Play`}
+              loading="lazy"
+              decoding="async"
+            />
+          </a>
+        </li>
+      )}
+    </ul>
+  )
+}
+
+<style>
+  .store-badges {
+    position: relative; /* lift above a stretched card link */
+    z-index: 1;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .store-badges.stacked {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .store-badges a {
+    display: inline-flex;
+    border-radius: 7px; /* matches the badge corner, for the focus ring */
+    transition: opacity 0.18s ease;
+  }
+  .store-badges a:hover {
+    opacity: 0.82;
+  }
+  .store-badges img {
+    height: var(--badge-h);
+    width: auto;
+    display: block;
+  }
+</style>

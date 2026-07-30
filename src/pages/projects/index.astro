@@ -1,138 +1,98 @@
 ---
+import { Image } from 'astro:assets';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import SiteNav from '../../components/SiteNav.astro';
 import SiteFooter from '../../components/SiteFooter.astro';
-import PageHeader from '../../components/PageHeader.astro';
-import ProjectVisual from '../../components/ProjectVisual.astro';
-// Screenshot vendored from the centerref-site repo (src/assets/screens/).
-import crWatch from '../../assets/screens/watch-active-1h.png';
+import StoreBadges from '../../components/StoreBadges.astro';
+import { CASE_STUDIES } from '../../data/caseStudies.js';
 
-const LIVE = '#3f6f49';
-const FLIGHT = '#a9762f';
-const CONCEPT = '#8a7d66';
-
-// Every project is one row with the same skeleton: a left rail (mark,
-// name, status) and a content column that leads with the tagline set
-// large. A `screenshot` row also carries a real device shot; a `text`
-// row leans on the tagline as its visual anchor — no hollow image box.
-// A text row graduates to a screenshot row by adding `shot` + `shotAlt`
-// and switching `layout`.
-//
-// mark.fit: 'contain' = a logo on the sand mat · 'cover' = an app icon
-// shown full-bleed · 'mono' = a typeset initial, for projects with no art.
-const projects = [
-  {
-    name: 'FutAve',
-    layout: 'text',
-    mark: { fit: 'contain', src: '/logos/futave-mark.svg', alt: 'FutAve logo' },
-    status: 'Live',
-    statusColor: LIVE,
-    tagline: 'A taste engine for soccer.',
-    body: 'Not another live-scores app. FutAve is a curation layer: its Wave Detector scores how exciting a match will be before kickoff, weighing form, rivalry, and what is at stake, and an AI layer writes the context for why it matters. Live scores, lineups, and event timelines follow, for the matches actually worth your time.',
-    meta: 'iOS and web, Android soon · React Native, Next.js, Payload CMS',
-    url: 'https://futave.com',
-    cta: 'Visit futave.com',
-    external: true,
-  },
-  {
-    name: 'TheraBasics',
-    layout: 'text',
-    mark: { fit: 'cover', src: '/logos/therabasics-icon.png', alt: 'TheraBasics app icon' },
-    status: 'TestFlight',
-    statusColor: FLIGHT,
-    tagline: 'The work between sessions.',
-    body: 'Built with Raven, my wife and a psychologist. A mobile app gives clients the exercises and reflection that happen between appointments; a dashboard gives the therapist a place to review them. HIPAA-compliant, built on Supabase.',
-    meta: 'iOS, Android & web · React Native, Next.js',
-    url: 'https://therabasics.com',
-    cta: 'Visit therabasics.com',
-    external: true,
-  },
-  {
-    name: 'Center Ref',
-    layout: 'screenshot',
-    mark: { fit: 'contain', src: '/logos/centerref-icon.svg', alt: 'Center Ref logo' },
-    shot: crWatch,
-    shotAlt: 'Center Ref running a match on Apple Watch',
-    status: 'Public beta',
-    statusColor: FLIGHT,
-    tagline: 'Ref the match. Not the screen.',
-    body: 'A watch-first match clock for youth-soccer referees. The clock, score, and event log live on the Apple Watch, designed to be read in a two-second glance under bright sun. AYSO and Club Soccer division presets, haptic period signals you learn by feel, and stoppage time that arms its own countdown.',
-    meta: 'Apple Watch + iPhone · Swift',
-    url: 'https://centerref.com',
-    cta: 'Visit centerref.com',
-    external: true,
-  },
-  {
-    name: 'Numbrix',
-    layout: 'text',
-    mark: { fit: 'mono' },
-    status: 'Concept',
-    statusColor: CONCEPT,
-    tagline: 'Multiplication by strategy, not drill.',
-    body: 'A math game for kids built on derived facts: working out new answers from the ones you already know, instead of drilling flashcards. Still a concept, sketched for my own kids.',
-    meta: 'Concept and research',
-    url: 'https://numbrix.app',
-    cta: 'numbrix.app',
-    external: true,
-  },
-];
+// The full argument in four parts — same data the Home rows draw from.
 ---
 
 <BaseLayout
-  title="Projects — Ian Dunn"
-  description="Side projects from Ian Dunn — FutAve, TheraBasics, Center Ref, and Numbrix."
+  title="Case studies — Ian Dunn"
+  description="Case studies from Ian Dunn — FutAve, TheraBasics, Center Ref, and Stonefold. One opinion per product."
 >
-  <SiteNav active="Projects" />
+  <SiteNav active="Case studies" />
 
   <main id="main">
-    <PageHeader
-      eyebrow="Projects"
-      title="Side projects"
-      intro="Four things I'm building outside of work, in different states of done. I ship slowly, on nights and weekends, around a day job and three kids."
-    />
+    <!-- PAGE HEAD ─────────────────────────────────────────────── -->
+    <header class="section page-head">
+      <p class="head-eyebrow">Case studies</p>
+      <h1 class="head-title">One opinion per product<span class="period">.</span></h1>
+      <p class="head-lede">
+        Four projects, each with the problem that mattered, the tradeoff
+        I chose, and why the approach is different. Built slowly, on
+        nights and weekends, around a day job and three kids.
+      </p>
+    </header>
 
-    <section class="section project-list">
+    <section class="section case-list">
       {
-        projects.map((p) => (
-          <article class:list={['project', p.layout === 'screenshot' ? 'has-shot' : 'text-only']}>
-            <div class="project-id">
-              <span class:list={['project-mark', `is-${p.mark.fit}`]}>
-                {p.mark.fit === 'mono' ? (
+        CASE_STUDIES.map((c) => (
+          <article class="case" id={c.id}>
+            <div class="case-rail">
+              <span class:list={['case-mark', `is-${c.mark.fit}`]}>
+                {c.mark.fit === 'mono' ? (
                   <span class="mark-mono" aria-hidden="true">
-                    {p.name.charAt(0)}
+                    {c.name.charAt(0)}
                   </span>
                 ) : (
-                  <img src={p.mark.src} alt={p.mark.alt} loading="lazy" decoding="async" />
+                  <img src={c.mark.src} alt={c.mark.alt} loading="lazy" decoding="async" />
                 )}
               </span>
-              <h2 class="project-name">{p.name}</h2>
-              <span class="project-status">
-                <span class="dot" style={`background:${p.statusColor}`} />
-                {p.status}
+              <p class="case-num">{c.num}</p>
+              <h2 class="case-name">{c.name}</h2>
+              <span class="case-status">
+                <span class="dot" style={`background:${c.statusColor}`} />
+                {c.status}
               </span>
+              <p class="case-meta">{c.meta}</p>
+              {c.url && (
+                <a class="case-link" href={c.url} target="_blank" rel="noopener noreferrer">
+                  {c.cta} →
+                </a>
+              )}
+              {c.stores && (
+                <div class="case-stores">
+                  <StoreBadges
+                    ios={c.stores.ios}
+                    android={c.stores.android}
+                    height={30}
+                    label={c.name}
+                    direction="column"
+                  />
+                </div>
+              )}
             </div>
 
-            <div class="project-content">
-              <p class="project-tagline">{p.tagline}</p>
+            <div class="case-body">
+              <p class="case-opinion">“{c.opinion}”</p>
 
-              <div class="project-lower">
-                {p.layout === 'screenshot' && (
-                  <div class="project-visual">
-                    <ProjectVisual kind="screenshot" src={p.shot} alt={p.shotAlt} />
+              <div class:list={['case-detail', { 'no-shot': !c.shot }]}>
+                <div class="case-fields">
+                  <div>
+                    <p class="case-label">The problem that mattered</p>
+                    <p class="case-copy">{c.problem}</p>
                   </div>
-                )}
-                <div class="project-detail">
-                  <p class="project-body">{p.body}</p>
-                  <p class="project-meta">{p.meta}</p>
-                  <a
-                    class="project-link"
-                    href={p.url}
-                    target={p.external ? '_blank' : undefined}
-                    rel={p.external ? 'noopener noreferrer' : undefined}
-                  >
-                    {p.cta} →
-                  </a>
+                  <div>
+                    <p class="case-label">The tradeoff I made</p>
+                    <p class="case-copy">{c.tradeoff}</p>
+                  </div>
+                  <div>
+                    <p class="case-label">Why it’s different</p>
+                    <p class="case-copy">{c.different}</p>
+                  </div>
                 </div>
+
+                {c.shot && (
+                  <figure class="case-figure">
+                    <div class:list={['case-frame', `fit-${c.shotFit}`]}>
+                      <Image src={c.shot} alt={c.shotAlt} width={760} format="webp" loading="lazy" />
+                    </div>
+                    <figcaption>{c.caption}</figcaption>
+                  </figure>
+                )}
               </div>
             </div>
           </article>
@@ -145,26 +105,47 @@ const projects = [
 </BaseLayout>
 
 <style>
-  .project-list {
-    padding-bottom: clamp(3.5rem, 8vw, 6rem);
+  /* ── Page head — paper, like every other page ───────────── */
+  .page-head {
+    padding-block: clamp(2.5rem, 6vw, 4.5rem) clamp(1.75rem, 4vw, 2.75rem);
+  }
+  .head-eyebrow {
+    font: 500 11px/1 var(--font-mono);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .head-title {
+    margin-top: 18px;
+    font: 400 clamp(2.625rem, 6vw, 4rem) / 1.06 var(--font-head);
+    text-wrap: pretty;
+  }
+  .period {
+    color: var(--accent);
+  }
+  .head-lede {
+    margin-top: 22px;
+    max-width: 600px;
+    font: 400 17px/1.65 var(--font-body);
+    color: var(--ink-soft);
   }
 
-  /* Every row shares one skeleton: a left rail and a content column.
-     The rail width is fixed so project names align down the page. */
-  .project {
+  /* ── Case articles ──────────────────────────────────────── */
+  .case-list {
+    padding-block: 24px 72px;
+  }
+  .case {
     display: grid;
-    grid-template-columns: 0.9fr 2.6fr;
-    gap: clamp(1.5rem, 4vw, 3rem);
+    grid-template-columns: 0.85fr 2.6fr;
+    gap: 48px;
     align-items: start;
-    padding-block: clamp(2.5rem, 5vw, 3.5rem);
-    border-top: 1px solid var(--line);
-  }
-  .project:last-child {
+    padding: 52px 0;
     border-bottom: 1px solid var(--line);
+    scroll-margin-top: 24px; /* breathing room when deep-linked from home */
   }
 
-  /* ── Left rail: mark, name, status ──────────────────────────── */
-  .project-mark {
+  /* ── Left rail ──────────────────────────────────────────── */
+  .case-mark {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -174,14 +155,12 @@ const projects = [
     border: 1px solid var(--line);
     overflow: hidden;
   }
-  /* A logo is a mark — centered, capped, room around it. */
-  .project-mark.is-contain img {
+  .case-mark.is-contain img {
     max-width: 56%;
     max-height: 56%;
     object-fit: contain;
   }
-  /* An app icon owns its own background — show it full-bleed. */
-  .project-mark.is-cover img {
+  .case-mark.is-cover img {
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -190,12 +169,16 @@ const projects = [
     font: 400 1.6rem/1 var(--font-head);
     color: var(--muted);
   }
-
-  .project-name {
+  .case-num {
     margin-top: 16px;
-    font: 400 clamp(1.9rem, 3.4vw, 2.6rem) / 1.05 var(--font-head);
+    font: 400 15px/1 var(--font-mono);
+    color: var(--accent-strong);
   }
-  .project-status {
+  .case-name {
+    margin-top: 10px;
+    font: 400 clamp(2rem, 3.4vw, 2.5rem) / 1.05 var(--font-head);
+  }
+  .case-status {
     display: inline-flex;
     align-items: center;
     gap: 7px;
@@ -208,46 +191,15 @@ const projects = [
     height: 6px;
     border-radius: 50%;
   }
-
-  /* ── Content column: the tagline leads, then the lower band ─── */
-  .project-content {
-    display: flex;
-    flex-direction: column;
-    gap: clamp(1.1rem, 2.6vw, 1.7rem);
-  }
-  /* Set large, the tagline is the row's visual anchor — it carries
-     a text row on its own and decks a screenshot row. */
-  .project-tagline {
-    max-width: 30ch;
-    font: italic 400 clamp(1.45rem, 2.6vw, 2.15rem) / 1.25 var(--font-head);
-    color: var(--ink-soft);
-  }
-
-  .project-lower {
-    display: grid;
-    gap: clamp(1.25rem, 3vw, 2.25rem);
-    align-items: start;
-  }
-  /* A screenshot row splits the lower band: device shot, then detail. */
-  .has-shot .project-lower {
-    grid-template-columns: 1fr 1.25fr;
-  }
-  .project-visual {
-    width: 100%;
-    max-width: 320px;
-  }
-
-  .project-body {
-    max-width: 62ch;
-    font: 400 16px/1.65 var(--font-body);
-    color: var(--ink-body);
-  }
-  .project-meta {
-    margin-top: 16px;
+  /* The rail reads as two clusters: identity (mark, number, name, status)
+     and action (meta, link, stores) — this gap is the seam between them. */
+  .case-meta {
+    margin-top: 30px;
     font-size: 13px;
+    line-height: 1.6;
     color: var(--muted);
   }
-  .project-link {
+  .case-link {
     display: inline-block;
     margin-top: 16px;
     font-size: 14px;
@@ -256,22 +208,96 @@ const projects = [
     text-decoration: none;
     border-bottom: 1px solid var(--accent);
     padding-bottom: 2px;
+    transition: color 0.18s ease, border-color 0.18s ease;
   }
-  .project-link:hover {
+  .case-link:hover {
     color: var(--ink);
     border-bottom-color: var(--ink);
   }
-
-  /* The device shot stacks above its detail before the tile gets cramped. */
-  @media (max-width: 880px) {
-    .has-shot .project-lower {
-      grid-template-columns: 1fr;
-    }
+  .case-stores {
+    margin-top: 20px;
   }
+
+  /* ── The argument column ────────────────────────────────── */
+  /* A step below the 40px rail name, so each row has one title voice —
+     the name identifies, the quote argues. */
+  .case-opinion {
+    max-width: 30ch;
+    font: italic 400 clamp(1.375rem, 2.4vw, 1.75rem) / 1.3 var(--font-head);
+    color: var(--ink-soft);
+    text-wrap: pretty;
+  }
+  .case-detail {
+    margin-top: 30px;
+    display: grid;
+    grid-template-columns: 1fr 1.1fr;
+    gap: 36px;
+    align-items: start;
+  }
+  .case-detail.no-shot {
+    grid-template-columns: 1fr;
+  }
+  /* Field-to-field space must clear the copy's own line-height (~25px),
+     or the three fields fuse into one column of text. */
+  .case-fields {
+    display: grid;
+    gap: 34px;
+  }
+  /* Labels are scaffolding — muted ink, so the terracotta stays with
+     the number and the links. */
+  .case-label {
+    font: 500 10px/1 var(--font-mono);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .case-copy {
+    margin-top: 8px;
+    max-width: 62ch; /* keeps Stonefold's full-width row readable */
+    font: 400 15px/1.65 var(--font-body);
+    color: var(--ink-body);
+  }
+
+  /* ── The framed shot — same treatment as the Home rows ──── */
+  .case-frame {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    background: var(--paper-sand);
+    border: 1px solid var(--ink);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .case-frame :global(img) {
+    width: 100%;
+    height: 100%;
+    filter: var(--photo-filter);
+  }
+  .fit-cover :global(img) {
+    object-fit: cover;
+    object-position: top;
+  }
+  .fit-contain :global(img) {
+    object-fit: contain;
+    padding: 18px;
+  }
+  .case-figure figcaption {
+    margin-top: 7px;
+    font: 500 10px/1.4 var(--font-mono);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* ── Responsive ─────────────────────────────────────────── */
   @media (max-width: 760px) {
-    .project {
+    .case {
       grid-template-columns: 1fr;
-      gap: 1.5rem;
+      gap: 24px;
+    }
+    .case-detail {
+      grid-template-columns: 1fr;
     }
   }
 </style>
