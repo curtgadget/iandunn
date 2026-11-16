@@ -1,103 +1,166 @@
 ---
+// Projects — built to the dealt look (docs/pare/full-redesign/deal.md, phase 3)
+// with the words of copy.md, as a stack of screens (the kit's layout-v4.md):
+//   1. hero          split, dealt for this page (film was dealt first and
+//                    rejected: the page has no film and no wide photograph
+//                    with a calm dark foot). Text on span-6 (the page's 6/6
+//                    split pair, deal.md), the FutAve home screen on span-6
+//                    start-7, cropped from its top left so the app's own
+//                    header reads. The main action and Email me, as on
+//                    every hero (sections.md: the main action reads the
+//                    same in the nav, the hero and the close). No float
+//                    card: copy.md gives this hero no card fact, and
+//                    nothing may be invented                     (1 screen)
+//   2. #futave       split: the write-up on span-6, the players screenshot
+//                    filling the right column                     (1 screen)
+//   3. #therabasics  the surface band (rhythm surface-pairs): the write-up
+//                    on span-6, the dashboard screenshot filling the right
+//                    column and carrying the dealt picture-develops moment
+//                    (photo-chapters and word-highlight were dealt first
+//                    and rejected: no page-wide photo set, no statement in
+//                    copy.md)                                     (1 screen)
+//   4. #center-ref   split: the write-up on span-6, the watch standing on
+//                    the surface panel (its one asset is 388px wide, so it
+//                    shows at most 1.3x, never cover-cropped)     (1 screen)
+//   5. footer.closing (SiteFooter: close-photo + footer-dark)     (1 screen)
 import { Image } from 'astro:assets';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import SiteNav from '../../components/SiteNav.astro';
 import SiteFooter from '../../components/SiteFooter.astro';
 import StoreBadges from '../../components/StoreBadges.astro';
 import { CASE_STUDIES } from '../../data/caseStudies.js';
+import { BOOK_CALL, EMAIL } from '../../data/site.js';
+// The FutAve section shows a different screen than the hero (one view never
+// twice on a page): the players view, imported here because only this page
+// uses it.
+import futavePlayers from '../../assets/screens/futave-players.png';
+// The hero's crop of the home screen: the same capture less its bottom 51px,
+// where a browser link tooltip sits in the file.
+import futaveHero from '../../assets/screens/futave-featured-hero.png';
 
-// The full argument in four parts — same data the Home rows draw from.
+const [futave, therabasics, centerRef] = CASE_STUDIES;
 ---
 
 <BaseLayout
-  title="Case studies — Ian Dunn"
-  description="Case studies from Ian Dunn — FutAve, TheraBasics, Center Ref, and Stonefold. One opinion per product."
+  title="Projects: FutAve, TheraBasics and Center Ref by Ian Dunn"
+  description="Three apps Ian Dunn builds outside his job at Pinterest: a football app, a therapy check-in app and a match clock for referees."
+  moment="picture-develops"
 >
-  <SiteNav active="Case studies" />
+  <!-- type: service
+       deal: hero split (film rejected: no film on the page), nav nav-centre, close close-photo,
+             footer footer-dark, rhythm surface-pairs, buttons arrow, mark initial,
+             palette oxblood-grey, pairing nunito, radius soft, no grounds
+       moments: picture-develops in #therabasics (the dashboard screenshot develops as it enters;
+                photo-chapters and word-highlight rejected: nothing to carry) -->
+  <SiteNav active="Projects" />
 
-  <main id="main">
-    <!-- PAGE HEAD ─────────────────────────────────────────────── -->
-    <header class="section page-head">
-      <p class="head-eyebrow">Case studies</p>
-      <h1 class="head-title">One opinion per product<span class="period">.</span></h1>
-      <p class="head-lede">
-        Four projects, each with the problem that mattered, the tradeoff
-        I chose, and why the approach is different. Built slowly, on
-        nights and weekends, around a day job and three kids.
-      </p>
-    </header>
+  <main id="top">
+    <section class="hero hero--split" data-enter aria-labelledby="hero-h">
+      <div class="wrap"><div class="hero-text grid hero__grid">
+        <div class="hero__text span-6">
+          <h1 id="hero-h">Apps I build on nights and weekends</h1>
+          <p class="hero__lead">FutAve and TheraBasics are live on iPhone, Android and the web; Center Ref is in public beta on Apple Watch and iPhone.</p>
+          <div class="btn-row">
+            <a class="btn btn--primary" href={BOOK_CALL.url}>{BOOK_CALL.label}<svg class="m-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="m-arrow__stem" d="M1 6h8"></path><path class="m-arrow__head" d="M4.5 2.5 8 6l-3.5 3.5"></path></svg></a>
+            <a class="btn btn--secondary" href={EMAIL.url}>{EMAIL.label}</a>
+          </div>
+        </div>
+        <div class="hero__media span-6 start-7">
+          <Image
+            src={futaveHero}
+            alt={futave.shotAlt}
+            width={736}
+            height={840}
+            widths={[480, 736]}
+            sizes="(max-width: 1023px) 100vw, 628px"
+            fit="cover"
+            position="left top"
+            style="--ly-pos: 0% 0%"
+            loading="eager"
+            fetchpriority="high"
+          />
+        </div>
+      </div></div>
+    </section>
 
-    <section class="section case-list">
-      {
-        CASE_STUDIES.map((c) => (
-          <article class="case" id={c.id}>
-            <div class="case-rail">
-              <span class:list={['case-mark', `is-${c.mark.fit}`]}>
-                {c.mark.fit === 'mono' ? (
-                  <span class="mark-mono" aria-hidden="true">
-                    {c.name.charAt(0)}
-                  </span>
-                ) : (
-                  <img src={c.mark.src} alt={c.mark.alt} loading="lazy" decoding="async" />
-                )}
-              </span>
-              <p class="case-num">{c.num}</p>
-              <h2 class="case-name">{c.name}</h2>
-              <span class="case-status">
-                <span class="dot" style={`background:${c.statusColor}`} />
-                {c.status}
-              </span>
-              <p class="case-meta">{c.meta}</p>
-              {c.url && (
-                <a class="case-link" href={c.url} target="_blank" rel="noopener noreferrer">
-                  {c.cta} →
-                </a>
-              )}
-              {c.stores && (
-                <div class="case-stores">
-                  <StoreBadges
-                    ios={c.stores.ios}
-                    android={c.stores.android}
-                    height={30}
-                    label={c.name}
-                    direction="column"
-                  />
-                </div>
-              )}
-            </div>
+    <section class="section" id="futave" aria-labelledby="futave-h">
+      <div class="wrap grid grid--top">
+        <div class="span-6 stack-6">
+          <div class="proj-head">
+            <h2 id="futave-h">{futave.name}</h2>
+            <span class="proj-id">
+              <span class="proj-mark"><img src={futave.mark.src} alt="" width="40" height="40" loading="lazy" decoding="async" /></span>
+              <span class="pill proj-status">{futave.status}</span>
+            </span>
+          </div>
+          {futave.writeup.map((para) => <p>{para}</p>)}
+          <p class="proj-meta">{futave.platforms}</p>
+          <StoreBadges ios={futave.stores.ios} android={futave.stores.android} height={44} label={futave.name} direction="column" />
+          <div class="btn-row">
+            <a class="btn btn--secondary" href={futave.url} target="_blank" rel="noopener noreferrer">{futave.cta}</a>
+          </div>
+        </div>
+        <figure class="proj-shot span-6 start-7">
+          <Image
+            src={futavePlayers}
+            alt="The FutAve players view, with players to follow and their clubs and leagues"
+            widths={[640, 1279]}
+            sizes="(max-width: 639px) 100vw, (max-width: 1023px) 160vw, 940px"
+            loading="lazy"
+          />
+        </figure>
+      </div>
+    </section>
 
-            <div class="case-body">
-              <p class="case-opinion">“{c.opinion}”</p>
+    <section class="section ground-surface" id="therabasics" aria-labelledby="therabasics-h">
+      <div class="wrap grid grid--top">
+        <div class="span-6 stack-6">
+          <div class="proj-head">
+            <h2 id="therabasics-h">{therabasics.name}</h2>
+            <span class="proj-id">
+              <span class="proj-mark proj-mark--cover"><img src={therabasics.mark.src} alt="" width="40" height="40" loading="lazy" decoding="async" /></span>
+              <span class="pill proj-status">{therabasics.status}</span>
+            </span>
+          </div>
+          {therabasics.writeup.map((para) => <p>{para}</p>)}
+          <p class="proj-meta">{therabasics.platforms}</p>
+          <StoreBadges ios={therabasics.stores.ios} android={therabasics.stores.android} height={44} label={therabasics.name} direction="column" />
+          <div class="btn-row">
+            <a class="btn btn--secondary" href={therabasics.url} target="_blank" rel="noopener noreferrer">{therabasics.cta}</a>
+          </div>
+        </div>
+        <figure class="proj-shot proj-develop span-6 start-7" data-moment="picture-develops">
+          <Image
+            src={therabasics.shot}
+            alt={therabasics.shotAlt}
+            widths={[768, 1279]}
+            sizes="(max-width: 639px) 135vw, (max-width: 1023px) 170vw, 940px"
+            loading="lazy"
+          />
+        </figure>
+      </div>
+    </section>
 
-              <div class:list={['case-detail', { 'no-shot': !c.shot }]}>
-                <div class="case-fields">
-                  <div>
-                    <p class="case-label">The problem that mattered</p>
-                    <p class="case-copy">{c.problem}</p>
-                  </div>
-                  <div>
-                    <p class="case-label">The tradeoff I made</p>
-                    <p class="case-copy">{c.tradeoff}</p>
-                  </div>
-                  <div>
-                    <p class="case-label">Why it’s different</p>
-                    <p class="case-copy">{c.different}</p>
-                  </div>
-                </div>
-
-                {c.shot && (
-                  <figure class="case-figure">
-                    <div class:list={['case-frame', `fit-${c.shotFit}`]}>
-                      <Image src={c.shot} alt={c.shotAlt} width={760} format="webp" loading="lazy" />
-                    </div>
-                    <figcaption>{c.caption}</figcaption>
-                  </figure>
-                )}
-              </div>
-            </div>
-          </article>
-        ))
-      }
+    <section class="section" id="center-ref" aria-labelledby="center-ref-h">
+      <div class="wrap grid grid--top">
+        <div class="span-6 stack-6">
+          <div class="proj-head">
+            <h2 id="center-ref-h">{centerRef.name}</h2>
+            <span class="proj-id">
+              <span class="proj-mark"><img src={centerRef.mark.src} alt="" width="40" height="40" loading="lazy" decoding="async" /></span>
+              <span class="pill proj-status">{centerRef.status}</span>
+            </span>
+          </div>
+          {centerRef.writeup.map((para) => <p>{para}</p>)}
+          <p class="proj-meta">{centerRef.platforms}</p>
+          <div class="btn-row">
+            <a class="btn btn--secondary" href={centerRef.url} target="_blank" rel="noopener noreferrer">{centerRef.cta}</a>
+          </div>
+        </div>
+        <figure class="proj-shot proj-shot--contain span-6 start-7">
+          <Image src={centerRef.shot} alt={centerRef.shotAlt} loading="lazy" />
+        </figure>
+      </div>
     </section>
   </main>
 
@@ -105,199 +168,199 @@ import { CASE_STUDIES } from '../../data/caseStudies.js';
 </BaseLayout>
 
 <style>
-  /* ── Page head — paper, like every other page ───────────── */
-  .page-head {
-    padding-block: clamp(2.5rem, 6vw, 4.5rem) clamp(1.75rem, 4vw, 2.75rem);
-  }
-  .head-eyebrow {
-    font: 500 11px/1 var(--font-mono);
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--muted);
-  }
-  .head-title {
-    margin-top: 18px;
-    font: 400 clamp(2.625rem, 6vw, 4rem) / 1.06 var(--font-head);
-    text-wrap: pretty;
-  }
-  .period {
-    color: var(--accent);
-  }
-  .head-lede {
-    margin-top: 22px;
-    max-width: 600px;
-    font: 400 17px/1.65 var(--font-body);
-    color: var(--ink-soft);
-  }
-
-  /* ── Case articles ──────────────────────────────────────── */
-  .case-list {
-    padding-block: 24px 72px;
-  }
-  .case {
-    display: grid;
-    grid-template-columns: 0.85fr 2.6fr;
-    gap: 48px;
-    align-items: start;
-    padding: 52px 0;
-    border-bottom: 1px solid var(--line);
-    scroll-margin-top: 24px; /* breathing room when deep-linked from home */
-  }
-
-  /* ── Left rail ──────────────────────────────────────────── */
-  .case-mark {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 46px;
-    height: 46px;
-    background: var(--paper-sand);
-    border: 1px solid var(--line);
-    overflow: hidden;
-  }
-  .case-mark.is-contain img {
-    max-width: 56%;
-    max-height: 56%;
-    object-fit: contain;
-  }
-  .case-mark.is-cover img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  .mark-mono {
-    font: 400 1.6rem/1 var(--font-head);
-    color: var(--muted);
-  }
-  .case-num {
-    margin-top: 16px;
-    font: 400 15px/1 var(--font-mono);
-    color: var(--accent-strong);
-  }
-  .case-name {
-    margin-top: 10px;
-    font: 400 clamp(2rem, 3.4vw, 2.5rem) / 1.05 var(--font-head);
-  }
-  .case-status {
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-    margin-top: 10px;
-    font-size: 12px;
-    color: var(--muted);
-  }
-  .dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-  }
-  /* The rail reads as two clusters: identity (mark, number, name, status)
-     and action (meta, link, stores) — this gap is the seam between them. */
-  .case-meta {
-    margin-top: 30px;
-    font-size: 13px;
-    line-height: 1.6;
-    color: var(--muted);
-  }
-  .case-link {
-    display: inline-block;
-    margin-top: 16px;
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--accent-strong);
-    text-decoration: none;
-    border-bottom: 1px solid var(--accent);
-    padding-bottom: 2px;
-    transition: color 0.18s ease, border-color 0.18s ease;
-  }
-  .case-link:hover {
-    color: var(--ink);
-    border-bottom-color: var(--ink);
-  }
-  .case-stores {
-    margin-top: 20px;
-  }
-
-  /* ── The argument column ────────────────────────────────── */
-  /* A step below the 40px rail name, so each row has one title voice —
-     the name identifies, the quote argues. */
-  .case-opinion {
-    max-width: 30ch;
-    font: italic 400 clamp(1.375rem, 2.4vw, 1.75rem) / 1.3 var(--font-head);
-    color: var(--ink-soft);
-    text-wrap: pretty;
-  }
-  .case-detail {
-    margin-top: 30px;
-    display: grid;
-    grid-template-columns: 1fr 1.1fr;
-    gap: 36px;
-    align-items: start;
-  }
-  .case-detail.no-shot {
-    grid-template-columns: 1fr;
-  }
-  /* Field-to-field space must clear the copy's own line-height (~25px),
-     or the three fields fuse into one column of text. */
-  .case-fields {
-    display: grid;
-    gap: 34px;
-  }
-  /* Labels are scaffolding — muted ink, so the terracotta stays with
-     the number and the links. */
-  .case-label {
-    font: 500 10px/1 var(--font-mono);
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--muted);
-  }
-  .case-copy {
-    margin-top: 8px;
-    max-width: 62ch; /* keeps Stonefold's full-width row readable */
-    font: 400 15px/1.65 var(--font-body);
-    color: var(--ink-body);
-  }
-
-  /* ── The framed shot — same treatment as the Home rows ──── */
-  .case-frame {
-    width: 100%;
-    aspect-ratio: 4 / 3;
-    background: var(--paper-sand);
-    border: 1px solid var(--ink);
-    overflow: hidden;
+  /* each project's head row: the name on the left line, the app's real mark
+     and the status (the kit's pill) ending on the column's right line */
+  .proj-head {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
+    gap: var(--s-5);
   }
-  .case-frame :global(img) {
+  .proj-id {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s-3);
+  }
+  .proj-mark {
+    flex: none;
+    display: inline-grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: var(--r-sm);
+    overflow: hidden;
+  }
+  .proj-mark img {
     width: 100%;
     height: 100%;
-    filter: var(--photo-filter);
-  }
-  .fit-cover :global(img) {
-    object-fit: cover;
-    object-position: top;
-  }
-  .fit-contain :global(img) {
     object-fit: contain;
-    padding: 18px;
   }
-  .case-figure figcaption {
-    margin-top: 7px;
-    font: 500 10px/1.4 var(--font-mono);
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
+  .proj-mark--cover img {
+    object-fit: cover;
+  }
+  .proj-status {
+    font-family: var(--font-text);
+    font-weight: 500;
+    letter-spacing: 0;
+    color: inherit;
+  }
+  /* the platforms-and-stack line: meta, muted at body size */
+  .proj-meta {
     color: var(--muted);
   }
+  /* the head row and the two write-up columns of the surface band */
+  .proj-head--wide {
+    margin-bottom: var(--s-7);
+  }
+  /* a screenshot filling the split's right column (the service demo's
+     develop-frame geometry), cropped from its top left so the app's own
+     header reads */
+  .proj-shot {
+    margin: 0;
+    border-radius: var(--r-lg);
+    overflow: hidden;
+    height: min(640px, var(--ly-fit));
+  }
+  /* the dealt arrow look sets a secondary button as a text link, with 9px of
+     padding and border still in front of the label; alone in its row the
+     label itself stands on the text line */
+  .btn-row > .btn--secondary:only-child {
+    padding-inline: 0;
+    border-inline-width: 0;
+  }
+  .proj-shot :global(img) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 0% 0%;
+  }
+  /* the watch stands at its own size on the surface: 510px is 1.31x its
+     388px file, inside the system's 1.33x ceiling, never cover-cropped */
+  .proj-shot--contain {
+    display: grid;
+    place-items: center;
+    background: var(--surface);
+  }
+  .proj-shot--contain :global(img) {
+    width: min(510px, 90%);
+    height: auto;
+    max-width: none;
+    max-height: none;
+    object-fit: contain;
+    object-position: 50% 50%;
+  }
+  /* the dealt moment's frame: the dashboard develops as it enters; its crop
+     centres on the dashboard page's own headline */
+  .proj-develop :global(img) {
+    object-position: 50% 0%;
+  }
 
-  /* ── Responsive ─────────────────────────────────────────── */
-  @media (max-width: 760px) {
-    .case {
-      grid-template-columns: 1fr;
-      gap: 24px;
+  /* stacked (640 to 1023): splits stack text first; each figure follows its
+     text at a ratio that keeps the section on its screens */
+  @media (min-width: 640px) and (max-width: 1023px) {
+    /* stacked, each section becomes a column that fills its screens exactly
+       (--ly-fit is the kit's screen less the paddings): the text first, then
+       the figure taking what the screen leaves, so every gap between
+       sections is the same two paddings */
+    .wrap.grid {
+      display: flex;
+      flex-direction: column;
+      min-height: var(--ly-fit);
     }
-    .case-detail {
-      grid-template-columns: 1fr;
+    .wrap.grid > div {
+      margin-bottom: var(--s-6);
+    }
+    .proj-shot {
+      margin-top: auto;
+      height: auto;
+      flex: 1 1 0;
+      min-height: 0;
+      position: relative;
+      /* the dashboard and players files are 891px tall: past 1176px shown
+         the source would blow up beyond the system's 1.33x ceiling; any
+         space the cap frees moves into the auto margin above the figure */
+      max-height: 1176px;
+    }
+    .proj-shot:not(.proj-shot--contain) :global(img) {
+      position: absolute;
+      inset: 0;
+    }
+    .proj-shot--contain :global(img) {
+      width: min(516px, 90%);
+      height: auto;
+      max-height: 90%;
+      object-fit: contain;
+    }
+    /* the two-screen sections of the narrow tablet (their --h is set below) */
+  }
+  @media (min-width: 640px) and (max-width: 799px) {
+    #therabasics .wrap.grid,
+    #center-ref .wrap.grid {
+      min-height: calc(var(--ly-fit) + 100svh);
+    }
+  }
+  /* the phone (under 640): the .g2m band keeps its two rows; the watch
+     keeps its own size on a taller panel so its screen fills */
+  @media (max-width: 639px) {
+    .proj-shot {
+      margin-top: var(--s-6);
+      height: auto;
+      aspect-ratio: 16 / 9;
+    }
+    /* the band's two phone screens: the write-up, then the dashboard in the
+       3:4 crop its own headline reads in, set on the second screen's foot
+       (the column's auto margin takes the slack, so the gap to the next
+       section stays the page's two paddings) */
+    #therabasics .wrap.grid {
+      display: flex;
+      flex-direction: column;
+      min-height: calc(var(--ly-fit) + 100lvh);
+    }
+    #therabasics .wrap.grid > div {
+      margin-bottom: var(--s-7);
+    }
+    .proj-develop {
+      margin-top: auto;
+      aspect-ratio: 3 / 4;
+    }
+    .proj-shot--contain {
+      aspect-ratio: auto;
+      height: 780px;
+    }
+    .proj-shot--contain :global(img) {
+      width: min(100%, 388px);
+      height: auto;
+    }
+    /* the badge pair runs line to line on a phone (SR-7 reads any pair as a
+       card row), one badge per half */
+    :global(.store-badges.stacked) {
+      display: grid !important;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+    :global(.store-badges.stacked img) {
+      width: 100%;
+      height: auto;
+    }
+  }
+</style>
+
+<style is:global>
+  /* stacked on the narrow tablet (640 to 799), the band and the watch
+     section each hold two screens: their write-ups leave one screen too
+     little room for a visual. From 800 up one screen holds both. The kit
+     reads --h from 640 to 1023 and --hm under 640 */
+  @media (min-width: 640px) and (max-width: 799px) {
+    main > #therabasics,
+    main > #center-ref {
+      --h: 2;
+    }
+  }
+  @media (max-width: 639px) {
+    main > #therabasics,
+    main > #center-ref {
+      --hm: 2;
     }
   }
 </style>

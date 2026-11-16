@@ -198,3 +198,42 @@ Notes on the run:
 
 Phase 2 gate: `GATE: PASS` on round 1 of 3 for `dist/index.html`, no waivers; checker 0 FAIL at
 1440/1024/820/768/390, layout check no findings, perf 0 FAIL 0 WARN, copy-lint 0 FAIL 0 WARN.
+
+## Dealt in phase 3: the Projects page
+
+Dealt 2026-11-15 with the committed histories, from the project folder:
+
+```bash
+node $S/assets/layout/deal.mjs --type service --has ui --history .taste-skill/layout-history.json
+node $S/scripts/moments.mjs pick --page service --count 1 --fits section,statement --photo --exclude photo-chapters,word-highlight --history .taste-skill/history.json
+```
+
+- **Hero: split** (the page's second deal). The first, `--has photo,ui`, dealt **film** and it was
+  rejected: film wants a real film or a wide photograph with a calm dark foot, and the page has
+  neither (its material is the three apps' screenshots; the portraits belong to Home and About).
+  Re-dealt as `--has ui`: **split**. The text takes span-6 on the page's 6/6 split pair (the
+  phase-2 note above), the FutAve home screen on span-6 start-7, cropped from its top left
+  (`futave-featured-hero.png`, the same capture less its bottom 51px, where a browser link tooltip
+  sits in the file). The split's float card is not built: copy.md gives this hero no card fact, and
+  nothing may be invented. The hero carries the main action and Email me, as `sections.md` has
+  every hero carry the main action; the checker holds `cta` on a hero without a button.
+- **Moment: picture-develops** (film look), the third deal. **photo-chapters** came first and was
+  rejected: it wants three to five page-wide photographs, and the only Center Ref asset is 388px
+  wide (a page-wide frame of it would be a 3x blow-up). **word-highlight** came second and was
+  rejected: it wants a statement of 12 to 40 words, and copy.md's Projects page has none (phases
+  take copy.md as it stands). picture-develops carries the TheraBasics dashboard screenshot in
+  `#therabasics`, the one large light frame on the page.
+- **Shapes.** Three one-screen sections on the stack: FutAve a split with the players screenshot
+  filling the right column; TheraBasics on the surface band (rhythm surface-pairs) with the
+  developing dashboard; Center Ref a split with the watch standing at its own size on a surface
+  panel (its 388px file is never cover-cropped; at most 1.3x, inside the checker's 1.33x ceiling).
+  Stacked (640 to 1023) each section becomes a column that fills its screens exactly, the figure
+  taking what the screen leaves; the band and the watch section take two screens under 800px and
+  on a phone.
+- **Waiver (1).** `copy-headline` on the h1: the approved copy.md h1 for /projects is "Apps I
+  build on nights and weekends"; the category is named by Home's h1 and this page's meta
+  description.
+
+Phase 3 gate: `GATE: PASS` for `dist/projects/index.html`, the one waiver above; checker 0 FAIL
+besides it at 1440/1024/820/768/390 and the 320 walk, layout check no findings at the five sizes,
+perf 0 FAIL 0 WARN, copy-lint 0 FAIL 0 WARN.
