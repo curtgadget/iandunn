@@ -17,3 +17,8 @@ node_modules/
 
 # local agent tooling
 .claude/
+
+# taste-skill local state: keep only the deal histories (the build marker, gate rounds, crops and Chrome profiles stay local)
+.taste-skill/*
+!.taste-skill/history.json
+!.taste-skill/layout-history.json
