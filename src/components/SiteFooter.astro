@@ -1,190 +1,113 @@
 ---
-// SiteFooter — a calm dark footer: a "Say hi." mark, the social list,
-// three link columns, and a quiet copyright line.
-import SocialIcon from './SocialIcon.astro';
-import { SOCIALS, FOOTER_COLUMNS } from '../data/site.js';
+// SiteFooter — the page's last section, `footer.closing` (deal.md): row 1 is
+// the dealt close-photo (the h2, one line and Book a call, then a portrait
+// never used above it), row 2 the dealt footer-dark directory (the name set
+// large with the initial mark, the Pages, Apps and Contact columns, the legal
+// row), all on the inverse oxblood ground. The kit's system.css lays it out.
+// Words: copy.md, Close and Footer. Links: src/data/site.js.
+import { Image } from 'astro:assets';
+import { FOOTER_COLUMNS, BOOK_CALL } from '../data/site.js';
+// The close's portrait, imported so Astro writes an 800 and a 1600 file (a phone
+// never loads the 640 KB original). It stays in public/photos for the pages
+// that still link it directly.
+import closePhoto from '../../public/photos/glasses-portrait.jpg';
 
 const year = new Date().getFullYear();
+const isExternal = (url: string) => url.startsWith('http');
+// Column spans: the name on span-4, Pages and Apps on span-2, Contact (six
+// links, set in two short lists) on span-4, so the row ends on the right line.
+const colClass = ['footer__col--pages', 'footer__col--apps', 'footer__col--contact'];
 ---
 
-<footer class="site-footer section">
-  <div class="footer-grid">
-    <div class="footer-lead">
-      <p class="say-hi">Say hi<span class="dot">.</span></p>
-      <p class="footnote">
-        For collaborations, advice, or a chat about a side project.
-        My inbox is open.
-      </p>
-
-      <ul class="social-list">
+<footer class="footer closing footer--dark ground-inverse" id="contact" aria-labelledby="close-h">
+  <div class="wrap">
+    <div class="closing__cta close--photo">
+      <div class="section-head--split">
+        <div>
+          <h2 id="close-h">A 30-minute call about your team or app</h2>
+          <p class="t-lead">For advice on running an engineering team, or a second pair of eyes on an app you’re building.</p>
+        </div>
+        <a class="btn btn--primary" href={BOOK_CALL.url}>{BOOK_CALL.label}<svg class="m-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="m-arrow__stem" d="M1 6h8"></path><path class="m-arrow__head" d="M4.5 2.5 8 6l-3.5 3.5"></path></svg></a>
+      </div>
+      <!-- the one portrait wide enough (1586px) for a strip across the 1280 .wrap -->
+      <div class="close__media" style="--pos: 50% 33%">
+        <Image src={closePhoto} alt="Ian Dunn adjusting his glasses" widths={[800, 1586]} sizes="(max-width: 639px) 100vw, 1280px" loading="lazy" data-source="client" data-subject="Ian Dunn" />
+      </div>
+    </div>
+    <div class="closing__links">
+      <div class="grid">
+        <div class="span-4">
+          <a class="footer__mark" href="/"><span class="mark mark--initial" aria-hidden="true">I</span>Ian Dunn</a>
+        </div>
         {
-          SOCIALS.map((s) => (
-            <li>
-              <a
-                href={s.url}
-                target={s.url.startsWith('http') ? '_blank' : undefined}
-                rel={s.url.startsWith('http') ? 'noopener noreferrer' : undefined}
-              >
-                <span class="social-icon">
-                  <SocialIcon id={s.id} size={16} />
-                </span>
-                <span class="social-name">{s.label}</span>
-                <span class="social-handle">{s.handle}</span>
-              </a>
-            </li>
+          FOOTER_COLUMNS.map((col, i) => (
+            <div class:list={['footer__col', colClass[i]]}>
+              <h3>{col.title}</h3>
+              <ul>
+                {col.items.map((item) => (
+                  <li>
+                    <a
+                      href={item.url}
+                      target={isExternal(item.url) ? '_blank' : undefined}
+                      rel={isExternal(item.url) ? 'noopener noreferrer' : undefined}
+                    >
+                      {item.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
           ))
         }
-      </ul>
+      </div>
+      <div class="footer__legal">
+        <span>&copy; {year} Ian Dunn</span>
+        <span>The App Store and Google Play badges are trademarks of Apple and Google.</span>
+      </div>
     </div>
-
-    {
-      FOOTER_COLUMNS.map((col) => (
-        <div class="footer-col">
-          <p class="col-title">{col.title}</p>
-          <ul>
-            {col.items.map((item) => (
-              <li>
-                {item.url ? (
-                  <a
-                    href={item.url}
-                    target={item.url.startsWith('http') ? '_blank' : undefined}
-                    rel={item.url.startsWith('http') ? 'noopener noreferrer' : undefined}
-                  >
-                    {item.label}
-                  </a>
-                ) : (
-                  <span>{item.label}</span>
-                )}
-              </li>
-            ))}
-          </ul>
-        </div>
-      ))
-    }
-  </div>
-
-  <div class="footer-meta">
-    <span>© {year} Ian Dunn</span>
-    <span>Los Angeles, California</span>
   </div>
 </footer>
 
 <style>
-  .site-footer {
-    background: var(--dark);
-    color: var(--dark-fg);
-    padding-top: clamp(3rem, 7vw, 5rem);
-    padding-bottom: 32px;
+  /* the initial tile at the footer's 48px name: a tile a little under the cap height
+     with the letter set inside it (the kit's 1em tile leaves the letter no room) */
+  .footer__mark .mark--initial {
+    font-size: 0.5em;
+    width: 1.6em;
+    height: 1.6em;
   }
-
-  .footer-grid {
+  /* the columns: Pages and Apps on two columns each, Contact on four, the row
+     ending on the right line at every width (the kit sets three per row under 1024) */
+  .footer__col--pages,
+  .footer__col--apps {
+    grid-column: auto / span 2;
+  }
+  .footer__col--contact {
+    grid-column: auto / span 4;
+  }
+  .footer__col--contact ul {
     display: grid;
-    grid-template-columns: 1.7fr 1fr 1fr 1fr;
-    gap: 48px 40px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: repeat(3, auto);
+    grid-auto-flow: column;
+    column-gap: var(--gutter);
   }
-
-  /* ── Lead column ────────────────────────────────────────── */
-  .say-hi {
-    font: 400 clamp(2.5rem, 5vw, 3.5rem) / 1 var(--font-head);
-  }
-  .dot {
-    color: var(--accent-on-dark);
-  }
-  .footnote {
-    margin-top: 16px;
-    max-width: 320px;
-    font: 400 15px/1.6 var(--font-body);
-    color: var(--dark-muted);
-  }
-
-  .social-list {
-    margin-top: 30px;
-    display: flex;
-    flex-direction: column;
-    max-width: 340px;
-  }
-  .social-list a {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 11px 0;
-    color: var(--dark-fg);
-    text-decoration: none;
-    border-bottom: 1px solid rgba(148, 139, 120, 0.18);
-    transition: color 0.18s ease;
-  }
-  .social-list li:first-child a {
-    border-top: 1px solid rgba(148, 139, 120, 0.18);
-  }
-  .social-list a:hover {
-    color: var(--accent-on-dark);
-  }
-  .social-icon {
-    width: 20px;
-    display: inline-flex;
-    justify-content: center;
-    color: var(--dark-muted);
-  }
-  .social-name {
-    flex: 1;
-    font-size: 15px;
-  }
-  .social-handle {
-    font-size: 12px;
-    color: var(--dark-muted);
-  }
-
-  /* ── Link columns ───────────────────────────────────────── */
-  .col-title {
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--dark-muted);
-    margin-bottom: 16px;
-  }
-  .footer-col ul {
-    display: flex;
-    flex-direction: column;
-    gap: 11px;
-  }
-  .footer-col li {
-    font-size: 14px;
-  }
-  .footer-col a {
-    text-decoration: none;
-    transition: color 0.18s ease;
-  }
-  .footer-col a:hover {
-    color: var(--accent-on-dark);
-  }
-
-  /* ── Meta ───────────────────────────────────────────────── */
-  .footer-meta {
-    margin-top: clamp(2.5rem, 6vw, 4rem);
-    padding-top: 22px;
-    border-top: 1px solid rgba(148, 139, 120, 0.18);
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 8px 24px;
-    font-size: 12px;
-    color: var(--dark-muted);
-  }
-
-  /* ── Responsive ─────────────────────────────────────────── */
-  @media (max-width: 860px) {
-    .footer-grid {
-      grid-template-columns: 1fr 1fr;
+  @media (max-width: 1023px) {
+    .footer__col--pages,
+    .footer__col--apps {
+      grid-column: auto / span 3;
     }
-    .footer-lead {
+    .footer__col--contact {
+      grid-column: auto / span 6;
+    }
+  }
+  @media (max-width: 639px) {
+    .footer__col--pages,
+    .footer__col--apps {
+      grid-column: auto / span 6;
+    }
+    .footer__col--contact {
       grid-column: 1 / -1;
-    }
-  }
-  @media (max-width: 520px) {
-    .footer-grid {
-      grid-template-columns: 1fr;
-      gap: 36px;
     }
   }
 </style>

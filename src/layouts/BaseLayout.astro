@@ -1,14 +1,25 @@
 ---
+// BaseLayout — the document shell for every page: head (meta, Open Graph,
+// canonical URL, fonts, the taste-skill kit), the page type the kit and its
+// checker read, and the kit's scripts at the end of <body>.
+//
+// The kit lives in public/assets (copied from the taste-skill, never edited)
+// and loads as plain root-relative files. src/styles/global.css holds the
+// dealt :root palette and type (deal.md) and is linked by Astro after these
+// <link>s, as the kit requires.
 import '../styles/global.css';
 
 interface Props {
   title: string;
   description?: string;
+  /** The page's dealt moment id (deal.md), so its module preloads. */
+  moment?: string;
 }
 
 const {
   title,
-  description = 'Ian Dunn — Senior Engineering Manager at Pinterest, former founder, and builder of small things on the side. LA native, Belizean roots.',
+  description = 'Ian Dunn runs an engineering team at Pinterest and builds FutAve, TheraBasics and Center Ref at home in Los Angeles.',
+  moment,
 } = Astro.props;
 
 const canonical = Astro.site
@@ -23,15 +34,15 @@ const ogImage = Astro.site
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" data-type="service" data-radius="soft" data-buttons="arrow" data-motion>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="theme-color" content="#f5f1ea" />
+    <meta name="theme-color" content="#e2e2e2" />
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
@@ -42,18 +53,40 @@ const ogImage = Astro.site
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:image" content={ogImage} />
 
-    <!-- Fonts: Sorts Mill Goudy (display serif, with a true italic) +
-         JetBrains Mono (labels, captions, case-study numbers). Helvetica
-         Neue (body) is a system font and is not loaded. -->
+    <!-- The kind (deal.md, plan line 1): a service, people are hired. -->
+    <meta name="site-kind" content="other" />
+    <meta name="page-type" content="service" />
+
+    <!-- Nunito, the dealt pairing: one family for display and text. -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Sorts+Mill+Goudy:ital@0;1&family=JetBrains+Mono:wght@400;500;600&display=swap"
-      rel="stylesheet"
-    />
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400..700&display=swap" rel="stylesheet" />
+
+    <!-- The taste-skill kit, in the order system.md gives. -->
+    <link rel="stylesheet" href="/assets/system.css" />
+    <link rel="stylesheet" href="/assets/ui/cards.css" />
+    <link rel="stylesheet" href="/assets/motion/motion.css" />
+    <link rel="stylesheet" href="/assets/backgrounds/backgrounds.css" />
+    <link rel="stylesheet" href="/assets/layout/layout.css" />
+    <link rel="stylesheet" href="/assets/icons/icon.css" />
+
+    <!-- The hero's entrance (motion.md): set before the first paint. -->
+    <script is:inline>document.documentElement.classList.add('m-enter');setTimeout(()=>document.documentElement.classList.add('m-enter-done'),700)</script>
+    {
+      moment && (
+        <Fragment>
+          <script is:inline>document.documentElement.classList.add('mo-js');setTimeout(()=>document.documentElement.classList.add('mo-safe'),2500)</script>
+          <link rel="modulepreload" href="/assets/moments/moments.js" />
+          <link rel="modulepreload" href="/assets/moments/lib.js" />
+          <link rel="modulepreload" href={`/assets/moments/${moment}/moment.js`} />
+        </Fragment>
+      )
+    }
   </head>
   <body>
-    <a class="skip-link" href="#main">Skip to content</a>
     <slot />
+    <script is:inline type="module" src="/assets/system.js"></script>
+    <script is:inline type="module" src="/assets/motion/motion.js"></script>
+    <script is:inline type="module" src="/assets/layout/layout.js"></script>
   </body>
 </html>
