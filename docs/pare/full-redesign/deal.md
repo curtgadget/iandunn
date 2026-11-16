@@ -263,7 +263,7 @@ perf 0 FAIL 0 WARN, copy-lint 0 FAIL 0 WARN.
   `#roles`) makes the section gaps at the ground changes uneven at one width or another
   (`section-gaps` FAILs at 820/768 or 390 in every arrangement tried); every About section sits on
   the page ground and the 3gforfree panel takes the surface step instead.
-- **Phase 4 gate:** `/about` `GATE: PASS` (round 1; one waiver: `no-visual` on `#story` — the only
+- **Phase 4 gate (as run in phase 4):** `/about` `GATE: PASS` (round 1; one waiver: `no-visual` on `#story` — the only
   artifact of 3gforfree.com is its real ~150px screenshot, and the brief invents no images).
   `/writing` `GATE: PASS` (round 2; one waiver: `copy-headline` — the h1 "Writing" is the plan's
   fixed wording). `/writing/build-it-to-run-without-you` `GATE: OPEN 6` (rounds used up): the
@@ -277,3 +277,34 @@ perf 0 FAIL 0 WARN, copy-lint 0 FAIL 0 WARN.
   `copy-contrast` (the published post's own headings and voice; plan.md keeps the post body as
   written, and rewriting it to pass a lint is not a redesign change). copy-lint on `/about` and
   `/writing`: 0 FAIL 0 WARN.
+
+## Built in phase 5: the 404, the kit prune, and the full sweep
+
+- **The 404's moment: picture-develops** (seed eda7c2d9), the first result of the same command the
+  other pages used (`moments.mjs pick --page service --count 1 --fits section,statement --photo
+  --history .taste-skill/history.json`), accepted: the page's hero carries a photograph. The 404
+  takes the site's split hero as built (text span-6, picture span-6 start-7), with
+  `pinterest-standing.jpg` (724px fills the 628px column with no blow-up; this page's close shows
+  the glasses portrait, so nothing repeats within the page) and one primary button, the plan's
+  fixed "Back to the front page".
+- **The kit pruned.** `public/assets` went from 1,594 files / 37 MB to 46 files / ~700 KB: the
+  closure of what the six built pages load (the five dealt stylesheets, system/motion/layout/ui
+  scripts and their imports, the icon set cards.css references, and the three dealt moments'
+  moment.js **and moment.css** — moments.js links `<id>/moment.css` at runtime, which a static
+  scan of the HTML misses; round 1 of the 404's gate caught the missing file). No kit file was
+  edited.
+- **Phase 5 gate, every page type** (each page armed as its own build with `--start --new`, its
+  waivers swapped in; category "engineering manager", primary "Book a call"):
+  - `/` `GATE: PASS`, no waivers.
+  - `/about` `GATE: PASS`, 1 waiver (`no-visual` on `#story`, as phase 4).
+  - `/projects` `GATE: PASS`, 1 waiver (`copy-headline`, the approved copy.md h1).
+  - `/writing` `GATE: PASS`, 1 waiver (`copy-headline`, the plan's fixed "Writing").
+  - `/writing/build-it-to-run-without-you` `GATE: OPEN 6` (rounds used up), the same record as
+    phase 4: 5 waivers at the cap (screen-height, section-height, one-heading, no-visual, hole —
+    a 2,300-word essay is not a landing page) and 6 open with reasons (the footer off the screen
+    grid ×2, same root; copy-headline on the post's title; copy-headings, copy-stock-phrase,
+    copy-contrast in the post's own voice, kept as written per plan.md).
+  - `/404` `GATE: PASS`, 2 waivers (`copy-headline` and `copy-fact` on "Page not found." — the
+    plan's fixed wording; a utility error page sells nothing and nothing may be invented).
+- The full five-width runs (checker at 1440/1024/820/768/390 with the 320 walk, the layout check
+  at the five sizes, perf) are recorded in `check-report.md` beside this file.

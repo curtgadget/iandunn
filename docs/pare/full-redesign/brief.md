@@ -67,3 +67,32 @@ looking AI-made.
   statuses, current FutAve positioning).
 - `astro build` succeeds; the site deploys from main in one release.
 - Ian looks at it and does not say "AI made this".
+
+## Outcome
+
+Closed 2026-11-15. The site was rebuilt end to end to the dealt system — oxblood-grey palette,
+Nunito, split heroes, nav-centre, footer-dark with the close-photo strip, one dealt moment per
+page — across five phases: PR #10 (the deal, the copy, the toolchain), PR #11 (shell, Home, the
+trimmed data, Contact retired), PR #13 (Projects), PR #12 (About and Writing), and this phase's
+release PR from `redesign` into `main`, which deploys it (Cloudflare Pages deploys from main;
+the release waits on Ian's approval of that PR). The gate ended PASS on `/`, `/about`,
+`/projects`, `/writing` and `/404`, and OPEN 6 with reasons on the one essay page
+(`check-report.md` beside this file has the full sweep). Rollback points: tags
+`v1-pre-redesign` and `v2-pre-redesign`.
+
+Decisions that changed during the build, with why:
+- The hero text column is span-6, not the dealt span-5: the Home h1's long words set on four
+  lines in 519px and fail the layout check; the starter's own split pair is 6/6 (deal.md).
+- The deal's trade was passed as `agency`, not "product builder": the dealer's matcher reads
+  "product" as physical goods (deal.md, notes on the run).
+- About carries three portraits, not the planned "one or two": the dealt split hero plus the
+  checker's `no-visual` on the roles rows forced the third; `stool-seated.jpg` (360px) stays
+  unused — too small for any slot without a blow-up past the checker's 1.33x line.
+- The surface band (rhythm surface-pairs) lives on Home only: on About every arrangement
+  failed `section-gaps` at some width, so the 3gforfree panel takes the surface step instead.
+- The 404 kept the site's split hero with the dealt `picture-develops` moment rather than a
+  text-only utility page, so the one page the plan gave fixed wording still passes the gate
+  (two reasoned waivers on that wording).
+
+The run is closed; the removed working files (plan.md, check.md, look.md, reading-list.md,
+decisions.json, preview.json) remain in version control history.
