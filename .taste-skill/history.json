@@ -1,0 +1,20 @@
+{
+ "palettes": [
+  "oxblood-grey"
+ ],
+ "types": [
+  "nunito"
+ ],
+ "dealt": [
+  "nunito",
+  "work-sans",
+  "source-serif"
+ ],
+ "moments": [
+  {
+   "id": "pinned-chapters",
+   "at": "2026-11-16T01:24:09.507Z",
+   "seed": "4ad9dd94"
+  }
+ ]
+}

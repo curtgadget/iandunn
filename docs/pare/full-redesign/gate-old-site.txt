@@ -1,0 +1,90 @@
+gate.mjs run against the built pre-redesign site (phase 1 toolchain proof; FAILs expected, not fixed)
+Commands: npm run build; node ~/.claude/skills/design-taste-frontend/scripts/gate.mjs --start dist/index.html --root dist --kind service; node ~/.claude/skills/design-taste-frontend/scripts/gate.mjs dist/index.html
+Run: 2026-11-15, branch redesign-phase-1, Node v24.21.0, headless Chrome
+
+gate: checking dist/index.html (service); this takes a few minutes on a CPU Chrome
+gate: 27 FAIL open
+  FAIL hero-fill        main#main > section.section.case-studies "Things I’m building"  [1440]
+       the next section shows on the first screen: it starts at 720px on a 900px screen (the hero ends at 648px)
+       fix: let the hero fill the first screen alone (min-height: 100svh, less above it): nothing of the next section on load
+  FAIL cta              main#main > section.section.service "The weekend"  [1440, 390]
+       the last section before the footer ends with no button
+       fix: add the action: a button in the hero, one on every priced item, one in the closing section
+  FAIL heading-scale    article.cs-row:nth-of-type(1) > div.cs-body > div.cs-title-line > h3.cs-name "FutAve"  [1440]
+       h3 headings in 2 sizes, 26px ("People’s Warden") to 34px (x1.31)
+       fix: size headings by level: the h1 largest, one size per level, each level below the one above
+  FAIL visual-caption   main#main > section.section.hero > figure.hero-photo > figcaption "LOS ANGELES · BELIZEAN   [1440]
+       a figcaption under the picture chin-portrait.jpg: "LOS ANGELES · BELIZEAN ROOTS · WHISTLE O..."; no caption or description under any image, render or visual (house rule)
+       fix: take the line away: no caption or description under, over or on any image, render or visual; a licence credit goes in one footer line
+  FAIL visual-caption   section.section.case-studies > article.cs-row:nth-of-type(1) > figure.cs-figure > figcapti  [1440]
+       a figcaption under the picture futave-featured.CbrBT8vy_Z2fjBiU.webp: "FUTAVE.COM — THE WAVE DETECTOR’S CALL"; no caption or description under any image, render or visual (house rule)
+       fix: take the line away: no caption or description under, over or on any image, render or visual; a licence credit goes in one footer line
+  FAIL visual-caption   section.section.case-studies > article.cs-row:nth-of-type(2) > figure.cs-figure > figcapti  [1440]
+       a figcaption under the picture therabasics-therapists.C4wC2Q1y_1rzyHG.webp: "THERABASICS.COM — THE SESSION BRIEF"; no caption or description under any image, render or visual (house rule)
+       fix: take the line away: no caption or description under, over or on any image, render or visual; a licence credit goes in one footer line
+  FAIL visual-caption   section.section.case-studies > article.cs-row:nth-of-type(3) > figure.cs-figure > figcapti  [1440]
+       a figcaption under the picture watch-active-1h.CyKg42mn_SNNnR.webp: "THE WATCH FACE, MID-MATCH"; no caption or description under any image, render or visual (house rule)
+       fix: take the line away: no caption or description under, over or on any image, render or visual; a licence credit goes in one footer line
+  FAIL hero-enter       main#main > section.section.hero  [1440]
+       the hero does not enter on load: no data-enter on the hero and no head line setting html.m-enter (motion.md, The hero's entrance)
+       fix: put data-enter on the hero <section> and keep the head line from starter.html that sets html.m-enter
+  FAIL moment-none      (the page)  [1440]
+       a service page (--type) deals no moment: every kind carries one, two on a long page (moments.md)
+       fix: deal one (moments.mjs pick --page service --photo) and mount it in its own section
+  FAIL hero-screen      main#main > section.section.hero "The best systems run without you. I run "  [1440]
+       the hero ends at 648px on a 900px screen, 252px above the fold: it ends at the fold, 1px either way (SR-1)
+       fix: make the hero exactly one screen (height: 100svh, its content fitted inside), never taller or shorter
+  FAIL hero-screen      main#main > section.section.case-studies "Case studies Things I’m building All cas"  [1440]
+       252px of the next section shows on the first screen (from 648px on a 900px screen): nothing below the hero shows at load (SR-1)
+       fix: end the hero at the fold so nothing of the next section shows at load (hero height: 100svh)
+  FAIL section-height   main#main > section.section.case-studies "Case studies Things I’m building All cas"  [1440]
+       the section is 1456px tall (1.6 screens), 344px short of two screens (1800px): every section after the hero is one screen or two, 2px either way (SR-2)
+       fix: set the section to one screen or two (height: calc(var(--h,1) * 100vh), --h 1 or 2) and cut or split its content to fit
+  FAIL section-height   footer.site-footer.section "Say hi. For collaborations, advice, or a"  [1440]
+       the section is 564px tall (0.6 screens), 336px short of one screen (900px): every section after the hero is one screen or two, 2px either way (SR-2)
+       fix: set the section to one screen or two (height: calc(var(--h,1) * 100vh), --h 1 or 2) and cut or split its content to fit
+  FAIL one-section      main#main > section.section.service "Off the clock The weekend The other half"  [1440]
+       the screen at scroll 2561px (the top of section 4) shows 336px of section 3 and the content of 2 sections, over 24px each beside section 4: a screen shows one section (another may peek 8px, 24px WARN) (SR-4)
+       fix: make each section exactly one screen or two, so a screen shows one section and no neighbour peeks
+  FAIL one-section      section.section.case-studies > div.block-head > div > h2.block-title "Things I’m building"  [1440]
+       the screen at scroll 69px (the top of section 1) shows 321px of section 2 and the heading of section 2 whole and the content of 2 sections, over 24px each beside section 1: a screen shows one section (another may peek 8p
+       fix: make each section exactly one screen or two, so a screen shows one section and no neighbour peeks
+  FAIL container-edges  header.site-nav.section "Ian Dunn Sr. Engineering Manager, Pinter"  [1440]
+       the nav's content runs 130px from the left and 130px from the right (read from its outermost blocks: no .wrap): the margin is 64-120px at 1440px (one container, equal margins, 2px either way) (SR-6)
+       fix: use one container on every section and the nav (.wrap): one margin left and right, 64-120px on a desktop, 16-24px on a phone
+  FAIL container-edges  main#main > section.section.hero "The best systems run without you. I run "  [1440]
+       the content of section 1 runs 130px from the left and 130px from the right (read from its outermost blocks: no .wrap): the margin is 64-120px at 1440px (one container, equal margins, 2px either way) (SR-6)
+       fix: use one container on every section and the nav (.wrap): one margin left and right, 64-120px on a desktop, 16-24px on a phone
+  FAIL container-edges  main#main > section.section.case-studies "Case studies Things I’m building All cas"  [1440]
+       the content of section 2 runs 130px from the left and 130px from the right (read from its outermost blocks: no .wrap): the margin is 64-120px at 1440px (one container, equal margins, 2px either way) (and 2 more like it: 
+       fix: use one container on every section and the nav (.wrap): one margin left and right, 64-120px on a desktop, 16-24px on a phone
+  FAIL container-edges  a.skip-link "Skip to content"  [1440]
+       a <a> at the top of the page, outside header.nav, main, footer.closing and nav.actionbar (SR-6)
+       fix: build the page as header.nav, a main of sections (each one in-flow .wrap plus background layers) and footer.closing
+  FAIL container-edges  div.service-list > article.service-row:nth-of-type(2) > div.service-line > h3.service-role  [1440]
+       1 text block starts on a left line at x 640, 510px from the container's left: text starts on the container's left, or on one split line (x 632, 732, 832) (SR-6)
+       fix: start the text on the container's left, or on the one split line every split shares
+  FAIL container-edges  main#main > section.section.service > div.service-list > article.service-row:nth-of-type(1  [1440]
+       a box over half the container wide runs 640-1310px, not on the container's lines at 130-1310px (SR-6)
+       fix: run the picture or box from the container's left line to its right line, or put it in a row or a split
+  FAIL container-edges  main#main > section.section.service > div.service-list > article.service-row:nth-of-type(2  [1440]
+       a box over half the container wide runs 640-1310px, not on the container's lines at 130-1310px (and 2 more like it: "Livestream Producer Sund", "AYSO Regional Referee U-") (SR-6)
+       fix: run the picture or box from the container's left line to its right line, or put it in a row or a split
+  FAIL row-lines        main#main > section.section.case-studies > article.cs-row:nth-of-type(1) "01 FutAve Live “  [1440]
+       a row of 3 items: its items are 21/232/322px tall, not one height (2px either way) (SR-7)
+       fix: start the row's first item on the container's left line and end its last on the right line, every item one height
+  FAIL row-lines        main#main > section.section.case-studies > article.cs-row:nth-of-type(2) "02 TheraBasics L  [1440]
+       a row of 3 items: its items are 21/256/322px tall, not one height (2px either way) (SR-7)
+       fix: start the row's first item on the container's left line and end its last on the right line, every item one height
+  FAIL row-lines        main#main > section.section.case-studies > article.cs-row:nth-of-type(3) "03 Center Ref Pu  [1440]
+       a row of 3 items: its items are 21/232/322px tall, not one height (2px either way) (SR-7)
+       fix: start the row's first item on the container's left line and end its last on the right line, every item one height
+  FAIL container        page  [1440, 390]
+       no .wrap
+       fix: put the content in one .wrap
+  FAIL copy-contrast    copy x5: "isn't", ", not t", "instead of", ", not d", ", not a"
+       contrast frames ("X, not Y", isn't, rather than, instead of, without the): 5, budget 2 (a tic, not a device)
+       fix: state the positive fact on its own; count all the forms together (references/copy-tells.md)
+  19 WARN (not blocking), first: no-visual main#main > section.section.hero "The be; no-visual main#main > section.section.case-studies; copy-headline main#main > section.section.hero > div.h; copy-headings article.cs-row:nth-of-type(2) > div.cs-b; body-size article.cs-row:nth-of-type(1) > div.cs-b
+A FAIL you judge false: add {"check": "<id>", "target": "<its where, enough to name that one finding>", "reason": "<why, 12+ characters>"} to .taste-skill/waivers.json (one finding each, 5 at most, never for kit-edited or checker-gaming); it goes in your report. Never edit the kit's files or hide the page from the checker.
+GATE: FAIL 27 (round 1 of 3)
