@@ -74,7 +74,7 @@ Closed 2026-11-15. The site was rebuilt end to end to the dealt system — oxblo
 Nunito, split heroes, nav-centre, footer-dark with the close-photo strip, one dealt moment per
 page — across five phases: PR #10 (the deal, the copy, the toolchain), PR #11 (shell, Home, the
 trimmed data, Contact retired), PR #13 (Projects), PR #12 (About and Writing), and this phase's
-release PR from `redesign` into `main`, which deploys it (Cloudflare Pages deploys from main;
+release PR #14 from `redesign` into `main`, which deploys it (Cloudflare Pages deploys from main;
 the release waits on Ian's approval of that PR). The gate ended PASS on `/`, `/about`,
 `/projects`, `/writing` and `/404`, and OPEN 6 with reasons on the one essay page
 (`check-report.md` beside this file has the full sweep). Rollback points: tags
