@@ -1,189 +1,107 @@
 ---
-// CaseStudyRow — one Home-page case study: number rail, the argument
-// (name, opinion, ONE featured field, meta), and a framed product shot.
-// The row teases; the full three-field argument lives on /projects. Which
-// field is featured comes from the entry's optional `tease` key
-// ('problem' | 'tradeoff' | 'different' — default 'different').
-// Renders an entry from src/data/caseStudies.js.
+// CaseStudyRow — one chapter of Home's "Apps I build and run" section, the
+// dealt pinned-chapters moment (deal.md; moments/_demo/in-page-service.html).
+// It renders one `li.mo-pc__step`: the app's mark, name and status as the
+// h3, its one teaser line as the step's paragraph, and its real screenshot
+// as the step's visual, which the moment moves into the shared frame while
+// the section holds. Renders an entry from src/data/caseStudies.js; only
+// src/pages/index.astro imports it.
 import { Image } from 'astro:assets';
 
 interface Props {
-  study: any;
+  study: {
+    id: string;
+    name: string;
+    status: string;
+    teaser: string;
+    mark: { fit: string; src: string; alt: string };
+    shot: ImageMetadata;
+    shotAlt: string;
+    shotFit: string;
+  };
 }
 const { study: c } = Astro.props;
 
-const FIELD_LABELS = {
-  problem: 'The problem that mattered',
-  tradeoff: 'The tradeoff I made',
-  different: 'Why it’s different',
-};
-const tease = (c.tease ?? 'different') as keyof typeof FIELD_LABELS;
+// A web screenshot fills the frame from its top; a small device shot (the
+// watch) stands whole on the surface instead of being cropped and upscaled.
+const contain = c.shotFit === 'contain';
 ---
 
-<article class="cs-row">
-  <span class="cs-num">{c.num}</span>
-
-  <div class="cs-body">
-    <div class="cs-title-line">
-      <h3 class="cs-name"><a href={`/projects#${c.id}`}>{c.name}</a></h3>
-      <span class="cs-status">
-        <span class="dot" style={`background:${c.statusColor}`} />
-        {c.status}
-      </span>
-    </div>
-
-    <p class="cs-opinion">“{c.opinion}”</p>
-
-    <div class="cs-detail">
-      <p class="cs-label">{FIELD_LABELS[tease]}</p>
-      <p class="cs-copy">{c[tease]}</p>
-    </div>
-
-    <p class="cs-meta">{c.meta}</p>
-  </div>
-
-  {
-    c.shot && (
-      <figure class="cs-figure">
-        <a class="cs-shot-link" href={`/projects#${c.id}`} aria-label={`${c.name} case study`}>
-          <div class:list={['cs-frame', `fit-${c.shotFit}`]}>
-            <Image src={c.shot} alt={c.shotAlt} width={760} format="webp" loading="lazy" />
-          </div>
-        </a>
-        <figcaption>{c.caption}</figcaption>
-      </figure>
-    )
-  }
-</article>
+<li class="mo-pc__step">
+  <h3 class="cs-head">
+    <span class:list={['cs-mark', `cs-mark--${c.mark.fit}`]}><img src={c.mark.src} alt="" width="28" height="28" loading="lazy" decoding="async" /></span>
+    <span>{c.name}</span>
+    <span class="pill cs-status">{c.status}</span>
+  </h3>
+  <p>{c.teaser}</p>
+  <figure class:list={['mo-pc__visual', { 'cs-visual--contain': contain }]}>
+    {
+      contain ? (
+        <Image src={c.shot} alt={c.shotAlt} loading="lazy" />
+      ) : (
+        <Image
+          src={c.shot}
+          alt={c.shotAlt}
+          width={1279}
+          height={850}
+          widths={[640, 1279]}
+          sizes="(max-width: 1023px) 100vw, 628px"
+          fit="cover"
+          position="top"
+          loading="lazy"
+        />
+      )
+    }
+  </figure>
+</li>
 
 <style>
-  .cs-row {
-    display: grid;
-    grid-template-columns: 56px 1.6fr 1fr;
-    gap: 40px;
-    align-items: start;
-    padding: 44px 0;
-    border-top: 1px solid var(--line);
-  }
-
-  .cs-num {
-    font: 400 15px/1 var(--font-mono);
-    color: var(--accent-strong);
-    padding-top: 6px;
-  }
-
-  .cs-title-line {
+  /* the h3: mark, name and status on one line (page CSS inside the moment's step) */
+  .cs-head {
     display: flex;
-    align-items: baseline;
-    gap: 16px;
-  }
-  .cs-name {
-    font: 400 clamp(1.7rem, 3vw, 2.125rem) / 1 var(--font-head);
-  }
-  .cs-name a {
-    color: inherit;
-    text-decoration: none;
-    transition: color 0.18s ease;
-  }
-  .cs-name a:hover {
-    color: var(--accent-strong);
-  }
-  .cs-status {
-    display: inline-flex;
     align-items: center;
-    gap: 6px;
-    font-size: 12px;
-    color: var(--muted);
+    gap: var(--s-3);
   }
-  .dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-  }
-
-  /* Capped at ~44ch so the quote breaks into two lines and reads as a
-     pull-quote, not a long single rule of italic. */
-  .cs-opinion {
-    margin-top: 14px;
-    max-width: 44ch;
-    font: italic 400 clamp(1.25rem, 2.2vw, 1.5rem) / 1.3 var(--font-head);
-    color: var(--ink-soft);
-    text-wrap: pretty;
-  }
-
-  .cs-detail {
-    margin-top: 28px;
-    max-width: 56ch;
-  }
-  /* Muted ink — the row's only terracotta is the number and hovers. */
-  .cs-label {
-    font: 500 10px/1 var(--font-mono);
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--muted);
-  }
-  .cs-copy {
-    margin-top: 8px;
-    font: 400 15px/1.65 var(--font-body);
-    color: var(--ink-body);
-  }
-
-  /* A hairline discharges the meta from the argument above it — without
-     it the line reads as another field. */
-  .cs-meta {
-    margin-top: 28px;
-    padding-top: 14px;
-    border-top: 1px solid var(--line);
-    max-width: 56ch;
-    font-size: 12px;
-    color: var(--muted);
-  }
-
-  /* The framed shot: sand mat, ink border — product shots crop from the
-     top, the watch shot sits contained on the mat. The whole frame links
-     to its case study; the border warming is the hover cue. */
-  .cs-shot-link {
-    display: block;
-  }
-  .cs-shot-link:hover .cs-frame {
-    border-color: var(--accent-strong);
-  }
-  .cs-frame {
-    width: 100%;
-    aspect-ratio: 4 / 3;
-    background: var(--paper-sand);
-    border: 1px solid var(--ink);
+  .cs-mark {
+    flex: none;
+    display: inline-grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    border-radius: var(--r-sm);
     overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: border-color 0.18s ease;
   }
-  .cs-frame :global(img) {
+  .cs-mark img {
     width: 100%;
     height: 100%;
-    filter: var(--photo-filter);
-  }
-  .fit-cover :global(img) {
-    object-fit: cover;
-    object-position: top;
-  }
-  .fit-contain :global(img) {
     object-fit: contain;
-    padding: 18px;
   }
-  .cs-figure figcaption {
-    margin-top: 7px;
-    font: 500 10px/1.4 var(--font-mono);
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--muted);
+  .cs-mark--cover img {
+    object-fit: cover;
   }
-
-  @media (max-width: 760px) {
-    .cs-row {
-      grid-template-columns: 1fr;
-      gap: 24px;
-    }
+  /* the status as the kit's pill, in the heading's own colour (open or closed step alike) */
+  .cs-status {
+    font-family: var(--font-text);
+    font-weight: 500;
+    letter-spacing: 0;
+    color: inherit;
+  }
+  /* inside the visual: web screenshots crop from the top; the watch stands whole */
+  .mo-pc__visual :global(img) {
+    object-position: 50% 0;
+  }
+  /* the watch shot (388px) stands at its own size, centred on the surface, never blown up */
+  .cs-visual--contain {
+    display: grid;
+    place-items: center;
+    background: var(--surface);
+  }
+  figure.mo-pc__visual.cs-visual--contain :global(img) {
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
+    aspect-ratio: auto;
+    object-fit: contain;
   }
 </style>

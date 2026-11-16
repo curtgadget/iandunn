@@ -1,9 +1,24 @@
 ---
+// Writing — a plain dated list (brief: no category cards, no archive framing),
+// built to the dealt look (docs/pare/full-redesign/deal.md):
+//   1. hero        split: "Writing", the lead and the post list on span-6 (the
+//                  site's 6/6 pair; the one-post list is a short block, so it
+//                  merges into the hero, layout-v4.md), one portrait on span-6
+//                  start-7 carrying the dealt moment picture-develops
+//                  (seed ed0b690e): the photograph comes up out of a faint grey
+//                  print as the page loads. The hero was dealt photo (twice) and
+//                  film; rejected because every kept portrait is 724px wide
+//                  (photo wants 1920, film a 1280 frame), so split again.
+//                  The portrait is Home's hero portrait again: About holds the
+//                  three other 724px portraits, and photographs repeat only
+//                  across pages, never within one.
+//   2. footer.closing (SiteFooter): close-photo + footer-dark
+// The category field stays in each post's frontmatter and is not rendered.
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SiteNav from '../components/SiteNav.astro';
 import SiteFooter from '../components/SiteFooter.astro';
-import PageHeader from '../components/PageHeader.astro';
+import { BOOK_CALL } from '../data/site.js';
 
 // Posts live in src/content/writing/ — newest first.
 const posts = (await getCollection('writing')).sort(
@@ -14,69 +29,49 @@ const posts = (await getCollection('writing')).sort(
 // formatting would shift them back a day.
 const fmt = (d: Date) =>
   d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
-
-// The four categories the writing is filed under (from the brief).
-const categories = [
-  {
-    name: 'Building',
-    desc: 'Side projects, weekend code, and the actual mechanics of shipping things with three kids in the house.',
-  },
-  {
-    name: 'Leading',
-    desc: 'Engineering management: hiring, feedback, and what changes when you stop writing code for a living.',
-  },
-  {
-    name: 'Learning',
-    desc: 'Books, talks, and papers worth underlining, including the things I got wrong on the second read.',
-  },
-  {
-    name: 'Life',
-    desc: 'Fatherhood, faith, Los Angeles, Belize, the church livestream, and the Saturday sideline.',
-  },
-];
 ---
 
 <BaseLayout
-  title="Writing — Ian Dunn"
-  description="Notes from Ian Dunn on building, leading, learning, and life."
+  title="Writing by Ian Dunn"
+  description="Posts by Ian Dunn on running an engineering team and building apps, newest first."
+  moment="picture-develops"
 >
+  <!-- type: service
+       deal: hero split (photo and film dealt first, rejected: no kept portrait is wide enough
+             for their frames), nav nav-centre, close close-photo, footer footer-dark,
+             buttons arrow, mark initial
+       moment: picture-develops on the hero's portrait -->
   <SiteNav active="Writing" />
 
-  <main id="main">
-    <PageHeader
-      eyebrow="Writing"
-      title="The notebook"
-      intro="Short pieces on building, leading, learning, and life."
-    />
-
-    <section class="section categories">
-      <div class="category-grid">
-        {
-          categories.map((c) => (
-            <article class="category">
-              <h2 class="category-name">{c.name}</h2>
-              <p class="category-desc">{c.desc}</p>
-            </article>
-          ))
-        }
-      </div>
-    </section>
-
-    <section class="section archive">
-      <p class="eyebrow">The archive</p>
-      {
-        posts.map((post) => (
-          <article class="post-row">
-            <p class="post-meta">
-              {post.data.category} · {fmt(post.data.date)}
-            </p>
-            <h2 class="post-title">
-              <a href={`/writing/${post.id}/`}>{post.data.title}</a>
-            </h2>
-            <p class="post-desc">{post.data.description}</p>
-          </article>
-        ))
-      }
+  <main id="top">
+    <section class="hero hero--split" data-enter aria-labelledby="hero-h">
+      <div class="wrap"><div class="hero-text grid hero__grid">
+        <div class="hero__text span-6">
+          <h1 id="hero-h">Writing</h1>
+          <p class="hero__lead">Posts on running an engineering team and building apps, newest first.</p>
+          <div class="btn-row">
+            <a class="btn btn--primary" href={BOOK_CALL.url}>{BOOK_CALL.label}<svg class="m-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="m-arrow__stem" d="M1 6h8"></path><path class="m-arrow__head" d="M4.5 2.5 8 6l-3.5 3.5"></path></svg></a>
+          </div>
+          <ol class="writing__list" aria-label="Posts, newest first">
+            {
+              posts.map((post) => (
+                <li class="writing__row">
+                  <p class="writing__meta">{fmt(post.data.date)}</p>
+                  <p class="writing__title">
+                    <a href={`/writing/${post.id}/`}>{post.data.title}</a>
+                  </p>
+                  <p class="writing__desc">{post.data.description}</p>
+                </li>
+              ))
+            }
+          </ol>
+        </div>
+        <!-- picture-develops (moments.md): the portrait develops once as the page
+             arrives; without script or under reduced motion it simply stands -->
+        <figure class="hero__media span-6 start-7" data-moment="picture-develops">
+          <img src="/photos/chin-portrait.jpg" alt="Ian Dunn in a white T-shirt and glasses, his hand at his chin" width="724" height="1086" style="--ly-pos: 50% 30%" fetchpriority="high" />
+        </figure>
+      </div></div>
     </section>
   </main>
 
@@ -84,63 +79,56 @@ const categories = [
 </BaseLayout>
 
 <style>
-  .categories {
-    padding-bottom: clamp(2rem, 4vw, 3rem);
+  /* the dated list, merged into the hero as its last element (a one-post list is
+     a short block, layout-v4.md): each row closes with its own hairline */
+  .writing__list {
+    margin: var(--s-7) 0 0;
+    padding: 0;
+    list-style: none;
+    max-width: 52ch;
   }
-  /* hairline gap-grid — these are informational, not links */
-  .category-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-    gap: 1px;
-    background: var(--line);
-    border: 1px solid var(--line);
-  }
-  .category {
-    background: var(--paper);
-    padding: 26px 22px;
-  }
-  .category-name {
-    font: 400 24px/1 var(--font-head);
-  }
-  .category-desc {
-    margin-top: 10px;
-    font: 400 14px/1.6 var(--font-body);
-    color: var(--ink-body);
-  }
-
-  .archive {
-    padding-bottom: clamp(3.5rem, 8vw, 6rem);
-  }
-  .post-row {
-    margin-top: 18px;
-    padding: 26px 0;
-    border-top: 1px solid var(--line);
-  }
-  .post-row:last-child {
+  .writing__row {
+    padding-block: var(--s-5);
     border-bottom: 1px solid var(--line);
+    display: grid;
+    gap: var(--s-2);
   }
-  .post-meta {
-    font: 500 11px/1 var(--font-mono);
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
+  .writing__row:first-child {
+    padding-top: 0;
+  }
+  .writing__meta {
+    font-size: var(--t-small);
     color: var(--muted);
   }
-  .post-title {
-    margin-top: 12px;
-    font: 400 clamp(1.5rem, 3vw, 2rem) / 1.15 var(--font-head);
+  .writing__title {
+    font-family: var(--font-display);
+    font-weight: var(--display-weight);
+    font-size: var(--t-h3);
+    line-height: 1.2;
+    letter-spacing: var(--display-tracking);
   }
-  .post-title a {
-    color: inherit;
-    text-decoration: none;
-    transition: color 0.18s ease;
+  .writing__desc {
+    color: var(--ink);
+    max-width: 48ch;
   }
-  .post-title a:hover {
-    color: var(--accent-strong);
-  }
-  .post-desc {
-    margin-top: 10px;
-    max-width: 62ch;
-    font: 400 15px/1.65 var(--font-body);
-    color: var(--ink-body);
+
+  /* the phone hero holds the h1 stress test (heroes.json maxChars) with the
+     list aboard: the one-word h1 steps down (still above the h2 floor) and the
+     list tightens, so a 45-character headline still ends above the fold */
+  @media (max-width: 639px) {
+    .hero h1 {
+      font-size: 32px;
+    }
+    .writing__list {
+      margin-top: var(--s-5);
+      max-width: none;
+    }
+    .writing__row {
+      padding-block: var(--s-4);
+      gap: var(--s-1);
+    }
+    .writing__desc {
+      line-height: 1.5;
+    }
   }
 </style>

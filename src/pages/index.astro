@@ -1,113 +1,81 @@
 ---
+// Home — built to the dealt look (docs/pare/full-redesign/deal.md) with the
+// words of copy.md, as a stack of screens (the kit's layout-v4.md):
+//   1. hero        split: the h1, lead and two actions on span-6 (the 6/6 pair: the
+//                  dealt span-5 sets this h1 on four lines, layout check hero-lines),
+//                  one portrait on span-6 start-7 with one flat float card (1 screen)
+//   2. #apps       the dealt moment pinned-chapters: three chapters, one per app,
+//                  each app's real screenshot in the frame            (2 screens)
+//   3. #story      the surface band (rhythm surface-pairs): text left, a
+//                  portrait right, pointing at About                  (1 screen)
+//   4. footer.closing (SiteFooter): close-photo + footer-dark          (1 screen)
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SiteNav from '../components/SiteNav.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import CaseStudyRow from '../components/CaseStudyRow.astro';
-import Plate from '../components/Plate.astro';
 import { CASE_STUDIES } from '../data/caseStudies.js';
-
-// Home leads with the three shipped-or-shipping case studies;
-// Stonefold lives on the Case Studies page only.
-const featured = CASE_STUDIES.slice(0, 3);
-
-// Off the clock — each role's copy ties back to the thesis.
-const weekend = [
-  {
-    role: 'People’s Warden',
-    org: 'Christ the Good Shepherd · Episcopal',
-    tie: 'Elected to represent the laity on the vestry. Less authority than the title suggests, more showing up — which is most of what leadership is.',
-  },
-  {
-    role: 'Board Member',
-    org: 'Good Shepherd Manor · Leimert Park',
-    tie: 'Affordable senior housing with long roots. Governance and stewardship: keeping a system steady for the people living inside it.',
-  },
-  {
-    role: 'Livestream Producer',
-    org: 'Sundays, 10 a.m.',
-    tie: 'Built the parish’s broadcast stack from scratch — thumbnails, bulletins, clipping, all automated. It goes live every Sunday, and it runs without me.',
-  },
-  {
-    role: 'AYSO Regional Referee',
-    org: 'U-12, most Saturdays',
-    tie: 'Whistle in hand in my kids’ league. The weekend job that quietly turned into Center Ref.',
-  },
-];
+import { BOOK_CALL, EMAIL } from '../data/site.js';
 ---
 
-<BaseLayout title="Ian Dunn">
+<BaseLayout
+  title="Ian Dunn: engineering manager in Los Angeles"
+  description="Ian Dunn runs an engineering team at Pinterest and builds FutAve, TheraBasics and Center Ref at home in Los Angeles."
+  moment="pinned-chapters"
+>
+  <!-- type: service
+       deal: hero split, nav nav-centre, close close-photo, footer footer-dark, rhythm surface-pairs,
+             buttons arrow, mark initial, palette oxblood-grey, pairing nunito, radius soft, no grounds
+       moments: pinned-chapters in #apps (three apps shown in the space of one section) -->
   <SiteNav active="Home" />
 
-  <main id="main">
-    <!-- HERO — quiet paper, one declarative thesis ───────────── -->
-    <section class="section hero">
-        <div class="hero-text">
-          <h1 class="hero-thesis">
-            The best systems run without you<span class="period">.</span>
-          </h1>
-          <p class="hero-lede">
-            I run my team at Pinterest by the same rule I ship side projects
-            by: know exactly who it’s for, cut what doesn’t serve them, and
-            then get out of the way. Eight years a founder before a
-            decade-plus building for Disney, NBC, Netflix, and Spotify.
-          </p>
-
-          <div class="hero-actions">
-            <a class="cta" href="/projects">Read the case studies →</a>
-            <a class="cta-ghost" href="/about">The long way in →</a>
+  <main id="top">
+    <section class="hero hero--split" data-enter aria-labelledby="hero-h">
+      <div class="wrap"><div class="hero-text grid hero__grid">
+        <div class="hero__text span-6">
+          <h1 id="hero-h">Engineering manager who builds his own apps</h1>
+          <p class="hero__lead">I run a team at Pinterest with no product manager, and build FutAve, TheraBasics and Center Ref at home in Los Angeles.</p>
+          <div class="btn-row">
+            <a class="btn btn--primary" href={BOOK_CALL.url}>{BOOK_CALL.label}<svg class="m-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="m-arrow__stem" d="M1 6h8"></path><path class="m-arrow__head" d="M4.5 2.5 8 6l-3.5 3.5"></path></svg></a>
+            <a class="btn btn--secondary" href={EMAIL.url}>{EMAIL.label}</a>
           </div>
         </div>
-
-        <figure class="hero-photo">
-          <div class="hero-frame">
-            <img src="/photos/chin-portrait.jpg" alt="Ian Dunn" loading="eager" />
+        <div class="hero__media span-6 start-7">
+          <img src="/photos/chin-portrait.jpg" alt="Ian Dunn in a white T-shirt and glasses, his hand at his chin" width="724" height="1086" style="--ly-pos: 50% 30%" fetchpriority="high" />
+          <div class="ly-float">
+            <div class="ly-float__title">AYSO referee, U-12, most Saturdays</div>
           </div>
-          <figcaption>Los Angeles · Belizean roots · whistle on Saturdays</figcaption>
-        </figure>
-      </section>
-
-    <!-- CASE STUDIES ─────────────────────────────────────────── -->
-    <section class="section case-studies">
-    <div class="block-head">
-      <div>
-        <p class="eyebrow">Case studies</p>
-        <h2 class="block-title">Things I’m building</h2>
-      </div>
-      <a class="block-link" href="/projects">All case studies →</a>
-    </div>
-
-      {featured.map((c) => <CaseStudyRow study={c} />)}
+        </div>
+      </div></div>
     </section>
 
-    <!-- OFF THE CLOCK ────────────────────────────────────────── -->
-    <section class="section service">
-    <div class="service-intro">
-      <p class="eyebrow">Off the clock</p>
-      <h2 class="block-title">The weekend</h2>
-      <p class="service-blurb">
-        The other half of the week — a small Episcopal parish in L.A., a
-        board seat, and a livestream rig that goes live at 10 a.m. sharp.
-      </p>
-
-      <!-- The artifact slot. The handoff wants a photo of the livestream
-           rig here; the portrait stands in until that shot exists. -->
-      <div class="rig">
-        <Plate src="/photos/stool-seated.jpg" alt="Ian Dunn, seated" aspect="4 / 5" />
+    <!-- pinned-chapters (moments.md): the section is the host, two screens tall; moment.js holds it
+         while the three apps open one at a time and the frame shows each one's screenshot -->
+    <section class="section" id="apps" style="--h: 2" data-moment="pinned-chapters" aria-labelledby="apps-h">
+      <div class="wrap mo-pc__grid">
+        <div class="mo-pc__text">
+          <div class="section-head">
+            <h2 id="apps-h">Apps I build and run</h2>
+            <p>FutAve and TheraBasics are live on iPhone, Android and the web. Center Ref is in public beta on Apple Watch.</p>
+          </div>
+          <ol class="mo-pc__steps">
+            {CASE_STUDIES.map((c) => <CaseStudyRow study={c} />)}
+          </ol>
+          <p><a class="link" href="/projects">See all three projects</a></p>
+        </div>
+        <div class="mo-pc__visuals frame"></div>
       </div>
-    </div>
+    </section>
 
-    <div class="service-list">
-      {
-        weekend.map((row) => (
-          <article class="service-row">
-            <div class="service-line">
-              <h3 class="service-role">{row.role}</h3>
-              <span class="service-org">{row.org}</span>
-            </div>
-            <p class="service-copy">{row.tie}</p>
-          </article>
-        ))
-      }
+    <section class="section ground-surface" id="story" aria-labelledby="story-h">
+      <div class="wrap grid">
+        <div class="span-5 stack-6">
+          <h2 id="story-h">From a ringtone site to Pinterest</h2>
+          <p class="t-lead">I ran 3gforfree.com, a ringtone business, for about eight years before I moved into engineering jobs. Then came Disney, NBC, Netflix, Spotify and Pinterest.</p>
+          <p><a class="link" href="/about">Read the whole story</a></p>
+        </div>
+        <figure class="frame frame--photo story__photo span-6 start-7">
+          <img src="/photos/pinterest-standing.jpg" alt="Ian Dunn standing in front of a painted arch at Pinterest" width="724" height="1086" loading="lazy" />
+        </figure>
       </div>
     </section>
   </main>
@@ -116,186 +84,50 @@ const weekend = [
 </BaseLayout>
 
 <style>
-  /* ── Hero — quiet paper, the thesis in ink ──────────────── */
-  .hero {
-    display: grid;
-    grid-template-columns: 1.5fr 1fr;
-    gap: 64px;
-    align-items: center;
-    padding-block: clamp(3.5rem, 8vw, 5.5rem) clamp(3rem, 7vw, 5rem);
-  }
-  .hero-thesis {
-    font: 400 clamp(2.625rem, 6.5vw, 4.5rem) / 1.06 var(--font-head);
-    text-wrap: pretty;
-  }
-  .period {
-    color: var(--accent);
-  }
-  .hero-lede {
-    margin-top: 26px;
-    max-width: 540px;
-    font: 400 17px/1.65 var(--font-body);
-    color: var(--ink-soft);
-  }
-
-  .hero-actions {
-    margin-top: 34px;
-    display: flex;
-    align-items: center;
-    gap: 24px;
-  }
-  /* An outlined button holds the eye without shouting — the terracotta
-     stays in reserve for the period and interactions. */
-  .cta {
-    display: inline-block;
-    border: 1px solid var(--ink);
-    color: var(--ink);
-    padding: 14px 25px;
-    font: 500 14px/1 var(--font-body);
-    text-decoration: none;
-    transition: background 0.18s ease, color 0.18s ease;
-  }
-  .cta:hover {
-    background: var(--ink);
-    color: var(--paper);
-  }
-  .cta-ghost {
-    font: 500 14px/1 var(--font-body);
-    color: var(--muted);
-    text-decoration: none;
-    border-bottom: 1px solid var(--line);
-    padding-bottom: 3px;
-    transition: color 0.18s ease;
-  }
-  .cta-ghost:hover {
-    color: var(--accent-strong);
-  }
-
-  /* The portrait: desktop only, hairline frame, the site's warm grade. */
-  .hero-photo {
-    max-width: 300px;
-    width: 100%;
-    justify-self: end;
-  }
-  .hero-frame {
-    width: 100%;
-    aspect-ratio: 4 / 5;
+  /* the story's portrait: 1:1 on the split's right column (layout-v4.md, Pictures) */
+  .story__photo {
+    margin: 0;
+    aspect-ratio: 1 / 1;
+    border-radius: var(--r-lg);
     overflow: hidden;
-    border: 1px solid var(--line);
   }
-  .hero-frame img {
+  .story__photo img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    filter: var(--photo-filter);
+    object-position: 50% 18%;
   }
-  .hero-photo figcaption {
-    margin-top: 8px;
-    font: 500 10px/1.4 var(--font-mono);
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--muted);
-  }
-
-  /* ── Case studies ───────────────────────────────────────── */
-  .case-studies {
-    padding-block: 72px;
-  }
-  .block-head {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    gap: 16px;
-    flex-wrap: wrap;
-    margin-bottom: 8px;
-  }
-  .block-title {
-    margin-top: 10px;
-    font: 400 clamp(2rem, 4vw, 2.625rem) / 1.08 var(--font-head);
-  }
-  .block-link {
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--muted);
-    text-decoration: none;
-    transition: color 0.18s ease;
-  }
-  .block-link:hover {
-    color: var(--accent-strong);
-  }
-
-  /* ── Off the clock ──────────────────────────────────────── */
-  .service {
-    display: grid;
-    grid-template-columns: 1fr 1.5fr;
-    gap: 64px;
-    align-items: start;
-    background: var(--paper-sand);
-    border-top: 1px solid var(--line);
-    border-bottom: 1px solid var(--line);
-    padding-block: 72px;
-  }
-  .service-blurb {
-    margin-top: 18px;
-    max-width: 340px;
-    font: 400 16px/1.6 var(--font-body);
-    color: var(--ink-body);
-  }
-
-  .rig {
-    margin-top: 2.25rem;
-    max-width: 360px;
-  }
-
-  .service-row {
-    padding: 24px 0;
-    border-top: 1px solid var(--line);
-  }
-  .service-row:last-child {
-    border-bottom: 1px solid var(--line);
-  }
-  .service-line {
-    display: flex;
-    align-items: baseline;
-    gap: 14px;
-    justify-content: space-between;
-  }
-  .service-role {
-    font: 400 clamp(1.35rem, 2.5vw, 1.625rem) / 1.15 var(--font-head);
-  }
-  .service-org {
-    font-size: 12px;
-    color: var(--muted);
-    flex: none;
-  }
-  .service-copy {
-    margin-top: 10px;
-    max-width: 560px;
-    font: 400 15px/1.65 var(--font-body);
-    color: var(--ink-body);
-  }
-
-  /* ── Responsive ─────────────────────────────────────────── */
-  @media (max-width: 760px) {
-    .hero {
-      grid-template-columns: 1fr;
-      gap: 40px;
-      padding-block: 48px;
+  /* stacked (640 to 1023): a 3:2 crop keeps the section on one screen, 48px under the text */
+  @media (max-width: 1023px) {
+    .story__photo {
+      margin-top: var(--s-7);
     }
-    /* Statement first, then the portrait at real size — the figure
-       follows the text in the single-column stack. */
-    .hero-photo {
-      justify-self: start;
-      max-width: 380px;
+  }
+  @media (min-width: 640px) and (max-width: 1023px) {
+    .story__photo {
+      aspect-ratio: 3 / 2;
     }
-    .hero-actions {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 18px;
-    }
-    .service {
-      grid-template-columns: 1fr;
-      gap: 36px;
-    }
+  }
+</style>
+
+<style is:global>
+  /* pinned-chapters at rest below 1024 (it runs live from 1024): the moment's rest is as tall as its
+     steps, so hold it to its two screens and let the steps fill them (layout-v4.md, the tablet: content
+     of 1,130 to 1,856px takes two screens), each step's screenshot under its words and wide enough to
+     read, so every section after it starts on a whole screen with no empty band between */
+  @media (max-width: 1023px) {
+    main > #apps[data-moment]:not(.is-live) .mo-pc__steps { gap: var(--s-7); }
+    main > #apps[data-moment]:not(.is-live) .mo-pc__step { grid-template-columns: minmax(0, 1fr); }
+    main > #apps[data-moment]:not(.is-live) .mo-pc__step :is(h3, p) { grid-column: 1; align-self: start; }
+    main > #apps[data-moment]:not(.is-live) .mo-pc__step .mo-pc__visual { grid-column: 1; grid-row: auto; margin: var(--s-4) 0 0; }
+    main > #apps[data-moment]:not(.is-live) .mo-pc__visual > img { aspect-ratio: 16 / 9; max-height: none; }
+  }
+  @media (min-width: 640px) and (max-width: 1023px) {
+    main > #apps[data-moment]:not(.is-live) { min-height: calc(2 * 100svh); }
+    main > #apps[data-moment]:not(.is-live) .mo-pc__visual > img { max-height: 34svh; }
+  }
+  @media (max-width: 639px) {
+    main > #apps[data-moment]:not(.is-live) { min-height: calc(2 * 100lvh); }
+    main > #apps[data-moment]:not(.is-live) .mo-pc__visual > img { aspect-ratio: 4 / 3; }
   }
 </style>

@@ -1,0 +1,65 @@
+{
+ "palettes": [
+  "oxblood-grey"
+ ],
+ "types": [
+  "nunito"
+ ],
+ "dealt": [
+  "nunito",
+  "work-sans",
+  "source-serif"
+ ],
+ "moments": [
+  {
+   "id": "pinned-chapters",
+   "at": "2026-11-16T01:24:09.507Z",
+   "seed": "4ad9dd94"
+  },
+  {
+   "id": "photo-chapters",
+   "at": "2026-11-16T02:24:31.271Z",
+   "seed": "9a85a2e1"
+  },
+  {
+   "id": "word-highlight",
+   "at": "2026-11-16T02:25:00.047Z",
+   "seed": "9db10f16"
+  },
+  {
+   "id": "picture-develops",
+   "at": "2026-11-16T02:26:11.329Z",
+   "seed": "31e73ccb"
+  },
+  {
+   "id": "word-highlight",
+   "at": "2026-11-16T02:27:24.232Z",
+   "seed": "ee67adf3"
+  },
+  {
+   "id": "picture-develops",
+   "at": "2026-11-16T02:28:01.692Z",
+   "seed": "ed0b690e"
+  },
+  {
+   "id": "photo-chapters",
+   "at": "2026-11-16T02:28:32.956Z",
+   "seed": "0a86adb2"
+  },
+  {
+   "id": "pinned-chapters",
+   "at": "2026-11-16T02:28:38.744Z",
+   "seed": "d736a5fa"
+  },
+  {
+   "id": "word-highlight",
+   "at": "2026-11-16T02:31:58.333Z",
+   "seed": "b39cceca"
+  },
+  {
+   "id": "picture-develops",
+   "at": "2026-11-16T05:17:22.910Z",
+   "seed": "eda7c2d9"
+  }
+ ]
+}

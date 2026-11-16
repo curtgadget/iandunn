@@ -1,58 +1,50 @@
 ---
+// 404 — built to the dealt look (docs/pare/full-redesign/deal.md) with the
+// words of copy.md (h1 and link text fixed by plan.md):
+//   1. hero        split: "Page not found.", the lead and the one action on
+//                  span-6 (the site's 6/6 pair), one portrait on span-6
+//                  start-7 carrying the dealt moment picture-develops
+//                  (seed eda7c2d9): the photograph comes up out of a faint
+//                  grey print as the page loads. The portrait is Home's
+//                  story portrait again (photographs repeat only across
+//                  pages, never within one; this page's close shows the
+//                  glasses portrait).
+//   2. footer.closing (SiteFooter): close-photo + footer-dark
+// Cloudflare Pages serves dist/404.html automatically for unknown routes.
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SiteNav from '../components/SiteNav.astro';
 import SiteFooter from '../components/SiteFooter.astro';
-// Cloudflare Pages serves dist/404.html automatically for unknown routes.
 ---
 
-<BaseLayout title="Not found — Ian Dunn" description="That page doesn’t exist.">
+<BaseLayout
+  title="Ian Dunn: page not found"
+  description="No page lives at this address on iandunn.net."
+  moment="picture-develops"
+>
+  <!-- type: service
+       deal: hero split, nav nav-centre, close close-photo, footer footer-dark,
+             buttons arrow, mark initial
+       moment: picture-develops on the hero's portrait -->
   <SiteNav />
 
-  <main id="main">
-    <section class="section lost">
-      <p class="eyebrow">404</p>
-      <h1 class="lost-title">That page isn’t here<span class="period">.</span></h1>
-      <p class="lost-note">
-        The address may have changed, or it never existed. Everything that
-        does exist is one click away.
-      </p>
-      <a class="lost-link" href="/">Back to the home page →</a>
+  <main id="top">
+    <section class="hero hero--split" data-enter aria-labelledby="hero-h">
+      <div class="wrap"><div class="hero-text grid hero__grid">
+        <div class="hero__text span-6">
+          <h1 id="hero-h">Page not found.</h1>
+          <p class="hero__lead">The address may be mistyped or out of date. The four pages are in the menu above.</p>
+          <div class="btn-row">
+            <a class="btn btn--primary" href="/">Back to the front page<svg class="m-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="m-arrow__stem" d="M1 6h8"></path><path class="m-arrow__head" d="M4.5 2.5 8 6l-3.5 3.5"></path></svg></a>
+          </div>
+        </div>
+        <!-- picture-develops (moments.md): the portrait develops once as the page
+             arrives; without script or under reduced motion it simply stands -->
+        <figure class="hero__media span-6 start-7" data-moment="picture-develops">
+          <img src="/photos/pinterest-standing.jpg" alt="Ian Dunn standing in front of a painted arch at Pinterest" width="724" height="1086" style="--ly-pos: 50% 30%" fetchpriority="high" />
+        </figure>
+      </div></div>
     </section>
   </main>
 
   <SiteFooter />
 </BaseLayout>
-
-<style>
-  .lost {
-    padding-block: clamp(4rem, 12vw, 8rem);
-  }
-  .lost-title {
-    margin-top: 14px;
-    font: 400 clamp(2.2rem, 6vw, 3.5rem) / 1.06 var(--font-head);
-  }
-  .period {
-    color: var(--accent);
-  }
-  .lost-note {
-    margin-top: 18px;
-    max-width: 46ch;
-    font: 400 17px/1.65 var(--font-body);
-    color: var(--ink-body);
-  }
-  .lost-link {
-    display: inline-block;
-    margin-top: 26px;
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--accent-strong);
-    text-decoration: none;
-    border-bottom: 1px solid var(--accent);
-    padding-bottom: 2px;
-    transition: color 0.18s ease, border-color 0.18s ease;
-  }
-  .lost-link:hover {
-    color: var(--ink);
-    border-bottom-color: var(--ink);
-  }
-</style>

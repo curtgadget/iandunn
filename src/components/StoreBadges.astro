@@ -27,6 +27,8 @@ const name = label ?? 'the app';
             <img
               src="/badges/app-store.svg"
               alt={`Download ${name} on the App Store`}
+              width={Math.round(height * 3.375)}
+              height={height}
               loading="lazy"
               decoding="async"
             />
@@ -39,6 +41,8 @@ const name = label ?? 'the app';
             <img
               src="/badges/google-play.svg"
               alt={`Get ${name} on Google Play`}
+              width={Math.round(height * 3.375)}
+              height={height}
               loading="lazy"
               decoding="async"
             />
