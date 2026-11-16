@@ -1,0 +1,155 @@
+{
+  "title": "iandunn.net: the full redesign",
+  "summary": "The site drops its AI-default look entirely and rebuilds as four pages under a dealt design system, with three fact-checked projects, copy rewritten out of its visible formula, and your portraits as the only carried-over visuals. One release at the end; the live site never shows a half-done state.",
+  "change": "Five template-looking pages become four designed ones.",
+  "today": [
+    {
+      "label": "Home",
+      "note": "Serif hero, three formula teasers, parish section",
+      "problem": "Stacked AI-default tells on every screen"
+    },
+    {
+      "label": "About",
+      "note": "3gforfree story under mono eyebrow labels"
+    },
+    {
+      "label": "Case studies",
+      "note": "4 projects, same four-field template each",
+      "problem": "Stale: Stonefold empty, FutAve copy outdated"
+    },
+    {
+      "label": "Writing",
+      "note": "4 category cards, archive frame, one post",
+      "problem": "Structure promises a cadence that doesn't exist"
+    },
+    {
+      "label": "Contact",
+      "note": "Six channel cards",
+      "problem": "Duplicates the footer"
+    }
+  ],
+  "after": [
+    {
+      "label": "Home",
+      "note": "Dealt hero, portrait, three teasers, one main action",
+      "change": "changed"
+    },
+    {
+      "label": "About",
+      "note": "Origin story + career + the parish/AYSO material",
+      "change": "changed"
+    },
+    {
+      "label": "Projects",
+      "note": "FutAve, TheraBasics, Center Ref — each its own shape",
+      "change": "changed"
+    },
+    {
+      "label": "Writing",
+      "note": "Plain dated list; post keeps its URL",
+      "change": "changed"
+    },
+    {
+      "label": "Contact",
+      "note": "Folds into the footer; /contact redirects home",
+      "change": "removed"
+    }
+  ],
+  "phases": [
+    {
+      "id": "p1",
+      "name": "The deal, the copy, the toolchain",
+      "gets": "The dealt design system on record, every word of the new site drafted, and the taste-skill gate proven on this machine.",
+      "size": "medium",
+      "done": [
+        "copy-lint passes on the drafted copy, or every warning has a written reason",
+        "deal.md records one complete deal and any rejected ones",
+        "The gate produced a report against the built old site"
+      ],
+      "relies": "The installed taste-skill's deal scripts; Node 24 and Chrome, both verified"
+    },
+    {
+      "id": "p2",
+      "name": "Shell, Home, and the data",
+      "gets": "New tokens, nav and footer sitewide; the new Home; project data trimmed to three with new copy; Contact retired.",
+      "size": "large",
+      "done": [
+        "Gate passes on Home (or OPEN with only reasoned waivers)",
+        "/contact redirect present in the build",
+        "No Stonefold entry in the data"
+      ],
+      "relies": "All old tokens live in one :root block, so replacing them reaches every page"
+    },
+    {
+      "id": "p3",
+      "name": "Projects",
+      "gets": "The projects page rebuilt: real screenshots, store badges, three write-ups that don't share one template.",
+      "size": "medium",
+      "done": [
+        "Gate passes on /projects",
+        "No Stonefold string anywhere in src/",
+        "The three write-ups match copy.md"
+      ],
+      "relies": "The trimmed data from phase 2; the real screenshots already in the repo"
+    },
+    {
+      "id": "p4",
+      "name": "About and Writing",
+      "gets": "About with the origin story, career line and parish/AYSO section; Writing as an honest plain list; the post restyled.",
+      "size": "medium",
+      "done": [
+        "Gate passes on /about, /writing, and the post",
+        "The parish section is on About and not Home",
+        "The post URL is unchanged"
+      ],
+      "relies": "Writing already runs on a content collection; no schema change needed"
+    },
+    {
+      "id": "p5",
+      "name": "Sweep and release",
+      "gets": "404 rebuilt, the 37 MB kit pruned to what the pages load, full check on every page, docs rewritten, one merge to main.",
+      "size": "medium",
+      "done": [
+        "Gate passes on all five page types",
+        "No old-palette hex, old fonts, Stonefold, or /contact references left in src/",
+        "The merge to main is deployed"
+      ],
+      "relies": "Cloudflare Pages deploying from main; two rollback tags in place"
+    }
+  ],
+  "wording": [
+    { "where": "Nav items", "text": "Home · About · Projects · Writing" },
+    { "where": "Page title prefix", "text": "Ian Dunn" },
+    { "where": "Hero main action", "text": "Email me — or — Book a call (final pick in copy.md)" },
+    { "where": "Project statuses", "text": "Live · Live · Public beta" },
+    { "where": "Project CTAs", "text": "Visit futave.com · Visit therabasics.com · Visit centerref.com" },
+    { "where": "Footer contact handles", "text": "iandunn@iandunn.net · Book a call · LinkedIn in/iancdunn · Threads @curtgadget · Instagram @curtgadget · GitHub @curtgadget" },
+    { "where": "Writing page title", "text": "Writing" },
+    { "where": "Post byline", "text": "{date} · {n} min read" },
+    { "where": "404", "text": "Page not found. · Back to the front page" },
+    { "where": "/contact", "text": "301 redirect to /" }
+  ],
+  "save": "Also commit the plan files on the redesign branch, so each fresh build session can see them",
+  "check": {
+    "verdict": "Three fresh reviewers (on Fable, the strongest model here) each read the plan once: ready after fixes. Ten findings, all fixed in the plan; nothing left as your call.",
+    "fixed": [
+      "Phase 1 told the builder to \"disarm\" the gate — an operation the skill does not have; the gate choreography was rewritten to how the skill actually works.",
+      "Home was being built on project data a later phase then deleted; the data rewrite moved into phase 2.",
+      "A claimed CI does not exist (its one workflow was deleted in July); phases now verify locally before merging.",
+      "About and Writing were two phases paying two cycles for three small files; merged into one.",
+      "The full 1,594-file taste-skill kit would have deployed to production; phase 5 now prunes it.",
+      "The final cleanup grep would have flagged the new design system's own token; it now targets the old palette and fonts.",
+      "Three phases demanded a flawless gate pass while others allowed reasoned waivers; all phases now match.",
+      "A done-when required old pages to keep their old look mid-branch, which token replacement makes impossible; restated as accepted mid-branch breakage."
+    ],
+    "notDoing": [],
+    "calls": []
+  },
+  "risks": [
+    "The taste-skill is built for single-page company sites; phase 1 proves its gate works against this multi-page Astro build before any page is rebuilt.",
+    "Its rule that contacts use .example addresses conflicts with a real personal site; real handles stay and those check failures are waived, with the brief as the reason.",
+    "The dealt palette may clash with the portraits' warm tones; it is re-dealt only on the brief's hard constraints.",
+    "Copy is rewritten in Ian's voice during phase 1 — after this page — so phase 1's pull request is the redline point.",
+    "Pages not yet rebuilt render broken on the redesign branch mid-build; only the branch sees them."
+  ]
+}
