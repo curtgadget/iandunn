@@ -179,3 +179,22 @@ Notes on the run:
   the old copy). The full output is in `gate-old-site.txt`; nothing was fixed or waived. `.taste-skill/` is local state: the deal histories
   (`history.json`, `layout-history.json`) are committed so later deals stay away from these picks;
   the build marker, the gate's rounds and its crops are not.
+
+## Built in phase 2: what changed from the deal, and why
+
+- **Hero text on span-6, not span-5.** Home's h1 ("Engineering manager who builds his own apps", 43
+  characters with long words) sets on four lines in the dealt 519px column at 72px, and the layout
+  check fails `hero-lines`. The other two dealt pairings were tried as the deal allows: Work Sans
+  (four lines at 1440, five at 1024) and Source Serif 4 with Libre Franklin (four lines) fail the same
+  way, because the words, not the face, are too long for the column. The starter's own split pair is
+  6/6, so the text takes span-6 (628px) beside the picture on span-6 start-7: three lines at 1440,
+  `hero-lines` passes, and the pairing stays Nunito. The split line (x 732) is unchanged on every
+  split of the page.
+- **Two portraits swapped against copy.md's suggestions.** The close-photo strip runs the full 1280px
+  `.wrap`, and only `glasses-portrait.jpg` (1586px wide) fills it without a blow-up (the checker's
+  `photo-upscale` FAILs the 724px `pinterest-standing.jpg` there at 1.77x). So the close shows the
+  glasses portrait (the eyes and the hand on the frames, Astro-resized to 800 and 1586) and the story
+  section ("From a ringtone site to Pinterest") shows `pinterest-standing.jpg`.
+
+Phase 2 gate: `GATE: PASS` on round 1 of 3 for `dist/index.html`, no waivers; checker 0 FAIL at
+1440/1024/820/768/390, layout check no findings, perf 0 FAIL 0 WARN, copy-lint 0 FAIL 0 WARN.
