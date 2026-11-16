@@ -1,10 +1,20 @@
 ---
-// One post from the Writing collection, set in the site's editorial
-// voice: mono byline, Goudy display, a readable measure, hairline rules.
+// One post from the Writing collection, set in the dealt system
+// (docs/pare/full-redesign/deal.md): Nunito in both jobs, the oxblood ink,
+// the kit's tokens and hairlines.
+//   1. hero        the title page: the byline (date · read time), the h1, and
+//                  the description as the standfirst, carrying the dealt
+//                  moment word-highlight (seed b39cceca): it rests at half ink
+//                  and turns to ink as it crosses the screen's middle
+//   2. article     the post as written, at a reading measure; its height is
+//                  the essay's own (longform prose, not a marketing screen)
+//   3. footer.closing (SiteFooter): close-photo + footer-dark
+// The category field stays in the frontmatter and is not rendered (brief).
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import SiteNav from '../../components/SiteNav.astro';
 import SiteFooter from '../../components/SiteFooter.astro';
+import { BOOK_CALL } from '../../data/site.js';
 
 export async function getStaticPaths() {
   const posts = await getCollection('writing');
@@ -26,90 +36,105 @@ const dateLabel = post.data.date.toLocaleDateString('en-US', {
 const minutes = Math.max(1, Math.round(post.body.split(/\s+/).length / 200));
 ---
 
-<BaseLayout title={`${post.data.title} — Ian Dunn`} description={post.data.description}>
+<BaseLayout title={`${post.data.title} — Ian Dunn`} description={post.data.description} moment="word-highlight">
+  <!-- type: service
+       deal: nav nav-centre, close close-photo, footer footer-dark, buttons arrow, mark initial
+       moment: word-highlight on the standfirst (the post's description) -->
   <SiteNav active="Writing" />
 
-  <main id="main">
-    <article class="section post">
-      <header class="post-head">
-        <p class="post-byline">
-          {post.data.category} · {dateLabel} · {minutes} min read
-        </p>
-        <h1 class="post-title">{post.data.title}<span class="period">.</span></h1>
-      </header>
+  <main id="top">
+    <section class="hero post-hero" data-enter aria-labelledby="post-h">
+      <div class="wrap"><div class="hero-text post-hero__text">
+        <p class="post-byline">{dateLabel} · {minutes} min read</p>
+        <h1 id="post-h">{post.data.title}</h1>
+        <!-- word-highlight (moments.md): the standfirst lights up word by word;
+             without script or under reduced motion it stands in full ink -->
+        <p class="mo-wh__text post-standfirst" data-moment="word-highlight">{post.data.description}</p>
+        <div class="btn-row">
+          <a class="btn btn--primary" href={BOOK_CALL.url}>{BOOK_CALL.label}<svg class="m-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="m-arrow__stem" d="M1 6h8"></path><path class="m-arrow__head" d="M4.5 2.5 8 6l-3.5 3.5"></path></svg></a>
+        </div>
+      </div></div>
+    </section>
 
-      <div class="prose">
-        <Content />
+    <section class="section post-body" aria-label="The post">
+      <div class="wrap">
+        <article class="prose">
+          <Content />
+        </article>
+        <footer class="post-foot">
+          <a class="link" href="/writing/">All writing</a>
+        </footer>
       </div>
-
-      <footer class="post-foot">
-        <a class="back-link" href="/writing">← All writing</a>
-      </footer>
-    </article>
+    </section>
   </main>
 
   <SiteFooter />
 </BaseLayout>
 
 <style>
-  .post {
-    padding-block: clamp(2.5rem, 6vw, 4.5rem) clamp(3.5rem, 8vw, 6rem);
-  }
-  .post-head {
-    max-width: 720px;
+  /* the title page: byline, title, standfirst, top-aligned like every hero */
+  .post-hero__text {
+    display: grid;
+    gap: var(--s-5);
+    align-content: start;
   }
   .post-byline {
-    font: 500 11px/1.5 var(--font-mono);
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
+    font-size: var(--t-small);
+    font-weight: 500;
     color: var(--muted);
   }
-  .post-title {
-    margin-top: 14px;
-    font: 400 clamp(2.2rem, 5.5vw, 3.5rem) / 1.08 var(--font-head);
+  .post-hero h1 {
+    max-width: 18ch;
     text-wrap: pretty;
   }
-  .period {
-    color: var(--accent);
+  .post-standfirst {
+    margin-top: var(--s-4);
+    color: var(--ink);
   }
 
-  /* ── Prose — markdown output, styled via :global ────────── */
+  /* longform prose keeps its own height: an essay is read as one flow, not a
+     stack of marketing screens, so the section box's screen height is undone */
+  main > .post-body {
+    height: auto;
+  }
+  .post-body > .wrap {
+    padding-block: 0 var(--s-9);
+  }
+
+  /* ── Prose — markdown output on the kit's tokens ────────── */
   .prose {
-    margin-top: clamp(1.75rem, 4vw, 2.5rem);
     max-width: 68ch;
   }
   .prose :global(p) {
     margin-top: 1.3em;
-    font: 400 17px/1.7 var(--font-body);
-    color: var(--ink-body);
+    font-size: 17px;
+    line-height: 1.75;
+    color: var(--ink);
   }
   .prose :global(h2) {
-    margin-top: 2.2em;
-    font: 400 clamp(1.5rem, 3vw, 1.9rem) / 1.2 var(--font-head);
+    margin-top: 2.4em;
+    font-family: var(--font-display);
+    font-weight: var(--display-weight);
+    font-size: var(--t-h3);
+    line-height: 1.2;
+    letter-spacing: var(--display-tracking);
     color: var(--ink);
     text-wrap: pretty;
   }
   .prose :global(h2 + p) {
     margin-top: 1em;
   }
+  /* the essay's own dividers become air: parts are told apart by space,
+     not rules (the system's separation rule) */
   .prose :global(hr) {
-    margin: 3rem 0 0;
+    margin: 3.5rem 0 0;
     border: 0;
-    border-top: 1px solid var(--line);
-  }
-  .prose :global(a) {
-    color: var(--accent-strong);
-    text-decoration: none;
-    border-bottom: 1px solid var(--accent);
-    transition: color 0.18s ease, border-color 0.18s ease;
-  }
-  .prose :global(a:hover) {
-    color: var(--ink);
-    border-bottom-color: var(--ink);
   }
   .prose :global(strong) {
     font-weight: 600;
-    color: var(--ink);
+  }
+  .prose :global(em) {
+    font-style: italic;
   }
   .prose :global(ul),
   .prose :global(ol) {
@@ -119,31 +144,18 @@ const minutes = Math.max(1, Math.round(post.body.split(/\s+/).length / 200));
   }
   .prose :global(li) {
     margin-top: 0.5em;
-    font: 400 17px/1.7 var(--font-body);
-    color: var(--ink-body);
+    font-size: 17px;
+    line-height: 1.75;
+    color: var(--ink);
   }
   .prose :global(blockquote) {
     margin-top: 1.5em;
     padding: 0.25em 0 0.25em 1.4em;
     border-left: 1px solid var(--line);
-    font: italic 400 1.2rem/1.5 var(--font-head);
-    color: var(--ink-soft);
+    color: var(--muted);
   }
 
   .post-foot {
-    margin-top: clamp(2.5rem, 6vw, 3.5rem);
-    padding-top: 22px;
-    border-top: 1px solid var(--line);
-    max-width: 68ch;
-  }
-  .back-link {
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--muted);
-    text-decoration: none;
-    transition: color 0.18s ease;
-  }
-  .back-link:hover {
-    color: var(--accent-strong);
+    margin-top: var(--s-8);
   }
 </style>

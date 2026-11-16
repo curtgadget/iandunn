@@ -237,3 +237,43 @@ node $S/scripts/moments.mjs pick --page service --count 1 --fits section,stateme
 Phase 3 gate: `GATE: PASS` for `dist/projects/index.html`, the one waiver above; checker 0 FAIL
 besides it at 1440/1024/820/768/390 and the 320 walk, layout check no findings at the five sizes,
 perf 0 FAIL 0 WARN, copy-lint 0 FAIL 0 WARN.
+
+## Built in phase 4: what changed from the deal, and why
+
+- **About and Writing both take the split hero.** Each page dealt its hero from the committed
+  history. About dealt `film`, then `photo`; Writing dealt `photo`, `film`, `photo` again. All were
+  rejected on the same fact: every kept portrait is 724px wide, the film hero's frame is 1280 and
+  the photo hero wants 1920, so either would trip the checker's own `photo-upscale` line (1.33x).
+  The cycle then returned `split`, the one hero the material carries; the rejections are in
+  `.taste-skill/layout-history.json`.
+- **Moments dealt:** About `word-highlight` (seed ee67adf3; the story's closing turn, pulled out
+  of the story prose so no line appears twice), Writing `picture-develops` (seed ed0b690e; the
+  hero's portrait develops on load), the post page `word-highlight` (seed b39cceca; the standfirst,
+  which is the post's own description). The post page first dealt `photo-chapters` and
+  `pinned-chapters`; an essay with no photographs and no stepped feature carries neither, so each
+  was dealt again with the last excluded.
+- **About carries three portraits, not the plan's "one or two".** copy.md suggests two
+  (career: pinterest-seated-close; the roles section), and the dealt split hero needs a third
+  (pinterest-seated-full). The roles section got `pinterest-half` because the checker's
+  `no-visual` FAILs a rows section with no picture, and the one remaining small portrait
+  (stool-seated, 360px) cannot fill a split column without a blow-up. stool-seated stays unused.
+  Writing's hero therefore reuses Home's `chin-portrait` — photographs repeat only across pages,
+  never within one, and the checker reads per page.
+- **The surface band stays on Home.** On About, a `.ground-surface` band (on `#story` or
+  `#roles`) makes the section gaps at the ground changes uneven at one width or another
+  (`section-gaps` FAILs at 820/768 or 390 in every arrangement tried); every About section sits on
+  the page ground and the 3gforfree panel takes the surface step instead.
+- **Phase 4 gate:** `/about` `GATE: PASS` (round 1; one waiver: `no-visual` on `#story` — the only
+  artifact of 3gforfree.com is its real ~150px screenshot, and the brief invents no images).
+  `/writing` `GATE: PASS` (round 2; one waiver: `copy-headline` — the h1 "Writing" is the plan's
+  fixed wording). `/writing/build-it-to-run-without-you` `GATE: OPEN 6` (rounds used up): the
+  skill's checks are built for company landing pages, and a 2,300-word published essay is not one.
+  Waived (5, the cap): `screen-height` and `section-height` on the essay body (a reading height,
+  not a screen height), `one-heading` (the essay's own eight h2s), `no-visual` (an essay with no
+  pictures; the brief invents none), `hole` (the 68ch reading measure leaves the right margin
+  empty). Open with reasons (6): `section-height` and `one-section` on the footer (it starts off
+  the screen grid only because the essay above it has a reading height — same root as the waived
+  body), `copy-headline` (the h1 is the post's title), and `copy-headings`, `copy-stock-phrase`,
+  `copy-contrast` (the published post's own headings and voice; plan.md keeps the post body as
+  written, and rewriting it to pass a lint is not a redesign change). copy-lint on `/about` and
+  `/writing`: 0 FAIL 0 WARN.
