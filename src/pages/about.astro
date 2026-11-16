@@ -1,124 +1,136 @@
 ---
+// About — built to the dealt look (docs/pare/full-redesign/deal.md) with the
+// words of copy.md (About page), as a stack of screens (the kit's layout-v4.md):
+//   1. hero        split: the h1 and lead on span-6 (the site's 6/6 pair), one
+//                  portrait on span-6 start-7 with one flat float card (1 screen).
+//                  The hero was dealt film, then photo; both rejected because every
+//                  kept portrait is 724px wide (film's frame is 1280, photo wants
+//                  1920), so the deal fell to split, the one hero the material fits.
+//   2. #story      the 3gforfree story left, the real site screenshot and its
+//                  facts in a panel on the surface step            (1 screen)
+//   3. #market     the dealt moment word-highlight (seed ee67adf3): the story's
+//                  closing line as the page's one statement          (1 screen)
+//   4. #career     split: Disney to Pinterest left, a portrait right  (1 screen)
+//   5. #roles      the parish, board, livestream and AYSO rows        (1 screen)
+//   6. footer.closing (SiteFooter): close-photo + footer-dark         (1 screen)
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SiteNav from '../components/SiteNav.astro';
 import SiteFooter from '../components/SiteFooter.astro';
-import PageHeader from '../components/PageHeader.astro';
-
-// The 3gforfree screenshot is a vendored artifact from the 3G repo
-// (sites/all/themes/3gforfree/screenshot.png) — the real site, ~150px,
-// shown small and on purpose.
-
-const takeaways = [
-  ['Customer instinct', 'I found the product by standing next to the people who wanted it.'],
-  ['Product instinct', 'An off-hand favor turned into a self-serve product.'],
-  ['Technical grit', 'I learned by building, debugging, scaling, and operating under real load.'],
-  ['Scrappiness', 'No playbook and no modern tooling — you solve the problem or it breaks.'],
-  ['Resilience', 'When the market shifted under me, I shifted with it.'],
-];
+import { BOOK_CALL } from '../data/site.js';
 ---
 
 <BaseLayout
-  title="About — Ian Dunn"
-  description="How a ringtone business Ian Dunn ran through his twenties shaped the engineering leader he became."
+  title="About Ian Dunn: from 3gforfree.com to Pinterest"
+  description="How eight years running a ringtone business led Ian Dunn into engineering at Disney, NBC, Netflix, Spotify and Pinterest."
+  moment="word-highlight"
 >
+  <!-- type: service
+       deal: hero split (film and photo dealt first, both rejected: no kept portrait is wide
+             enough for their frames), nav nav-centre, close close-photo, footer footer-dark,
+             rhythm surface-pairs (the band stays on Home; here every section sits on the
+             page ground and the panel takes the surface step), buttons arrow, mark initial
+       moment: word-highlight in #market (the statement that turns the story) -->
   <SiteNav active="About" />
 
-  <main id="main">
-    <PageHeader
-      eyebrow="About"
-      title="The long way in"
-      intro="I lead an engineering team at Pinterest now, but I didn't take the standard route here. I came into tech sideways, by building something of my own first — and the years before the formal titles taught me as much about product, systems, and ownership as anything since."
-    />
-
-    <section class="section origin">
-      <p class="eyebrow">Origin story</p>
-      <h2 class="origin-head">Building before I had the title</h2>
-
-      <div class="origin-grid">
-        <div class="origin-prose">
-          <p>
-            Before I became an engineering leader, I built and ran
-            3gforfree.com: a mobile ringtone and customization business that
-            started as a page for coworkers and grew into my full-time work
-            for most of my twenties.
-          </p>
-          <p>
-            I was working at Sprint in the early mobile-web era. Coworkers
-            wanted ringtones and screensavers for their phones, so I worked
-            out how to deliver content to a flip phone and stood up a site on
-            a computer at my parents' house. They passed the link to
-            customers, traffic grew, and a favor turned into a business.
-          </p>
-          <p>
-            I built both halves of it: the web experience and a separate
-            mobile site, with device detection that fingerprinted each phone
-            so it only got content it could actually play. This was before
-            cloud infrastructure made scaling a button you press, so growth
-            meant solving performance and operational problems the hard way.
-            It was also a crash course in business — customer demand, product
-            iteration, music and content rights, and what it means to own a
-            whole system when that system is just you.
-          </p>
-          <p>
-            Eventually the carriers and platforms absorbed ringtone
-            distribution, the market moved, and I moved with it, into formal
-            engineering roles. The path in was winding. But 3gforfree is where
-            most of my instincts were formed.
-          </p>
+  <main id="top">
+    <section class="hero hero--split" data-enter aria-labelledby="hero-h">
+      <div class="wrap"><div class="hero-text grid hero__grid">
+        <div class="hero__text span-6">
+          <h1 id="hero-h">Engineering manager who started as a founder</h1>
+          <p class="hero__lead">I run an engineering team at Pinterest and live in Los Angeles with my wife, Dr.&nbsp;Raven Barrow, and our three kids.</p>
+          <div class="btn-row">
+            <a class="btn btn--primary" href={BOOK_CALL.url}>{BOOK_CALL.label}<svg class="m-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="m-arrow__stem" d="M1 6h8"></path><path class="m-arrow__head" d="M4.5 2.5 8 6l-3.5 3.5"></path></svg></a>
+          </div>
         </div>
+        <div class="hero__media span-6 start-7">
+          <img src="/photos/pinterest-seated-full.jpg" alt="Ian Dunn seated on a stool in front of a painted arch at Pinterest" width="724" height="1086" style="--ly-pos: 50% 42%" fetchpriority="high" />
+          <div class="ly-float">
+            <div class="ly-float__title">Livestream producer, Sundays at 10 a.m.</div>
+          </div>
+        </div>
+      </div></div>
+    </section>
 
-        <aside class="origin-aside">
-          <figure class="origin-shot">
-            <img
-              src="/3gforfree-site.png"
-              alt="The 3gforfree.com homepage as it ran"
-              width="150"
-              height="139"
-              loading="lazy"
-              decoding="async"
-            />
-            <figcaption>3gforfree.com, the site as it ran</figcaption>
-          </figure>
-          <dl class="origin-facts">
+    <section class="section" id="story" aria-labelledby="story-h" style="--h: 1; --hm: 2">
+      <div class="wrap grid grid--top">
+        <div class="span-6 stack-6">
+          <h2 id="story-h">3gforfree.com, my first business</h2>
+          <p>In the early days of the mobile web I worked at Sprint. Coworkers wanted ringtones and screensavers for their flip phones, so I worked out how to deliver them and put up a site on a computer at my parents&rsquo; house.</p>
+          <p>They passed the link to customers, the traffic grew, and a favor became my full-time work for about eight years, through my twenties.</p>
+          <p>I built both halves: the website, and a mobile site that fingerprinted each phone so it only got files it could play. There was no cloud to scale on, so every slowdown got fixed by hand. I also learned the business side: what customers asked for, music and content rights, and running a whole system on my own.</p>
+        </div>
+        <aside class="story__panel span-6 start-7">
+          <img src="/3gforfree-site.png" alt="The 3gforfree.com homepage as it ran" width="150" height="139" loading="lazy" decoding="async" />
+          <dl class="story__facts">
             <div><dt>Role</dt><dd>Founder and operator</dd></div>
             <div><dt>Span</dt><dd>About eight years, through my twenties</dd></div>
-            <div><dt>Built with</dt><dd>Drupal, CodeIgniter, WURFL device detection</dd></div>
+            <div><dt>Built with</dt><dd>Drupal and CodeIgniter</dd></div>
+            <div><dt>Device detection</dt><dd>WURFL, fingerprinting each phone</dd></div>
           </dl>
         </aside>
       </div>
+    </section>
 
-      <div class="origin-takeaways">
-        <p class="eyebrow">What it taught me</p>
-        <ul>
-          {
-            takeaways.map(([term, gloss]) => (
-              <li>
-                <strong>{term}.</strong> {gloss}
-              </li>
-            ))
-          }
-        </ul>
+    <!-- word-highlight (moments.md): the statement rests at half ink and turns to ink
+         word by word as it crosses the middle of the screen -->
+    <section class="section statement" id="market" data-moment="word-highlight" aria-label="How it ended">
+      <div class="wrap">
+        <p class="t-label">How it ended</p>
+        <p class="mo-wh__text">Then the carriers and platforms took over ringtone sales. The market moved, and I moved into <strong>engineering jobs</strong>.</p>
       </div>
     </section>
 
-    <section class="section career">
-      <p class="eyebrow">Since then</p>
-      <h2 class="career-head">The formal years</h2>
-      <p class="career-body">
-        Everything after 3gforfree has been more conventional: engineering
-        roles, then management, at Disney, NBC, Netflix, Spotify, and now
-        Pinterest. The titles changed; the foundation held. I still lead by
-        staying close to the people we build for, favoring practical systems
-        over clever ones, working through ambiguity, and owning the outcome.
-      </p>
-      <a
-        class="career-link"
-        href="https://www.linkedin.com/in/iancdunn"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        The full record, roles and dates, lives on LinkedIn →
-      </a>
+    <section class="section" id="career" aria-labelledby="career-h" style="--h: 1; --hm: 2">
+      <div class="wrap grid grid--top">
+        <div class="span-5 stack-6">
+          <h2 id="career-h">Disney, NBC, Netflix, Spotify and Pinterest</h2>
+          <p>After 3gforfree came engineering jobs, then management. For more than two years I&rsquo;ve run a small team inside Pinterest&rsquo;s ad sales organization, building internal tools for the account teams who manage some of the largest advertisers in the world.</p>
+          <p>The team has no product manager, designer or program manager. The engineers talk to the people who use our tools and decide what to build. I wrote about how that works.</p>
+          <p class="career__links">
+            <a class="link" href="/writing/build-it-to-run-without-you/">Read Build it to run without you</a>
+            <a class="link" href="https://www.linkedin.com/in/iancdunn" target="_blank" rel="noopener noreferrer">See my roles on LinkedIn</a>
+          </p>
+        </div>
+        <figure class="frame frame--photo career__photo span-6 start-7">
+          <img src="/photos/pinterest-seated-close.jpg" alt="Ian Dunn seated in glasses and a grey hoodie at Pinterest" width="724" height="1086" loading="lazy" />
+        </figure>
+      </div>
+    </section>
+
+    <section class="section" id="roles" aria-labelledby="roles-h" style="--h: 1; --hm: 2">
+      <div class="wrap grid grid--top">
+        <div class="span-6 roles__text">
+        <div class="section-head">
+          <h2 id="roles-h">Church, a board seat and Saturday soccer</h2>
+          <p>Most of my week outside Pinterest and the apps goes to four roles in Los Angeles.</p>
+        </div>
+        <ul class="rows roles__rows">
+          <li>
+            <span class="rows__name">People&rsquo;s Warden</span>
+            <span class="rows__value">Christ the Good Shepherd, Episcopal</span>
+            <p>Elected to represent the congregation on the vestry, the parish&rsquo;s governing board.</p>
+          </li>
+          <li>
+            <span class="rows__name">Board member</span>
+            <span class="rows__value">Good Shepherd Manor, Leimert Park</span>
+            <p>Affordable housing for seniors in Leimert Park.</p>
+          </li>
+          <li>
+            <span class="rows__name">Livestream producer</span>
+            <span class="rows__value">Sundays at 10 a.m.</span>
+            <p>I built the parish&rsquo;s broadcast setup and automated the thumbnails, bulletins and clips. It goes live every Sunday and runs without me.</p>
+          </li>
+          <li>
+            <span class="rows__name">AYSO regional referee</span>
+            <span class="rows__value">U-12, most Saturdays</span>
+            <p>I referee in my kids&rsquo; league. Center Ref started on that field.</p>
+          </li>
+        </ul>
+        </div>
+        <figure class="frame frame--photo roles__photo span-6 start-7">
+          <img src="/photos/pinterest-half.jpg" alt="Ian Dunn standing in a grey hoodie in front of a painted arch" width="724" height="1086" loading="lazy" />
+        </figure>
+      </div>
     </section>
   </main>
 
@@ -126,120 +138,160 @@ const takeaways = [
 </BaseLayout>
 
 <style>
-  /* ── Origin story — the centerpiece, set on a tonal band ──── */
-  .origin {
-    background: var(--paper-sand);
-    border-top: 1px solid var(--line);
-    border-bottom: 1px solid var(--line);
-    padding-block: clamp(3rem, 7vw, 5rem);
-  }
-  .origin-head {
-    margin-top: 8px;
-    font: 400 clamp(1.9rem, 4vw, 2.9rem) / 1.08 var(--font-head);
-  }
-
-  .origin-grid {
-    margin-top: clamp(1.75rem, 4vw, 2.75rem);
+  /* the story panel: the real 3gforfree screenshot (a ~150px artifact of the
+     real site, held under the checker's 1.33x blow-up line) and the facts, on
+     the contrast step the surface band leaves (--surface is the page ground here) */
+  .story__panel {
+    background: var(--surface);
+    border-radius: var(--r-md);
+    padding: var(--s-7);
     display: grid;
-    grid-template-columns: 1.5fr 1fr;
-    gap: clamp(1.75rem, 5vw, 3.5rem);
-    align-items: start;
+    gap: var(--s-6);
+    align-content: start;
+    align-self: start;
   }
-  .origin-prose p {
-    font: 400 17px/1.65 var(--font-body);
-    color: var(--ink-body);
-  }
-  .origin-prose p + p {
-    margin-top: 1.1em;
-  }
-
-  /* ── The artifact: the real screenshot, shown small ───────── */
-  .origin-shot {
-    max-width: 220px;
-  }
-  .origin-shot img {
-    width: 100%;
+  .story__panel > img {
+    width: 196px;
     height: auto;
     border: 1px solid var(--line);
-    background: var(--paper);
+    background: #fff;
   }
-  .origin-shot figcaption {
-    margin-top: 8px;
-    font-size: 12px;
-    color: var(--muted);
-  }
-  .origin-facts {
-    margin-top: 28px;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-  }
-  .origin-facts dt {
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--muted);
-  }
-  .origin-facts dd {
-    margin: 3px 0 0;
-    font: 400 16px/1.4 var(--font-head);
-    color: var(--ink);
-  }
-
-  /* ── What it taught me ────────────────────────────────────── */
-  .origin-takeaways {
-    margin-top: clamp(2rem, 5vw, 3rem);
-    padding-top: clamp(1.75rem, 4vw, 2.5rem);
-    border-top: 1px solid var(--line);
-  }
-  .origin-takeaways ul {
-    margin-top: 16px;
+  .story__facts {
+    margin: 0;
     display: grid;
-    gap: 12px;
-    max-width: 70ch;
+    gap: var(--s-5);
   }
-  .origin-takeaways li {
-    font: 400 15px/1.6 var(--font-body);
-    color: var(--ink-body);
+  .story__facts > div {
+    display: grid;
+    gap: var(--s-1);
   }
-  .origin-takeaways strong {
-    font-weight: 600;
-    color: var(--ink);
+  .story__facts dt {
+    font-size: var(--t-small);
+    color: var(--muted);
   }
-
-  /* ── Since then ───────────────────────────────────────────── */
-  .career {
-    padding-block: clamp(3rem, 7vw, 5rem);
-  }
-  .career-head {
-    margin-top: 8px;
-    font: 400 clamp(1.9rem, 4vw, 2.9rem) / 1.08 var(--font-head);
-  }
-  .career-body {
-    margin-top: 18px;
-    max-width: 64ch;
-    font: 400 17px/1.65 var(--font-body);
-    color: var(--ink-body);
-  }
-  .career-link {
-    display: inline-block;
-    margin-top: 22px;
-    font-size: 14px;
+  .story__facts dd {
+    margin: 0;
     font-weight: 500;
-    color: var(--accent-strong);
-    text-decoration: none;
-    border-bottom: 1px solid var(--accent);
-    padding-bottom: 2px;
-  }
-  .career-link:hover {
-    color: var(--ink);
-    border-bottom-color: var(--ink);
   }
 
-  @media (max-width: 760px) {
-    .origin-grid {
-      grid-template-columns: 1fr;
+  /* the statement's label sits a step above its line */
+  #market .t-label {
+    color: var(--muted);
+    margin-bottom: var(--s-4);
+  }
+
+  /* the career portrait: 1:1 on the split's right column (layout-v4.md, Pictures) */
+  .career__photo {
+    margin: 0;
+    aspect-ratio: 1 / 1;
+    border-radius: var(--r-lg);
+    overflow: hidden;
+  }
+  .career__photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 24%;
+  }
+
+  /* the two career links stack as rows */
+  .career__links {
+    display: grid;
+    gap: var(--s-3);
+    justify-items: start;
+  }
+
+  /* the roles portrait mirrors the career one on the same split line */
+  .roles__photo {
+    margin: 0;
+    aspect-ratio: 1 / 1;
+    border-radius: var(--r-lg);
+    overflow: hidden;
+  }
+  .roles__photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 20%;
+  }
+
+  /* the tablet (layout-v4.md, the tablet): stacking either split would run past
+     its screen, so both keep their two columns on the page's 6/6 pair */
+  @media (min-width: 640px) and (max-width: 1023px) {
+    :is(#story, #roles) .grid {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+    }
+    :is(#story, #roles) .grid > .span-6 {
+      grid-column: auto / span 6;
+    }
+    :is(#story, #roles) .grid > .start-7 {
+      grid-column: 7 / span 6;
+    }
+    /* the narrower columns hold fewer words a line: a step up keeps the fill */
+    #story .stack-6 > p {
+      font-size: 18px;
+      line-height: 1.6;
+    }
+    .story__panel {
+      padding: var(--s-5);
+    }
+    .roles__photo {
+      aspect-ratio: 4 / 5;
+    }
+    .roles__rows > li {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .roles__rows .rows__value {
+      grid-column: 1;
+      grid-row: auto;
+      text-align: left;
+      white-space: normal;
+    }
+    .career__photo {
+      margin-top: var(--s-7);
+      aspect-ratio: 3 / 2;
+    }
+  }
+
+  /* the phone: each section holds its two screens with its content spread
+     through them (layout-v4.md: gaps between sections stay in the 112-420 band) */
+  @media (max-width: 639px) {
+    /* flush at the phone width, so its text sits on the container's line */
+    .story__panel {
+      margin-top: var(--s-7);
+      padding: 0;
+      background: none;
+      border-radius: 0;
+      gap: var(--s-7);
+    }
+    .story__facts {
+      gap: var(--s-7);
+    }
+    /* the portrait takes what the text leaves of the two screens, so the
+       section ends on the picture, not an empty band (as the hero does) */
+    #career .wrap.grid {
+      height: 100%;
+      grid-template-rows: minmax(0, auto) minmax(240px, 1fr);
+      align-items: stretch;
+    }
+    .career__photo {
+      margin-top: var(--s-7);
+      aspect-ratio: auto;
+      height: calc(100% - var(--s-7));
+    }
+    .roles__photo {
+      margin-top: var(--s-7);
+      aspect-ratio: 4 / 5;
+    }
+    .roles__rows > li {
+      padding-block: var(--s-5);
+    }
+    /* wider than half the 342px wrap: run the wrap's full width (SR-6) */
+    .career__links > a {
+      width: 100%;
+    }
+    .story__panel > img {
+      width: 160px;
     }
   }
 </style>
